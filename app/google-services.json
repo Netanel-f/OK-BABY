@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "313172431790",
+    "firebase_url": "https://ok-baby-7ce59.firebaseio.com",
+    "project_id": "ok-baby-7ce59",
+    "storage_bucket": "ok-baby-7ce59.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313172431790:android:c6b16d898d455563dbee3f",
+        "android_client_info": {
+          "package_name": "com.ux.ok_baby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313172431790-psv0ofeut1e06ahab4ag9lqtk32jq79g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5KmHS5EOcku_Lo_poB-MZXJySPbM96wk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313172431790-psv0ofeut1e06ahab4ag9lqtk32jq79g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
