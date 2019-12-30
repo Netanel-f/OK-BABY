@@ -31,6 +31,21 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
+    public void setUpOptions(View view) {
+        switch (view.getId()){
+            case R.id.sleepButton:
+                // TODO: 12/30/2019 start an sleep fragment
+            case R.id.diaperButton:
+                // TODO: 12/30/2019 start an diaper fragment
+            case R.id.foodButton:
+                // TODO: 12/30/2019 start an food fragment
+            case R.id.otherButton:
+                // TODO: 12/30/2019 other?
+        }
+    }
+    public void setUpBabyDetails(String name, String age){
+
+    }
 
     
 }

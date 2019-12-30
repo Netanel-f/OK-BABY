@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:orientation="vertical"
-    android:layout_alignParentTop="true">
+    android:layout_alignParentTop="true"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/babyImage"
             android:layout_width="76dp"
             android:layout_height="85dp"
             android:layout_marginLeft="20dp"
@@ -46,6 +46,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/babyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -55,6 +56,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/babyAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
