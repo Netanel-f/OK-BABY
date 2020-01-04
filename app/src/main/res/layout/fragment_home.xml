@@ -14,14 +14,13 @@
         <include layout="@layout/baby_details" />
     </RelativeLayout>
 
-    <!-- baby details-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/baby_details"
         android:layout_marginTop="50dp">
 
-        <include layout="@layout/menu_layout" />
+        <include layout="@layout/body_layout" />
     </RelativeLayout>
 
 
