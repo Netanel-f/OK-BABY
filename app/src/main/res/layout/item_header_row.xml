@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:elevation="0dp"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/tvText"
@@ -14,4 +15,13 @@
         android:padding="8dp"
         android:textSize="12sp"
         tools:text="text"/>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        />
+
+
 </RelativeLayout>

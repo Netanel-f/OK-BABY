@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
-
+    android:background="@color/light_gray">
 
     <TextView
         android:id="@+id/tvText"
@@ -14,6 +13,15 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textStyle="bold"
+        android:textColor="@color/gray"
         tools:text="text"/>
+
+
+    <View
+        android:id="@+id/vLine"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        />
 
 </RelativeLayout>
