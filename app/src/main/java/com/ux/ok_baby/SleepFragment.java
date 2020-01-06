@@ -39,16 +39,18 @@ public class SleepFragment extends Fragment {
         graphsBtn = (Button) view.findViewById(R.id.switch_to_graph_btn);
         tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
+        setUpGraphsBtn();
+
+        return view;
+    }
+
+    private void setUpReportTable(){
         CollectionReference dataSource = null; // todo - query from firebase
         mTableAdapter = new ReportTableAdapter(getContext(), dataSource);
         mTableLayout.setAdapter(mTableAdapter);
         mTableLayout.setHeaderFixed(true);
         mTableLayout.setSolidRowHeader(false);
         mTableAdapter.notifyDataSetChanged();
-
-        setUpGraphsBtn();
-
-        return view;
     }
 
     private void setUpGraphsBtn(){
