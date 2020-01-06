@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".AddBabyActivity"></activity>
         <activity android:name=".SignInActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".HomeFragment">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
