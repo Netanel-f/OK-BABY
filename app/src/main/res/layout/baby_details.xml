@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="26dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            tools:srcCompat="@tools:sample/avatars[4]" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="26dp"
+            android:layout_height="17dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/imageView2"
+            tools:srcCompat="@tools:sample/avatars[1]" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/babyImage"
+            android:layout_width="76dp"
+            android:layout_height="85dp"
+            android:layout_marginLeft="20dp"
+            tools:srcCompat="@tools:sample/avatars[0]" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/babyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:text="Baby Name"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/babyAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="7 months old"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
