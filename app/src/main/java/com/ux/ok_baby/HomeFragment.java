@@ -1,10 +1,13 @@
 package com.ux.ok_baby;
 
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.widget.TableRow;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * First screen when loading the app (after sign in).
@@ -28,9 +31,21 @@ public class HomeFragment extends FragmentActivity {
 //            menuFragment.setArguments(intent.getExtras());
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, menuFragment).commit();
         }
+        setUpOtherBabies();
     }
 
-    public void setUpBabyDetails(String name, String age) {
+    private void setUpBabyDetails(String name, String age) {
 
+    }
+
+    private void setUpOtherBabies(){
+        TableRow tableRow = findViewById(R.id.otherBabies);
+        int id = getResources().getIdentifier("ic_baby", "mipmap", getBaseContext().getPackageName());
+        CircleImageView circleImageView = new CircleImageView(this);
+        circleImageView.setImageResource(id);
+        tableRow.addView(circleImageView);
+        int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        circleImageView.getLayoutParams().height=dimensionInDp;
+        circleImageView.getLayoutParams().width=dimensionInDp;
     }
 }

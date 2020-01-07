@@ -20,12 +20,15 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.menu_layout, container, false);
+        setUpOptions();
+        return view;
+    }
 
+    private void setUpOptions() {
         view.findViewById(R.id.diaperButton).setOnClickListener(this);
         view.findViewById(R.id.foodButton).setOnClickListener(this);
         view.findViewById(R.id.otherButton).setOnClickListener(this);
         view.findViewById(R.id.sleepButton).setOnClickListener(this);
-        return view;
     }
 
     @Override
