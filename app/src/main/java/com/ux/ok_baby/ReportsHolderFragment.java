@@ -62,7 +62,7 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
             case FOOD_TAB:
                 return new FoodFragment();
             case DIAPER_TAB:
-                return new DiaperReport();
+                return new DiaperFragment();
         }
         return new OtherFragment();
     }
