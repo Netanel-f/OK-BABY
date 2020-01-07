@@ -23,20 +23,20 @@ public class BabyProfileActivity extends AppCompatActivity {
     private final String TAG = "BabyProfileActivity";
 
     // Activity main variables
-    private ImageView profile_picture;
-    private EditText baby_name;
-    private EditText baby_dob;
-    private Button update_profile_btn;
+    private ImageView profilePicture;
+    private EditText babyName;
+    private EditText babyDob;
+    private Button updateProfileBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_profile);
 
-        profile_picture = findViewById(R.id.profile_image);
-        baby_name = findViewById(R.id.baby_name);
-        baby_dob = findViewById(R.id.dob);
-        update_profile_btn = findViewById(R.id.update_profile_btn);
+        profilePicture = findViewById(R.id.profile_image);
+        babyName = findViewById(R.id.baby_name);
+        babyDob = findViewById(R.id.dob);
+        updateProfileBtn = findViewById(R.id.update_profile_btn);
 
 
         // setup views + image.
@@ -66,7 +66,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     private void setupUpdateButton() {
-        update_profile_btn.setOnClickListener(new View.OnClickListener() {
+        updateProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /* TODO
@@ -89,7 +89,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     private void setupProfileImage() {
-        profile_picture.setOnClickListener(new View.OnClickListener() {
+        profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pickProfileImage();
@@ -101,7 +101,7 @@ public class BabyProfileActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(image_uri).placeholder(R.drawable.ic_default_user_profile_image)
                 .apply(RequestOptions.circleCropTransform())
-                .into(profile_picture);
+                .into(profilePicture);
     }
 
     private void loadFromFirebase() {
@@ -113,9 +113,9 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     private boolean setBabyName() {
-        String baby_name_string = baby_name.getText().toString();
+        String babyNameString = babyName.getText().toString();
         // Check whether the entered text is not null and not empty
-        if (baby_name_string != null && !baby_name_string.isEmpty())
+        if (babyNameString != null && !babyNameString.isEmpty())
         {
             //display the text that you entered in edit text
             /* TODO:
@@ -129,9 +129,9 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     private boolean setBabyDob() {
-        String baby_dob_string = baby_dob.getText().toString();
+        String babyDobString = babyDob.getText().toString();
         // Check whether the entered text is not null and not empty
-        if (baby_dob_string != null && !baby_dob_string.isEmpty()) {
+        if (babyDobString != null && !babyDobString.isEmpty()) {
             /* TODO:
                 update Firebase with new baby DOB
              */
