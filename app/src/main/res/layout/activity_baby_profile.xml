@@ -17,32 +17,78 @@
         android:src="@drawable/ic_default_user_profile_image"
         android:visibility="visible"/>
 
-    <EditText
-        android:id="@+id/baby_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linear_fields_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:hint="Enter baby name"
-        android:gravity="center"
+        android:gravity="center_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image"
-        app:layout_constraintBottom_toTopOf="@+id/dob"
-        android:inputType="textPersonName" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/dob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:hint="Enter D.O.B"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/baby_name"
-        app:layout_constraintBottom_toTopOf="@+id/update_profile_btn"
-         />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Baby name:" />
+
+            <EditText
+                android:id="@+id/baby_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="40dp"
+                android:hint="Enter baby name"
+                android:gravity="center"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/dob_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Date of Birth:" />
+
+
+            <EditText
+                android:id="@+id/dob"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="80dp"
+                android:inputType="date"
+                android:hint="Enter D.O.B"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/dob_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Choose date"
+                android:onClick="showDatePickerDialog" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/update_profile_btn"
@@ -51,7 +97,7 @@
         android:text="Update Profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dob"
+        app:layout_constraintTop_toBottomOf="@+id/linear_fields_layout"
         app:layout_constraintBottom_toBottomOf="parent"
          />
 

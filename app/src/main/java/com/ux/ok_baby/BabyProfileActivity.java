@@ -2,6 +2,7 @@ package com.ux.ok_baby;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -26,6 +27,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     private ImageView profilePicture;
     private EditText babyName;
     private EditText babyDob;
+    private Button babyDOBPicker;
     private Button updateProfileBtn;
 
     @Override
@@ -36,6 +38,7 @@ public class BabyProfileActivity extends AppCompatActivity {
         profilePicture = findViewById(R.id.profile_image);
         babyName = findViewById(R.id.baby_name);
         babyDob = findViewById(R.id.dob);
+        babyDOBPicker = findViewById(R.id.dob_picker);
         updateProfileBtn = findViewById(R.id.update_profile_btn);
 
 
@@ -150,5 +153,10 @@ public class BabyProfileActivity extends AppCompatActivity {
             return to activity
          */
          startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
