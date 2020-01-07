@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 public class BabyProfileActivity extends AppCompatActivity {
 
 
@@ -92,6 +95,13 @@ public class BabyProfileActivity extends AppCompatActivity {
                 pickProfileImage();
             }
         });
+    }
+
+    private void loadImage(String image_uri) {
+        Glide.with(this)
+                .load(image_uri).placeholder(R.drawable.ic_default_user_profile_image)
+                .apply(RequestOptions.circleCropTransform())
+                .into(profile_picture);
     }
 
     private void loadFromFirebase() {

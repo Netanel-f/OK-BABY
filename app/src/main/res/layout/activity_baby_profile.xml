@@ -8,13 +8,14 @@
 
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="@android:dimen/app_icon_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@android:dimen/app_icon_size"
-        tools:srcCompat="@tools:sample/avatars[2]" />
+        android:src="@drawable/ic_default_user_profile_image"
+        android:visibility="visible"/>
 
     <EditText
         android:id="@+id/baby_name"
@@ -27,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image"
         app:layout_constraintBottom_toTopOf="@+id/dob"
-        />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/dob"
