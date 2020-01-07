@@ -57,12 +57,6 @@ public class BabyProfileActivity extends AppCompatActivity {
                     /* TODO:
                            The next code is needed if we want immediate upload of img to firebase
                     */
-//                    viewModel.uploadProfileImageToStorage(MainActivity.getCurrentUserID(), uri).observe(getViewLifecycleOwner(), new Observer<String>() {
-//                        @Override
-//                        public void onChanged(String storageUri) {
-//                            loadImage(storageUri);
-//                        }
-//                    });
                 }
             }
         }
@@ -109,9 +103,9 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     private boolean setBabyName() {
-        String baby_name_String = baby_name.getText().toString();
+        String baby_name_string = baby_name.getText().toString();
         // Check whether the entered text is not null and not empty
-        if (baby_name_String != null && !baby_name_String.isEmpty())
+        if (baby_name_string != null && !baby_name_string.isEmpty())
         {
             //display the text that you entered in edit text
             /* TODO:
@@ -125,9 +119,9 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     private boolean setBabyDob() {
-        String baby_dob_String = baby_dob.getText().toString();
+        String baby_dob_string = baby_dob.getText().toString();
         // Check whether the entered text is not null and not empty
-        if (baby_dob_String != null && !baby_dob_String.isEmpty()) {
+        if (baby_dob_string != null && !baby_dob_string.isEmpty()) {
             /* TODO:
                 update Firebase with new baby DOB
              */
