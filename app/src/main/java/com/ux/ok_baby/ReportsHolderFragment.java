@@ -19,7 +19,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class ReportsHolderFragment extends Fragment {
 
-    private String reportType = null;
+    private int reportType = -1;
 
     @Nullable
     @Override
@@ -27,7 +27,7 @@ public class ReportsHolderFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.report_layout, container, false);
-        reportType = getArguments().getString(REPORT_TYPE);
+        reportType = getArguments().getInt(REPORT_TYPE);
         return view;
     }
 
@@ -41,21 +41,8 @@ public class ReportsHolderFragment extends Fragment {
     }
 
     private void setUpTab(TabLayout tabLayout) {
-        if (reportType != null) {
-            switch (reportType) {
-                case SLEEP:
-                    tabLayout.getTabAt(0).select();
-                    break;
-                case FOOD:
-                    tabLayout.getTabAt(1).select();
-                    break;
-                case DIAPER:
-                    tabLayout.getTabAt(2).select();
-                    break;
-                case OTHER:
-                    tabLayout.getTabAt(3).select();
-                    break;
-            }
+        if (reportType != -1) {
+            tabLayout.getTabAt(reportType).select();
         }
     }
 }
@@ -70,11 +57,11 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int i) {
         switch (i) {
-            case 0:
+            case SLEEP_TAB:
                 return new SleepFragment();
-            case 1:
+            case FOOD_TAB:
                 return new FoodFragment();
-            case 2:
+            case DIAPER_TAB:
                 return new DiaperReport();
         }
         return new OtherFragment();
@@ -88,11 +75,11 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0:
+            case SLEEP_TAB:
                 return SLEEP;
-            case 1:
+            case FOOD_TAB:
                 return FOOD;
-            case 2:
+            case DIAPER_TAB:
                 return DIAPER;
         }
         return OTHER;

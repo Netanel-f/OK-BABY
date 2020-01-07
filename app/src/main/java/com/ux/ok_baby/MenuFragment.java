@@ -38,25 +38,25 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sleepButton:
-                startNewFragment(SLEEP);
+                startNewFragment(SLEEP_TAB);
                 break;
             case R.id.diaperButton:
-                startNewFragment(DIAPER);
+                startNewFragment(DIAPER_TAB);
                 break;
             case R.id.foodButton:
-                startNewFragment(FOOD);
+                startNewFragment(FOOD_TAB);
                 break;
             case R.id.otherButton:
-                startNewFragment(OTHER);
+                startNewFragment(OTHER_TAB);
                 break;
         }
     }
 
     @SuppressLint("ResourceType")
-    private void startNewFragment(String reportType) {
+    private void startNewFragment(int reportType) {
         ReportsHolderFragment reportsHolderFragment = new ReportsHolderFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(REPORT_TYPE, reportType);
+        bundle.putInt(REPORT_TYPE, reportType);
         reportsHolderFragment.setArguments(bundle);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, reportsHolderFragment);
