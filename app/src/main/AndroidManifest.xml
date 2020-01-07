@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SignInActivity" />
-        <activity android:name=".BabyProfileActivity">
+        <activity android:name=".HomeFragment">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
