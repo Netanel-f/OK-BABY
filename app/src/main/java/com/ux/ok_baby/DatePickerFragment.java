@@ -1,5 +1,6 @@
 package com.ux.ok_baby;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
@@ -8,9 +9,13 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.DatePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+//    DatePickerDialog.OnDateSetListener ondateSet;
+    private Calendar myCalendar;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
@@ -29,5 +34,12 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             TODO:
             implement this part
          */
+        myCalendar = Calendar.getInstance();
+        myCalendar.set(year, month, day);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = sdf.format(myCalendar.getTime());
+
+        BabyProfileActivity babyProfileActivity = (BabyProfileActivity) getActivity();
+        babyProfileActivity.processDatePickerResult(formattedDate);
     }
 }

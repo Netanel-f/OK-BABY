@@ -44,10 +44,10 @@
 
             <EditText
                 android:id="@+id/baby_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="40dp"
-                android:hint="Enter baby name"
+                android:hint=""
                 android:gravity="center"
                 android:inputType="textPersonName" />
 
@@ -71,20 +71,14 @@
 
             <EditText
                 android:id="@+id/dob"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="40dp"
-                android:layout_marginEnd="80dp"
-                android:inputType="date"
+                android:clickable="true"
+                android:editable="false"
                 android:hint="Enter D.O.B"
+                android:onClick="showDatePickerDialog"
                 android:gravity="center" />
-
-            <Button
-                android:id="@+id/dob_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Choose date"
-                android:onClick="showDatePickerDialog" />
 
         </LinearLayout>
 
@@ -98,7 +92,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_fields_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
-         />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

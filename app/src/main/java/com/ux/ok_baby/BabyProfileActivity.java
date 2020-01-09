@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,10 +13,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
+import java.util.Calendar;
 
 public class BabyProfileActivity extends AppCompatActivity {
 
@@ -26,9 +30,10 @@ public class BabyProfileActivity extends AppCompatActivity {
     // Activity main variables
     private ImageView profilePicture;
     private EditText babyName;
-    private EditText babyDob;
-    private Button babyDOBPicker;
+    private TextView babyDob;
     private Button updateProfileBtn;
+    private String dobString;
+    public static Calendar myCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +43,8 @@ public class BabyProfileActivity extends AppCompatActivity {
         profilePicture = findViewById(R.id.profile_image);
         babyName = findViewById(R.id.baby_name);
         babyDob = findViewById(R.id.dob);
-        babyDOBPicker = findViewById(R.id.dob_picker);
         updateProfileBtn = findViewById(R.id.update_profile_btn);
-
-
+        myCalendar = Calendar.getInstance();
         // setup views + image.
         setupUpdateButton();
         setupProfileImage();
@@ -156,7 +159,12 @@ public class BabyProfileActivity extends AppCompatActivity {
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void processDatePickerResult(String dateString) {
+        dobString = dateString;
+        babyDob.setText(dobString);
     }
 }
