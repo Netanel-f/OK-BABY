@@ -1,5 +1,6 @@
 package com.ux.ok_baby;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.TableRow;
@@ -38,14 +39,24 @@ public class HomeFragment extends FragmentActivity {
 
     }
 
-    private void setUpOtherBabies(){
+
+    @SuppressLint("ResourceAsColor")
+    private void setUpOtherBabies() {
         TableRow tableRow = findViewById(R.id.otherBabies);
-        int id = getResources().getIdentifier("ic_baby", "mipmap", getBaseContext().getPackageName());
         CircleImageView circleImageView = new CircleImageView(this);
-        circleImageView.setImageResource(id);
+        circleImageView.setImageResource(getResources().getIdentifier("ic_baby", "mipmap", getBaseContext().getPackageName()));
         tableRow.addView(circleImageView);
-        int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
-        circleImageView.getLayoutParams().height=dimensionInDp;
-        circleImageView.getLayoutParams().width=dimensionInDp;
+        circleImageView.setBorderColor(getResources().getColor(R.color.light_gray));
+        circleImageView.setBorderWidth(valToDp(2));
+        circleImageView.getLayoutParams().height = valToDp(40);
+        circleImageView.getLayoutParams().width = valToDp(40);
+    }
+
+    private int valToDp(int value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
+    }
+
+    private void onOtherBabyImageClick() {
+        // TODO: 1/9/2020  switch all the data to be of the clicked baby.
     }
 }
