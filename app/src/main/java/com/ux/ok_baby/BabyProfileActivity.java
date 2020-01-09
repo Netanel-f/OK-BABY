@@ -2,9 +2,7 @@ package com.ux.ok_baby;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,17 +76,14 @@ public class BabyProfileActivity extends AppCompatActivity {
                 /* TODO
                     check whether a profile picture had been chosen
                  */
-                if (!setBabyName()) {
-                    return;
+                if (checkBabyName() && checkBabyDob()) {
+                    /* TODO
+                        send data to firebase for storage.
+                        Name + DOB
+                        will we send Image only when pressing update
+                    */
                 }
-                if (!setBabyDob()) {
-                    return;
-                }
-                /* TODO
-                    send data to firebase for storage.
-                    Name + DOB
-                    will we send Image only when pressing update
-                 */
+
             }
         });
 
@@ -118,7 +113,11 @@ public class BabyProfileActivity extends AppCompatActivity {
          */
     }
 
-    private boolean setBabyName() {
+    /**
+     * check that the user has typed a name for the baby
+     * @return True iff babyName is not null && not empty, false otherwise.
+     */
+    private boolean checkBabyName() {
         String babyNameString = babyName.getText().toString();
         // Check whether the entered text is not null and not empty
         if (babyNameString != null && !babyNameString.isEmpty())
@@ -134,7 +133,11 @@ public class BabyProfileActivity extends AppCompatActivity {
         }
     }
 
-    private boolean setBabyDob() {
+    /**
+     * check that the user has typed a dob for the baby
+     * @return True iff baby dob is not empty, false otherwise.
+     */
+    private boolean checkBabyDob() {
         String babyDobString = babyDob.getText().toString();
         // Check whether the entered text is not null and not empty
         if (babyDobString != null && !babyDobString.isEmpty()) {
@@ -158,11 +161,20 @@ public class BabyProfileActivity extends AppCompatActivity {
          startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
     }
 
-    public void showDatePickerDialog(View v) {
+    /**
+     * This method will initiate a date Picker Dialog fragment
+     * @param view current view.
+     */
+    public void showDatePickerDialog(View view) {
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    /**
+     * This method will save the date that has been picked into the profile.
+     * This method will be called only from the DialogFragment class.
+     * @param dateString D.O.B string to save
+     */
     public void processDatePickerResult(String dateString) {
         dobString = dateString;
         babyDob.setText(dobString);
