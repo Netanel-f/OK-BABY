@@ -20,4 +20,13 @@
     <string name="left">Left</string>
     <string name="right">Right</string>
     <string name="amount">Amount</string>
+    <string name="time">Time</string>
+    <string name="texture">Texture</string>
+    <string name="color">Color</string>
+    <string name="pee">Pee</string>
+    <string name="poo">Poo</string>
+    <string name="runny">Runny</string>
+    <string name="diaper_entry">Diaper Entry</string>
+    <string name="food_entry">Food Entry</string>
+    <string name="sleep_entry">Sleep Entry</string>
 </resources>

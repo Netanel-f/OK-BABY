@@ -42,6 +42,7 @@ public class DiaperFragment extends Fragment {
         tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
         setUpGraphsBtn();
+        onAddClickListener(view.findViewById(R.id.addReport));
 
         return view;
     }
@@ -70,6 +71,15 @@ public class DiaperFragment extends Fragment {
                 graphsBtn.setVisibility(View.VISIBLE);
                 tableBtn.setVisibility(View.GONE);
                 mTableLayout.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    private void onAddClickListener(View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpDiaper popUpClass = new PopUpDiaper(getActivity());
+                popUpClass.showPopupWindow(view);
             }
         });
     }
