@@ -4,7 +4,7 @@
     <item
         android:id="@+id/breastfeeding"
         android:title="@string/breastfeeding"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottle"
         android:title="@string/bottle"

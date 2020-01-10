@@ -111,15 +111,18 @@
                     android:textStyle="bold" />
 
 
-                <EditText
+                <Button
                     android:id="@+id/type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/breastfeeding"
+                    android:textAllCaps="false" />
 
             </LinearLayout>
 
             <!--Side-->
             <LinearLayout
+                android:id="@+id/sideLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -135,10 +138,41 @@
                     android:textStyle="bold" />
 
 
-                <EditText
+                <Button
                     android:id="@+id/side"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="Right"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+
+
+            <!--Amount-->
+            <LinearLayout
+                android:id="@+id/amountLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/amount"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+                <Button
+                    android:id="@+id/amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="90ml"
+                    android:textAllCaps="false"/>
 
             </LinearLayout>
 
@@ -150,18 +184,18 @@
                     android:id="@+id/cancel_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cancel"
                     android:layout_toLeftOf="@+id/addButton"
-                    android:background="@drawable/button_border"/>
+                    android:background="@drawable/button_border"
+                    android:text="Cancel" />
 
 
                 <Button
                     android:id="@+id/addButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/button_border"/>
+                    android:background="@drawable/button_border"
+                    android:text="Add" />
             </RelativeLayout>
         </LinearLayout>
 
