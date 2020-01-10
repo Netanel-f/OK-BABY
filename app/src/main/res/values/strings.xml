@@ -10,4 +10,13 @@
     <string name="sleep_report_title">Sleep Report</string>
     <string name="switch_to_graph_btn_label">Graphs</string>
     <string name="switch_to_table_btn_label">Table</string>
+    <string name="date">Date</string>
+    <string name="start_time">Start</string>
+    <string name="end_time">End</string>
+    <string name="type">Type</string>
+    <string name="side">Side</string>
+    <string name="bottle">Bottle</string>
+    <string name="breastfeeding">Breastfeeding</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
 </resources>
