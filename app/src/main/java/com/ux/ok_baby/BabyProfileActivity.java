@@ -71,9 +71,6 @@ public class BabyProfileActivity extends AppCompatActivity {
         userStub.setUid("S0qjluVcTzToDJVqt8KRm5wu5D52");
         userStub.setEmail("s@gmail.com");
         babiesStub = new ArrayList<>();
-//        String stubBID = "blasd31";
-//        DocumentReference stubRef = firestoreDB.collection("babies").document(stubBID);
-//        babiesStub.add(stubRef);
         userStub.setBabies(babiesStub);
 
         // setup views + image.
@@ -187,55 +184,6 @@ public class BabyProfileActivity extends AppCompatActivity {
                     });
 
         }
-
-//        // get user details and go firestore to pull data
-//        final String uid = userStub.getUid();
-//
-//        DocumentReference userRef = firestoreDB.collection("users").document(uid);
-//
-//        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//
-//                    if (documentSnapshot.exists()) {
-//                        // user exists - check it's babies
-//                        User user = documentSnapshot.toObject(User.class);
-//
-//                        if (user.getBabies() == null || user.getBabies().isEmpty()) {
-//                            // TODO
-//                        } else {
-//                            List<DocumentReference> babiesRefs = user.getBabies();
-//
-//                            DocumentReference babyRef = babiesRefs.get(0);
-//
-//                            babyRef.get()
-//                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                            if (task.isSuccessful()) {
-//                                                DocumentSnapshot documentSnapshot1 = task.getResult();
-//
-//                                                if (documentSnapshot1.exists()) {
-//
-//                                                    Baby baby = documentSnapshot1.toObject(Baby.class);
-//
-//                                                    if (baby.getBabyName() != null && baby.getBabyDOB() != null) {
-//                                                        babyName.setText(baby.getBabyName());
-//                                                        babyDob.setText(baby.getBabyDOB());
-//                                                    }
-//
-//                                                }
-//                                            }
-//                                        }
-//                                    });
-//
-//                        }
-//                    }
-//                }
-//            }
-//        });
     }
 
     /**
