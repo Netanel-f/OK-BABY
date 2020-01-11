@@ -67,10 +67,13 @@ public class BabyProfileActivity extends AppCompatActivity {
         // TODO remove
         //  User stub
 
-        userStub = new User();
-        userStub.setUid("S0qjluVcTzToDJVqt8KRm5wu5D52");
-        userStub.setEmail("s@gmail.com");
         babiesStub = new ArrayList<>();
+//        // babyStub - if want to simulate user with exisiting baby
+//        String stubBID = "blasd31";
+//        DocumentReference stubRef = babiesCollection.document(stubBID);
+//        babiesStub.add(stubRef);
+
+        userStub = new User("S0qjluVcTzToDJVqt8KRm5wu5D52", "s@gmail.com", babiesStub);
         userStub.setBabies(babiesStub);
 
         // setup views + image.
@@ -88,7 +91,7 @@ public class BabyProfileActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String filePath = data.getData().getPath();
-                    android.util.Log.d(TAG, "onActivityResult: filepath is " + filePath);
+                    Log.d(TAG, "onActivityResult: filepath is " + filePath);
                     final Uri uri = data.getData();
                     Log.d(TAG, "Uri: " + uri.toString());
                     /* TODO:
