@@ -1,5 +1,6 @@
 package com.ux.ok_baby;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,8 +17,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.ux.ok_baby.Model.Baby;
+import com.ux.ok_baby.Model.User;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class BabyProfileActivity extends AppCompatActivity {
 
@@ -30,8 +41,17 @@ public class BabyProfileActivity extends AppCompatActivity {
     private EditText babyName;
     private TextView babyDob;
     private Button updateProfileBtn;
-    private String dobString;
+//    private String dobString;
     public static Calendar myCalendar;
+
+    // TODO fixed next variables to Model architecture
+    private FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+    private CollectionReference usersCollection = firestoreDB.collection("users");
+    private CollectionReference babiesCollection= firestoreDB.collection("babies");
+
+    User userStub;
+
+    List<DocumentReference> babiesStub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +63,23 @@ public class BabyProfileActivity extends AppCompatActivity {
         babyDob = findViewById(R.id.dob);
         updateProfileBtn = findViewById(R.id.update_profile_btn);
         myCalendar = Calendar.getInstance();
+
+        // TODO remove
+        //  User stub
+
+        userStub = new User();
+        userStub.setUid("S0qjluVcTzToDJVqt8KRm5wu5D52");
+        userStub.setEmail("s@gmail.com");
+        babiesStub = new ArrayList<>();
+//        String stubBID = "blasd31";
+//        DocumentReference stubRef = firestoreDB.collection("babies").document(stubBID);
+//        babiesStub.add(stubRef);
+        userStub.setBabies(babiesStub);
+
         // setup views + image.
         setupUpdateButton();
         setupProfileImage();
-        loadFromFirebase();
+        loadFromFirestore();
 
     }
 
@@ -75,13 +108,22 @@ public class BabyProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 /* TODO
                     check whether a profile picture had been chosen
+                    upload it?
                  */
                 if (checkBabyName() && checkBabyDob()) {
-                    /* TODO
-                        send data to firebase for storage.
-                        Name + DOB
-                        will we send Image only when pressing update
-                    */
+                    // checking a baby name and dob are valid
+
+                    String name = babyName.getText().toString();
+                    String dob = babyDob.getText().toString();
+                    if (userStub.getBabies() == null || userStub.getBabies().isEmpty()) {
+                        // user has no babies
+                        addNewBabyToDatabase(name, dob);
+
+                    } else {
+                        // user has babies - editing an exisiting one
+                        String bid = userStub.getBabies().get(0).getId();
+                        updateBabyInDatabase(bid, name, dob);
+                    }
                 }
 
             }
@@ -105,12 +147,95 @@ public class BabyProfileActivity extends AppCompatActivity {
                 .into(profilePicture);
     }
 
-    private void loadFromFirebase() {
+    /**
+     * This method will load baby's data from fire base
+     */
+    private void loadFromFirestore() {
         /* TODO:
             load existing image from firebase
-            load existing name
-            load existing d.o.b
+        load existing name
+        load existing d.o.b
          */
+
+
+        // using STUB
+        List<DocumentReference> userBabies = userStub.getBabies();
+        if ((userBabies != null) && (!userBabies.isEmpty())) {
+
+            // we have data to load from fire store
+            DocumentReference babyRef = userBabies.get(0);
+
+            babyRef.get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+
+                                if (documentSnapshot.exists()) {
+
+                                    Baby baby = documentSnapshot.toObject(Baby.class);
+
+                                    if (baby.getBabyName() != null && baby.getBabyDOB() != null) {
+                                        babyName.setText(baby.getBabyName());
+                                        babyDob.setText(baby.getBabyDOB());
+                                    }
+
+                                }
+                            }
+                        }
+                    });
+
+        }
+
+//        // get user details and go firestore to pull data
+//        final String uid = userStub.getUid();
+//
+//        DocumentReference userRef = firestoreDB.collection("users").document(uid);
+//
+//        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot documentSnapshot = task.getResult();
+//
+//                    if (documentSnapshot.exists()) {
+//                        // user exists - check it's babies
+//                        User user = documentSnapshot.toObject(User.class);
+//
+//                        if (user.getBabies() == null || user.getBabies().isEmpty()) {
+//                            // TODO
+//                        } else {
+//                            List<DocumentReference> babiesRefs = user.getBabies();
+//
+//                            DocumentReference babyRef = babiesRefs.get(0);
+//
+//                            babyRef.get()
+//                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                            if (task.isSuccessful()) {
+//                                                DocumentSnapshot documentSnapshot1 = task.getResult();
+//
+//                                                if (documentSnapshot1.exists()) {
+//
+//                                                    Baby baby = documentSnapshot1.toObject(Baby.class);
+//
+//                                                    if (baby.getBabyName() != null && baby.getBabyDOB() != null) {
+//                                                        babyName.setText(baby.getBabyName());
+//                                                        babyDob.setText(baby.getBabyDOB());
+//                                                    }
+//
+//                                                }
+//                                            }
+//                                        }
+//                                    });
+//
+//                        }
+//                    }
+//                }
+//            }
+//        });
     }
 
     /**
@@ -123,9 +248,6 @@ public class BabyProfileActivity extends AppCompatActivity {
         if (babyNameString != null && !babyNameString.isEmpty())
         {
             //display the text that you entered in edit text
-            /* TODO:
-                update Firebase with new baby name
-             */
             return true;
         } else {
             Toast.makeText(getApplicationContext(), "Enter a baby name", Toast.LENGTH_LONG).show();
@@ -141,9 +263,6 @@ public class BabyProfileActivity extends AppCompatActivity {
         String babyDobString = babyDob.getText().toString();
         // Check whether the entered text is not null and not empty
         if (babyDobString != null && !babyDobString.isEmpty()) {
-            /* TODO:
-                update Firebase with new baby DOB
-             */
             return true;
         } else {
             Toast.makeText(getApplicationContext(), "Enter Valid date of birth", Toast.LENGTH_LONG).show();
@@ -176,7 +295,35 @@ public class BabyProfileActivity extends AppCompatActivity {
      * @param dateString D.O.B string to save
      */
     public void processDatePickerResult(String dateString) {
-        dobString = dateString;
-        babyDob.setText(dobString);
+        babyDob.setText(dateString);
+    }
+
+
+    /**
+     * This method will add new baby to fire store
+     * @param babyName baby name
+     * @param babyDob baby date of birth
+     */
+    public void addNewBabyToDatabase(String babyName, String babyDob) {
+
+        // Create new baby document to initialize a new random id from fire store
+        DocumentReference newBabyRef = babiesCollection.document();
+        String bid = newBabyRef.getId();
+
+        // update name and dob in fire store
+        updateBabyInDatabase(bid, babyName, babyDob);
+    }
+
+
+    /**
+     * This method will update an existing baby in fire store
+     * @param bid baby id
+     * @param babyName baby name
+     * @param babyDob baby date of birth.
+     */
+    public void updateBabyInDatabase(String bid, String babyName, String babyDob) {
+        Baby baby = new Baby(bid, babyName, babyDob);
+        DocumentReference babyRef = babiesCollection.document(bid);
+        babyRef.set(baby);
     }
 }
