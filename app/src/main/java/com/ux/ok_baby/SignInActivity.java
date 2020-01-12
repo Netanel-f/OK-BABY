@@ -1,13 +1,30 @@
 package com.ux.ok_baby;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.ux.ok_baby.Model.User;
+
+import java.util.ArrayList;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -16,11 +33,17 @@ public class SignInActivity extends AppCompatActivity {
     private static final int MIN_PASSWORD_LENGTH = 1;
     private static final String VALID_EMAIL_ERROR_MSG = "Please enter a valid email address";
     private static final String VALID_PASSWORD_ERROR_MSG = "Please enter password";
+
     private EditText signInEmail;
     private EditText signInPassword;
     private Button signInBtn;
+    private ProgressBar progressBar;
+    private TextView signUpLink;
 
     private Context context;
+
+    private FirebaseAuth auth;
+    private FirebaseFirestore firestoreDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,36 +55,258 @@ public class SignInActivity extends AppCompatActivity {
         signInEmail = findViewById(R.id.editTextSignUpEmail);
         signInPassword = findViewById(R.id.editTextSignUpPassword);
         signInBtn = findViewById(R.id.buttonSignIn);
+        progressBar = findViewById(R.id.progressBarSignIn);
+        signUpLink = findViewById(R.id.signUpLink);
 
-        // initialize Firebase auth
-        // todo
+        // initialize Firebase
+        auth = FirebaseAuth.getInstance();
+        firestoreDB = FirebaseFirestore.getInstance();
 
-        // set up ui
-        setUpSignInButton();
+        setUpUI();
     }
 
+    private void setUpUI(){
+        setUpSignInButton();
+        setUpSignUpButton();
+    }
+
+    /**
+     * Sets up the sign in button.
+     */
     private void setUpSignInButton() {
         // If sign in button clicked
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // sign in
                 String email = signInEmail.getText().toString();
                 String password = signInPassword.getText().toString();
-
-                // validate email and password
-                if (email.length() < MIN_EMAIL_LENGTH) {
-                    Toast.makeText(context, VALID_EMAIL_ERROR_MSG, Toast.LENGTH_LONG).show();
-                }
-                if (password.length() < MIN_PASSWORD_LENGTH) {
-                    Toast.makeText(context, VALID_PASSWORD_ERROR_MSG, Toast.LENGTH_LONG).show();
-
-                }
-
-                // sign in
-                // todo: sign in with email and password
+                signIn(email, password);
             }
         });
+    }
 
+    /**
+     * Sets up the log in button.
+     */
+    private void setUpSignUpButton() {
+        // If sign in button clicked
+        signUpLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // sign in
+                String email = signInEmail.getText().toString();
+                String password = signInPassword.getText().toString();
+                signUp(email, password);
+            }
+        });
+    }
+
+    /**
+     * Starts the sign in process for the given email and password.
+     * @param email - entered email (string).
+     * @param password - entered password (string).
+     */
+    private void signIn(String email, String password) {
+        if (!validateEmailAndPassword(email, password)) {
+            return;
+        }
+
+        showProgressBar(true);
+        signInToFirebase(email, password);
+    }
+
+    /**
+     * Starts the sign in process for the given email and password.
+     * @param email - entered email (string).
+     * @param password - entered password (string).
+     */
+    private void signUp(String email, String password) {
+        if (!validateEmailAndPassword(email, password)) {
+            return;
+        }
+
+        showProgressBar(true);
+        createAuthenticationUser(email, password);
+    }
+
+
+    /**
+     * Validates that the email and password are of reasonable length.
+     * If not, displays a Toast with the appropriate error.
+     * @param email - entered email (string).
+     * @param password - entered password (string).
+     * @return true if the email and password were validated, false otherwise.
+     */
+    private boolean validateEmailAndPassword(String email, String password) {
+        boolean valid = true;
+
+        if (email.length() < MIN_EMAIL_LENGTH) {
+            Toast.makeText(context, VALID_EMAIL_ERROR_MSG, Toast.LENGTH_LONG).show();
+            valid = false;
+        }
+        if (password.length() < MIN_PASSWORD_LENGTH) {
+            Toast.makeText(context, VALID_PASSWORD_ERROR_MSG, Toast.LENGTH_LONG).show();
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    /**
+     * Sets the visibility of the progress bar.
+     * @param show - if true, shows the progress bar. Otherwise, hides it.
+     */
+    private void showProgressBar(Boolean show) {
+        if (show) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * Authenticates the email and password against Firebase Authentication.
+     * If the user doesn't exist, creates it.
+     * @param email
+     * @param password
+     */
+    private void signInToFirebase(String email, String password) {
+        // todo: get if exists, create with auth user uid if doesn't
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            authenticateUser(email, password);
+        } else {
+            getUserFromDatabase(currentUser);
+        }
+    }
+
+    private void authenticateUser(String email, String password){
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = auth.getCurrentUser();
+//                            createUser(user);
+                            getUserFromDatabase(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(context, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            showProgressBar(false);
+                        }
+                    }
+                });
+    }
+
+    private void createAuthenticationUser(String email, String password) {
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = auth.getCurrentUser();
+//                            createUser(user);
+                            getUserFromDatabase(user);
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(context, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            showProgressBar(false);
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * Navigates to the next activity according to the user's status: new user or existing user.
+     * @param authUser - FirebaseUser
+     */
+    private void getUserFromDatabase(FirebaseUser authUser) {
+        final String uid = authUser.getUid();
+        final String email = authUser.getEmail();
+        DocumentReference userRef = firestoreDB.collection("users").document(uid);
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // existing user
+                        User user = document.toObject(User.class);
+                        if (user.getBabies() == null || user.getBabies().isEmpty()){
+                            // baby list is empty -> treat like new user
+                            navigateToNextActivity(true);
+                        } else {
+                            navigateToNextActivity(false);
+                        }
+                    } else {
+                        // user doesn't exist
+                        Log.d(TAG, "User doesn't exist in database");
+                        addNewUser(uid, email);
+                    }
+                } else {
+                    // error retrieving data
+                    Log.w(TAG, "Error retrieving data from database");
+                }
+            }
+        });
+    }
+
+    private void addNewUser(String uid, String email) {
+        addUserToDatabase(uid, email);
+        navigateToNextActivity(true);
+    }
+
+
+    /**
+     * Determines if the user is a new user or an existing user and navigates accordingly.
+     * @param isNewUser - true if the user is new or has no babies.
+     */
+    private void navigateToNextActivity(Boolean isNewUser){
+        if (isNewUser) {
+            newUserNavigation();
+        } else {
+            existingUserNavigation();
+        }
+    }
+
+
+    /**
+     * Navigates to the screen a new user should go to: AddBabyActivity.
+     */
+    private void newUserNavigation() {
+        Intent addBabyIntent = new Intent(this, BabyProfileActivity.class);
+        // todo: firebase user? check what we want to pass on
+        startActivity(addBabyIntent);
 
     }
+
+    /**
+     * Navigates to the screen an existing user should go to: HomeFragment.
+     */
+    private void existingUserNavigation() {
+        Intent homeIntent = new Intent(this, HomeFragment.class);
+        // todo: firebase user?
+        startActivity(homeIntent);
+    }
+
+
+    /**
+     * DATABASE FUNCTIONS
+     */
+
+    public void addUserToDatabase(String uid, String email) {
+        User user = new User(uid, email, new ArrayList<DocumentReference>());
+        DocumentReference userRef = firestoreDB.collection("users").document(uid);
+        userRef.set(user);
+    }
+
+
 }
