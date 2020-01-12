@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.ux.ok_baby.Constants.BABY_ID;
+
 public class BabyProfileActivity extends AppCompatActivity {
 
 
@@ -41,13 +44,14 @@ public class BabyProfileActivity extends AppCompatActivity {
     private EditText babyName;
     private TextView babyDob;
     private Button updateProfileBtn;
-//    private String dobString;
+    //    private String dobString;
     public static Calendar myCalendar;
+    private Context context;
 
     // TODO fixed next variables to Model architecture
     private FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
     private CollectionReference usersCollection = firestoreDB.collection("users");
-    private CollectionReference babiesCollection= firestoreDB.collection("babies");
+    private CollectionReference babiesCollection = firestoreDB.collection("babies");
 
     User userStub;
 
@@ -58,6 +62,7 @@ public class BabyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_profile);
 
+        context = this;
         profilePicture = findViewById(R.id.profile_image);
         babyName = findViewById(R.id.baby_name);
         babyDob = findViewById(R.id.dob);
@@ -80,7 +85,6 @@ public class BabyProfileActivity extends AppCompatActivity {
         setupUpdateButton();
         setupProfileImage();
         loadFromFirestore();
-
     }
 
     @Override
@@ -118,17 +122,17 @@ public class BabyProfileActivity extends AppCompatActivity {
                     if (userStub.getBabies() == null || userStub.getBabies().isEmpty()) {
                         // user has no babies
                         addNewBabyToDatabase(name, dob);
-
                     } else {
                         // user has babies - editing an exisiting one
                         String bid = userStub.getBabies().get(0).getId();
                         updateBabyInDatabase(bid, name, dob);
                     }
+                    Intent intent = new Intent(context, HomeFragment.class);
+                    intent.putExtra(BABY_ID, userStub.getBabies().get(0).getId());
+                    startActivity(intent);
                 }
-
             }
         });
-
     }
 
     private void setupProfileImage() {
@@ -180,24 +184,22 @@ public class BabyProfileActivity extends AppCompatActivity {
                                         babyName.setText(baby.getBabyName());
                                         babyDob.setText(baby.getBabyDOB());
                                     }
-
                                 }
                             }
                         }
                     });
-
         }
     }
 
     /**
      * check that the user has typed a name for the baby
+     *
      * @return True iff babyName is not null && not empty, false otherwise.
      */
     private boolean checkBabyName() {
         String babyNameString = babyName.getText().toString();
         // Check whether the entered text is not null and not empty
-        if (babyNameString != null && !babyNameString.isEmpty())
-        {
+        if (babyNameString != null && !babyNameString.isEmpty()) {
             //display the text that you entered in edit text
             return true;
         } else {
@@ -208,6 +210,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * check that the user has typed a dob for the baby
+     *
      * @return True iff baby dob is not empty, false otherwise.
      */
     private boolean checkBabyDob() {
@@ -228,11 +231,12 @@ public class BabyProfileActivity extends AppCompatActivity {
             upload to Firebase
             return to activity
          */
-         startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
+        startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
     }
 
     /**
      * This method will initiate a date Picker Dialog fragment
+     *
      * @param view current view.
      */
     public void showDatePickerDialog(View view) {
@@ -243,6 +247,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     /**
      * This method will save the date that has been picked into the profile.
      * This method will be called only from the DialogFragment class.
+     *
      * @param dateString D.O.B string to save
      */
     public void processDatePickerResult(String dateString) {
@@ -252,8 +257,9 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * This method will add new baby to fire store
+     *
      * @param babyName baby name
-     * @param babyDob baby date of birth
+     * @param babyDob  baby date of birth
      */
     public void addNewBabyToDatabase(String babyName, String babyDob) {
 
@@ -268,9 +274,10 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * This method will update an existing baby in fire store
-     * @param bid baby id
+     *
+     * @param bid      baby id
      * @param babyName baby name
-     * @param babyDob baby date of birth.
+     * @param babyDob  baby date of birth.
      */
     public void updateBabyInDatabase(String bid, String babyName, String babyDob) {
         Baby baby = new Baby(bid, babyName, babyDob);

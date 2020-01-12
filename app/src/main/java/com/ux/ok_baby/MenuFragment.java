@@ -15,6 +15,11 @@ import static com.ux.ok_baby.Constants.*;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View view;
+    private String babyID;
+
+    public MenuFragment(String babyID) {
+        this.babyID = babyID;
+    }
 
     @Nullable
     @Override
@@ -57,7 +62,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     @SuppressLint("ResourceType")
     private void startNewFragment(int reportType) {
-        ReportsHolderFragment reportsHolderFragment = new ReportsHolderFragment();
+        ReportsHolderFragment reportsHolderFragment = new ReportsHolderFragment(babyID);
         Bundle bundle = new Bundle();
         bundle.putInt(REPORT_TYPE, reportType);
         reportsHolderFragment.setArguments(bundle);

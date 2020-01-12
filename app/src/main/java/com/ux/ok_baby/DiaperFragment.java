@@ -22,11 +22,11 @@ public class DiaperFragment extends Fragment {
 
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn;
-    private Button tableBtn;
+    private Button graphsBtn, tableBtn;
+    private String babyID;
 
-    public DiaperFragment() {
-        // Required empty public constructor
+    public DiaperFragment(String babyID) {
+        this.babyID = babyID;
     }
 
 
@@ -47,7 +47,7 @@ public class DiaperFragment extends Fragment {
         return view;
     }
 
-    private void setUpReportTable(){
+    private void setUpReportTable() {
         CollectionReference dataSource = null; // todo - query from firebase
         mTableAdapter = new ReportTableAdapter(getContext(), dataSource);
         mTableLayout.setAdapter(mTableAdapter);
@@ -56,7 +56,7 @@ public class DiaperFragment extends Fragment {
         mTableAdapter.notifyDataSetChanged();
     }
 
-    private void setUpGraphsBtn(){
+    private void setUpGraphsBtn() {
         graphsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,14 +74,14 @@ public class DiaperFragment extends Fragment {
             }
         });
     }
+
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpDiaper popUpClass = new PopUpDiaper(getActivity());
+                PopUpDiaper popUpClass = new PopUpDiaper(getActivity(), babyID);
                 popUpClass.showPopupWindow(view);
             }
         });
     }
-
 }

@@ -9,7 +9,6 @@
     <string name="sign_in_btn_label">Log in</string>
     <string name="sign_up_pre_text">Don\'t have an account?\t</string>
     <string name="sign_up_link_label">Sign up</string>
-    <string name="sign_in_btn_label">ok</string>
     <string name="sleep_report_title">Sleep Report</string>
     <string name="switch_to_graph_btn_label">Graphs</string>
     <string name="switch_to_table_btn_label">Table</string>

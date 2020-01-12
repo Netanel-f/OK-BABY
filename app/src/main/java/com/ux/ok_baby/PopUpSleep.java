@@ -12,54 +12,62 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import static com.ux.ok_baby.Constants.DATE_PATTERN;
 
 
 public class PopUpSleep {
     private Context context;
+    private View popupView;
+    private PopupWindow popupWindow;
     private Calendar myCalendar = Calendar.getInstance();
+    private EditText dateET, startTimeET, endTimeET;
+    private String babyID;
 
-
-    public PopUpSleep(Context context) {
+    public PopUpSleep(Context context, String babyID) {
         this.context = context;
+        this.babyID = babyID;
     }
 
     public void showPopupWindow(View view) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_window_sleep, null);
-        final PopupWindow popupWindow = setupPopup(view, popupView);
+        popupView = inflater.inflate(R.layout.popup_window_sleep, null);
+        popupWindow = setupPopup(view, popupView);
 
-        datePicker((EditText) popupView.findViewById(R.id.date));
-        timePicker((EditText) popupView.findViewById(R.id.startTime));
-        timePicker((EditText) popupView.findViewById(R.id.endTime));
+        dateET = (EditText) popupView.findViewById(R.id.date);
+        startTimeET = (EditText) popupView.findViewById(R.id.startTime);
+        endTimeET = (EditText) popupView.findViewById(R.id.endTime);
 
-        setUpButtons(popupView, popupWindow);
+        datePicker();
+        timePicker(startTimeET);
+        timePicker(endTimeET);
+        setUpAddButton();
+        setUpExit();
     }
 
-    private void setUpButtons(View popupView, final PopupWindow popupWindow) {
-        popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    //TODO add report
-            }
-        });
-
+    private void setUpExit() {
         popupView.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
             }
         });
-    }
-
-    private PopupWindow setupPopup(View view, View popupView) {
-        int width = LinearLayout.LayoutParams.MATCH_PARENT;
-        int height = LinearLayout.LayoutParams.MATCH_PARENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         popupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -67,14 +75,78 @@ public class PopUpSleep {
                 return true;
             }
         });
+    }
+
+    private Map<String, Object> mapSleep(String id, String date, String startTime, String endTime) {
+        HashMap<String, Object> mapSleep = new HashMap<>();
+        mapSleep.put("ID", id);
+        mapSleep.put("date", date);
+        mapSleep.put("startTime", startTime);
+        mapSleep.put("endTime", endTime);
+        return mapSleep;
+    }
+
+    private void setUpAddButton() {
+        popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String date = dateET.getText().toString();
+                String endTime = endTimeET.getText().toString();
+                String startTime = startTimeET.getText().toString();
+
+                if (isDateValid(date) && isTimeValid(endTime) && isTimeValid(startTime)) {
+                    CollectionReference sleepCollection = FirebaseFirestore.getInstance()
+                            .collection("babies").document(babyID).collection("sleep_reports");
+                    String id = sleepCollection.document().getId();
+                    sleepCollection.document(id).set(mapSleep(id, date, startTime, endTime));
+                } else {
+                    Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+
+    private boolean isDateValid(String dobString) {
+        if (dobString.isEmpty()) {
+            return false;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+        try {
+            sdf.parse(dobString);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isTimeValid(String time) {
+        if (time.isEmpty()) {
+            return false;
+        }
+        DateTimeFormatter strictTimeFormatter = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+        try {
+            LocalTime.parse(time, strictTimeFormatter);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+
+    private PopupWindow setupPopup(View view, View popupView) {
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.MATCH_PARENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         return popupWindow;
     }
 
-    private void datePicker(final EditText editText) {
-        editText.setOnClickListener(new View.OnClickListener() {
+    private void datePicker() {
+        dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, getDateSetListener(editText), myCalendar.get(Calendar.YEAR),
+                new DatePickerDialog(context, getDateSetListener(dateET), myCalendar.get(Calendar.YEAR),
                         myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });

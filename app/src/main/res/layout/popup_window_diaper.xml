@@ -103,7 +103,9 @@
                 <Button
                     android:id="@+id/type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/poo"
+                    android:textAllCaps="false" />
 
             </LinearLayout>
 
@@ -151,7 +153,6 @@
 
 
                 <!-- TODO-->
-
             </LinearLayout>
 
             <RelativeLayout

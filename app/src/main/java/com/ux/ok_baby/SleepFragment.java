@@ -3,8 +3,10 @@ package com.ux.ok_baby;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +14,26 @@ import android.widget.Button;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 /**
  * Contains the sleep report.
  */
 public class SleepFragment extends Fragment {
+    private final String TAG = "SleepFragment";
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn;
-    private Button tableBtn;
+    private Button graphsBtn, tableBtn;
+    private String babyID;
 
-    public SleepFragment() {
-        // Required empty public constructor
+    public SleepFragment(String babyID) {
+        this.babyID = babyID;
     }
 
 
@@ -41,7 +50,37 @@ public class SleepFragment extends Fragment {
 
         setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
+        loadFromFirebase();
         return view;
+    }
+
+    private void loadFromFirebase() {
+        CollectionReference sleepCollection = FirebaseFirestore.getInstance().collection("babies")
+                .document(babyID).collection("sleep_reports");
+        sleepCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e);
+                    return;
+                }
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            // TODO: 1/12/2020 add row to table
+                            break;
+                        case MODIFIED:
+                            // TODO: 1/12/2020 update row in table
+                            break;
+                        case REMOVED:
+                            // TODO: 1/12/2020 remove row from table
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     private void setUpReportTable() {
@@ -76,7 +115,7 @@ public class SleepFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpSleep popUpClass = new PopUpSleep(getActivity());
+                PopUpSleep popUpClass = new PopUpSleep(getActivity(), babyID);
                 popUpClass.showPopupWindow(view);
             }
         });

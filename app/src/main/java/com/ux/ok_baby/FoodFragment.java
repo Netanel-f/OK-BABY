@@ -21,13 +21,12 @@ public class FoodFragment extends Fragment {
 
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn;
-    private Button tableBtn;
+    private Button graphsBtn,tableBtn;
+    private String babyID;
 
-    public FoodFragment() {
-        // Required empty public constructor
+    public FoodFragment(String babyID) {
+        this.babyID = babyID;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +75,7 @@ public class FoodFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpFood popUpClass = new PopUpFood(getActivity());
+                PopUpFood popUpClass = new PopUpFood(getActivity(),babyID);
                 popUpClass.showPopupWindow(view);
             }
         });
