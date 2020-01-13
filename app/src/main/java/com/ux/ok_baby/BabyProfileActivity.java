@@ -240,8 +240,8 @@ public class BabyProfileActivity extends AppCompatActivity {
      * @param view current view.
      */
     public void showDatePickerDialog(View view) {
-        DatePickerFragment datePickerFragment = new DatePickerFragment();
-        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+        DateTimePicker dateTimePicker = new DateTimePicker(context);
+        dateTimePicker.datePicker(babyDob);
     }
 
     /**

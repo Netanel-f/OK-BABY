@@ -50,12 +50,8 @@
                 <EditText
                     android:id="@+id/date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <!--                <DatePicker android:id="@+id/datePicker1"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:datePickerMode="spinner"-->
-                <!--                    android:calendarViewShown="false"/>-->
+                    android:layout_height="wrap_content"
+                    android:editable="false" />
 
             </LinearLayout>
 
@@ -79,7 +75,8 @@
                 <EditText
                     android:id="@+id/time"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:editable="false" />
 
             </LinearLayout>
 
