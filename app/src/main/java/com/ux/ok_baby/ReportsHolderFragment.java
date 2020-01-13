@@ -20,6 +20,11 @@ import com.google.android.material.tabs.TabLayout;
 public class ReportsHolderFragment extends Fragment {
 
     private int reportType = -1;
+    private String babyID;
+
+    public ReportsHolderFragment(String babyID) {
+        this.babyID = babyID;
+    }
 
     @Nullable
     @Override
@@ -34,7 +39,7 @@ public class ReportsHolderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ViewPager viewPager = view.findViewById(R.id.reports);
-        viewPager.setAdapter(new ReportsPagerAdapter(getChildFragmentManager()));
+        viewPager.setAdapter(new ReportsPagerAdapter(getChildFragmentManager(),babyID));
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         setUpTab(tabLayout);
@@ -49,22 +54,25 @@ public class ReportsHolderFragment extends Fragment {
 
 class ReportsPagerAdapter extends FragmentStatePagerAdapter {
     private final int NUM_OF_TABS = 4;
+    private String babyID;
 
-    public ReportsPagerAdapter(FragmentManager fm) {
+    public ReportsPagerAdapter(FragmentManager fm,String babyID) {
         super(fm);
+        this.babyID = babyID;
     }
 
     @Override
     public Fragment getItem(int i) {
         switch (i) {
             case SLEEP_TAB:
-                return new SleepFragment();
+                return new SleepFragment(babyID);
             case FOOD_TAB:
-                return new FoodFragment();
+                return new FoodFragment(babyID);
             case DIAPER_TAB:
-                return new DiaperFragment();
+                return new DiaperFragment(babyID);
+            default:
+                return new OtherFragment(babyID);
         }
-        return new OtherFragment();
     }
 
     @Override
@@ -81,7 +89,8 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return FOOD;
             case DIAPER_TAB:
                 return DIAPER;
+            default:
+                return OTHER;
         }
-        return OTHER;
     }
 }

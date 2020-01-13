@@ -10,5 +10,6 @@ public class Constants {
     static final int DIAPER_TAB = 2;
     static final int OTHER_TAB = 3;
     static final String REPORT_TYPE = "report type";
-
+    static final String BABY_ID = "baby id";
+    static final String DATE_PATTERN = "MM/dd/yy";
 }
