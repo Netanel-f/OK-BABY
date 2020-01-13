@@ -15,8 +15,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ux.ok_baby.Model.SleepEntry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,10 +24,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import static com.ux.ok_baby.Constants.DATE_PATTERN;
 
@@ -36,6 +33,7 @@ public class PopUpSleep {
     private Context context;
     private View popupView;
     private PopupWindow popupWindow;
+    private SleepEntry sleepEntry;
     private Calendar myCalendar = Calendar.getInstance();
     private EditText dateET, startTimeET, endTimeET;
     private String babyID;
@@ -49,6 +47,7 @@ public class PopUpSleep {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.popup_window_sleep, null);
         popupWindow = setupPopup(view, popupView);
+        sleepEntry = new SleepEntry();
 
         dateET = (EditText) popupView.findViewById(R.id.date);
         startTimeET = (EditText) popupView.findViewById(R.id.startTime);
@@ -77,28 +76,19 @@ public class PopUpSleep {
         });
     }
 
-    private Map<String, Object> mapSleep(String id, String date, String startTime, String endTime) {
-        HashMap<String, Object> mapSleep = new HashMap<>();
-        mapSleep.put("ID", id);
-        mapSleep.put("date", date);
-        mapSleep.put("startTime", startTime);
-        mapSleep.put("endTime", endTime);
-        return mapSleep;
-    }
-
     private void setUpAddButton() {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String date = dateET.getText().toString();
-                String endTime = endTimeET.getText().toString();
-                String startTime = startTimeET.getText().toString();
+                sleepEntry.setDate(dateET.getText().toString());
+                sleepEntry.setEndTime(endTimeET.getText().toString());
+                sleepEntry.setStartTime(startTimeET.getText().toString());
 
-                if (isDateValid(date) && isTimeValid(endTime) && isTimeValid(startTime)) {
+                if (isDateValid(sleepEntry.getDate()) && isTimeValid(sleepEntry.getEndTime()) && isTimeValid(sleepEntry.getStartTime())) {
                     CollectionReference sleepCollection = FirebaseFirestore.getInstance()
                             .collection("babies").document(babyID).collection("sleep_reports");
                     String id = sleepCollection.document().getId();
-                    sleepCollection.document(id).set(mapSleep(id, date, startTime, endTime));
+                    sleepCollection.document(id).set(sleepEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }

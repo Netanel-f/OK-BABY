@@ -20,6 +20,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ux.ok_baby.Model.FoodEntry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,20 +28,19 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import static com.ux.ok_baby.Constants.DATE_PATTERN;
 
 public class PopUpFood {
     private Context context;
+    private FoodEntry foodEntry;
     private Calendar myCalendar = Calendar.getInstance();
     private EditText dateET, startTimeET, endTimeET;
     private Button typeB, sideB, amountB;
     private PopupWindow popupWindow;
     private View popupView;
-    private String babyID, date, endTime, startTime, type, side, amount;
+    private String babyID;
 
     public PopUpFood(Context context, String babyID) {
         this.context = context;
@@ -51,7 +51,7 @@ public class PopUpFood {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.popup_window_food, null);
         popupWindow = setupPopup(view, popupView);
-
+        foodEntry = new FoodEntry();
         dateET = popupView.findViewById(R.id.date);
         startTimeET = popupView.findViewById(R.id.startTime);
         endTimeET = popupView.findViewById(R.id.endTime);
@@ -86,28 +86,17 @@ public class PopUpFood {
         });
     }
 
-    private Map<String, Object> mapFood(String id) {
-        HashMap<String, Object> mapSleep = new HashMap<>();
-        mapSleep.put("ID", id);
-        mapSleep.put("date", date);
-        mapSleep.put("startTime", startTime);
-        mapSleep.put("endTime", endTime);
-        mapSleep.put("type", type);
-        mapSleep.put("side", side);
-        mapSleep.put("amount", amount);
-        return mapSleep;
-    }
 
     private void setUpAddButton() {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTime = startTimeET.getText().toString();
-                endTime = endTimeET.getText().toString();
-                if (isDateValid(date) && isTimeValid(endTime) && isTimeValid(startTime)) { // TODO: 1/12/2020 check validation of other variables
+                foodEntry.setStartTime(startTimeET.getText().toString());
+                foodEntry.setEndTime(endTimeET.getText().toString());
+                if (isDateValid(foodEntry.getDate()) && isTimeValid(foodEntry.getEndTime()) && isTimeValid(foodEntry.getStartTime())) { // TODO: 1/12/2020 check validation of other variables
                     CollectionReference foodCollection = FirebaseFirestore.getInstance().collection("babies").document(babyID).collection("food_reports");
                     String id = foodCollection.document().getId();
-                    foodCollection.document(id).set(mapFood(id));
+                    foodCollection.document(id).set(foodEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }
@@ -153,14 +142,14 @@ public class PopUpFood {
                             popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
                             popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
                             typeB.setText("Bottle");
-                            type = "Bottle";
-                            side = null;
+                            foodEntry.setType("Bottle");
+                            foodEntry.setSide(null);
                         } else {
                             popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
                             popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
                             typeB.setText("Breastfeeding");
-                            type = "Breastfeeding";
-                            amount = null;
+                            foodEntry.setType("Breastfeeding");
+                            foodEntry.setAmount(null);
                         }
                         return true;
                     }
@@ -180,10 +169,10 @@ public class PopUpFood {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.right) {
                             sideB.setText("Right");
-                            side = "Right";
+                            foodEntry.setSide("Right");
                         } else {
                             sideB.setText("Left");
-                            side = "Left";
+                            foodEntry.setSide("Left");
                         }
                         return true;
                     }
@@ -225,7 +214,7 @@ public class PopUpFood {
             public void onClick(View v) {
                 new DatePickerDialog(context, getDateSetListener(dateET), myCalendar.get(Calendar.YEAR),
                         myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                date = dateET.getText().toString();
+                foodEntry.setDate(dateET.getText().toString());
             }
         });
     }
