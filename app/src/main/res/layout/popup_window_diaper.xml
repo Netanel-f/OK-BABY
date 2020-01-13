@@ -51,7 +51,8 @@
                     android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false" />
+                    android:editable="false"
+                    android:gravity="center" />
 
             </LinearLayout>
 
@@ -76,7 +77,8 @@
                     android:id="@+id/time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false" />
+                    android:editable="false"
+                    android:gravity="center" />
 
             </LinearLayout>
 
