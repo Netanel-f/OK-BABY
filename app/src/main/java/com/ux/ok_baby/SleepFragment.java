@@ -70,6 +70,7 @@ public class SleepFragment extends Fragment {
                     switch (dc.getType()) {
                         case ADDED:
                             // TODO: 1/12/2020 add row to table
+
                             break;
                         case MODIFIED:
                             // TODO: 1/12/2020 update row in table
