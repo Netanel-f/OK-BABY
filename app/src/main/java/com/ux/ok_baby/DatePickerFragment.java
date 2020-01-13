@@ -5,6 +5,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.DatePicker;
@@ -12,8 +13,10 @@ import android.widget.DatePicker;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import static com.ux.ok_baby.Constants.DATE_PATTERN;
+
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-//    DatePickerDialog.OnDateSetListener ondateSet;
+    //    DatePickerDialog.OnDateSetListener ondateSet;
     private Calendar myCalendar;
 
     @Override
@@ -36,7 +39,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
          */
         myCalendar = Calendar.getInstance();
         myCalendar.set(year, month, day);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
         String formattedDate = sdf.format(myCalendar.getTime());
 
         BabyProfileActivity babyProfileActivity = (BabyProfileActivity) getActivity();
