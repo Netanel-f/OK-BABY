@@ -12,7 +12,7 @@ public class FoodEntry {
         this.type = type;
     }
 
-    FoodEntry() {
+    public FoodEntry() {
     }
 
     public String getStartTime() {

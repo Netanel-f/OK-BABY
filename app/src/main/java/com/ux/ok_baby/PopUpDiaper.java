@@ -1,7 +1,5 @@
 package com.ux.ok_baby;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -9,11 +7,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -28,7 +24,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Calendar;
-import java.util.Locale;
 
 import static com.ux.ok_baby.Constants.DATE_PATTERN;
 
@@ -36,6 +31,7 @@ public class PopUpDiaper {
     private Context context;
     private View popupView;
     private DiaperEntry diaperEntry;
+    private DateTimePicker dateTimePicker;
     private PopupWindow popupWindow;
     private Calendar myCalendar = Calendar.getInstance();
     private String babyID;
@@ -53,14 +49,15 @@ public class PopUpDiaper {
         popupView = inflater.inflate(R.layout.popup_window_diaper, null);
         popupWindow = setupPopup(view, popupView);
         diaperEntry = new DiaperEntry();
+        dateTimePicker = new DateTimePicker(context);
 
         dateET = popupView.findViewById(R.id.date);
         timeET = popupView.findViewById(R.id.time);
         typeB = popupView.findViewById(R.id.type);
         textureB = popupView.findViewById(R.id.texture);
         // TODO: 1/12/2020 update texture and color.
-        datePicker();
-        timePicker();
+        setUpDate();
+        setUpTime();
         onTypeClick();
         setUpAddButton();
         setUpExit();
@@ -160,48 +157,21 @@ public class PopUpDiaper {
         return popupWindow;
     }
 
-    private void datePicker() {
+    private void setUpDate() {
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, getDateSetListener(dateET), myCalendar.get(Calendar.YEAR),
-                        myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                dateTimePicker.datePicker(dateET);
                 diaperEntry.setDate(dateET.getText().toString());
             }
         });
     }
 
-    private DatePickerDialog.OnDateSetListener getDateSetListener(final EditText editText) {
-        return new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy", Locale.US); // TODO: 1/10/2020 change US
-                editText.setText(sdf.format(myCalendar.getTime()));
-            }
-        };
-    }
-
-    private TimePickerDialog.OnTimeSetListener getTimeSetListener(final EditText editText) {
-        return new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                editText.setText(selectedHour + ":" + selectedMinute);
-            }
-        };
-    }
-
-
-    private void timePicker() {
+    private void setUpTime() {
         timeET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog mTimePicker = new TimePickerDialog(context, getTimeSetListener(timeET),
-                        myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), true);
-                mTimePicker.setTitle("Select Time");
-                mTimePicker.show();
+                dateTimePicker.timePicker(timeET);
                 diaperEntry.setTime(timeET.getText().toString());
             }
         });
