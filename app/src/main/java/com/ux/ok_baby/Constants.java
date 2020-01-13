@@ -11,4 +11,6 @@ public class Constants {
     static final int OTHER_TAB = 3;
     static final String REPORT_TYPE = "report type";
 
+    static final String BABY_OBJECT_TAG = "BabyObject";
+
 }
