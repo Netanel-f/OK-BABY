@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.ui.reports.FoodFragment">
 
     <RelativeLayout
@@ -15,9 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/title_margin"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <Button
                 android:id="@+id/switch_to_graph_btn"
@@ -25,9 +25,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/switch_to_graph_btn_label"
 
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="visible"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/switch_to_table_btn"
@@ -35,26 +35,36 @@
                 android:layout_height="wrap_content"
                 android:text="@string/switch_to_table_btn_label"
 
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- report table -->
         <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout
-            android:layout_margin="10dp"
             android:id="@+id/tableReportLayout"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_below="@+id/report_header"
+            android:layout_margin="10dp"
             android:elevation="0dp"
+            android:visibility="visible"
             app:cellMargin="1dp"
-            app:fixedHeaders="true"
-            app:solidRowHeaders="false"
             app:dragAndDropEnabled="true"
-            android:visibility="visible"/>
+            app:fixedHeaders="true"
+            app:solidRowHeaders="false" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:src="@drawable/ic_add"
+            app:layout_anchorGravity="bottom|right|end" />
 
     </RelativeLayout>
 

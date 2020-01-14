@@ -18,7 +18,7 @@ import com.ux.ok_baby.R;
 public class OtherFragment extends Fragment {
 
 
-    public OtherFragment() {
+    public OtherFragment(String babyID) {
         // Required empty public constructor
     }
 

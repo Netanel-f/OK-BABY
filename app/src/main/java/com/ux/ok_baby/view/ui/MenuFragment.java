@@ -18,17 +18,25 @@ import static com.ux.ok_baby.utils.Constants.*;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View view;
+    private String babyID;
+
+    public MenuFragment(String babyID) {
+        this.babyID = babyID;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.menu_layout, container, false);
+        setUpOptions();
+        return view;
+    }
 
+    private void setUpOptions() {
         view.findViewById(R.id.diaperButton).setOnClickListener(this);
         view.findViewById(R.id.foodButton).setOnClickListener(this);
         view.findViewById(R.id.otherButton).setOnClickListener(this);
         view.findViewById(R.id.sleepButton).setOnClickListener(this);
-        return view;
     }
 
     @Override
@@ -57,7 +65,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     @SuppressLint("ResourceType")
     private void startNewFragment(int reportType) {
-        ReportsHolderFragment reportsHolderFragment = new ReportsHolderFragment();
+        ReportsHolderFragment reportsHolderFragment = new ReportsHolderFragment(babyID);
         Bundle bundle = new Bundle();
         bundle.putInt(REPORT_TYPE, reportType);
         reportsHolderFragment.setArguments(bundle);

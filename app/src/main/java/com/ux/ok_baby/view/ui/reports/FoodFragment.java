@@ -23,13 +23,12 @@ public class FoodFragment extends Fragment {
 
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn;
-    private Button tableBtn;
+    private Button graphsBtn,tableBtn;
+    private String babyID;
 
-    public FoodFragment() {
-        // Required empty public constructor
+    public FoodFragment(String babyID) {
+        this.babyID = babyID;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +42,7 @@ public class FoodFragment extends Fragment {
         tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
         setUpGraphsBtn();
-
+        onAddClickListener(view.findViewById(R.id.addReport));
         return view;
     }
 
@@ -71,6 +70,15 @@ public class FoodFragment extends Fragment {
                 graphsBtn.setVisibility(View.VISIBLE);
                 tableBtn.setVisibility(View.GONE);
                 mTableLayout.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    private void onAddClickListener(View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpFood popUpClass = new PopUpFood(getActivity(),babyID);
+                popUpClass.showPopupWindow(view);
             }
         });
     }
