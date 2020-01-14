@@ -10,12 +10,12 @@ import com.ux.ok_baby.model.Baby;
 import com.ux.ok_baby.model.User;
 import com.ux.ok_baby.repository.FirestoreRepository;
 
-public class ViewModel extends AndroidViewModel {
+public class UserViewModel extends AndroidViewModel {
 
-    private static final String TAG = "ViewModel";
+    private static final String TAG = "UserViewModel";
     private FirestoreRepository dbRepo;
 
-    public ViewModel(@NonNull Application application) {
+    public UserViewModel(@NonNull Application application) {
         super(application);
         this.dbRepo = new FirestoreRepository();
     }
@@ -81,14 +81,5 @@ public class ViewModel extends AndroidViewModel {
     public LiveData<User> getUser(String uid){
         return dbRepo.getUser(uid);
     }
-
-    /* ENTRIES */ // todo
-
-    public void getAllEntries(int entryType, String bid){
-        // todo: change entryType to enum?
-        // todo: LiveData<List<Entries>>
-    }
-
-    // todo: query specific entries: by date or others
 
 }
