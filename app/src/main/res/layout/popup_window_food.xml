@@ -47,12 +47,9 @@
                 <EditText
                     android:id="@+id/date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <!--                <DatePicker android:id="@+id/datePicker1"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:datePickerMode="spinner"-->
-                <!--                    android:calendarViewShown="false"/>-->
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:gravity="center" />
 
             </LinearLayout>
             <!--start time-->
@@ -75,7 +72,9 @@
                 <EditText
                     android:id="@+id/startTime"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:gravity="center" />
 
             </LinearLayout>
 
@@ -99,7 +98,9 @@
                 <EditText
                     android:id="@+id/endTime"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:gravity="center" />
 
             </LinearLayout>
 

@@ -1,33 +1,24 @@
 package com.ux.ok_baby;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ux.ok_baby.Model.SleepEntry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import static com.ux.ok_baby.Constants.DATE_PATTERN;
 
@@ -36,7 +27,8 @@ public class PopUpSleep {
     private Context context;
     private View popupView;
     private PopupWindow popupWindow;
-    private Calendar myCalendar = Calendar.getInstance();
+    private DateTimePicker dateTimePicker;
+    private SleepEntry sleepEntry;
     private EditText dateET, startTimeET, endTimeET;
     private String babyID;
 
@@ -49,14 +41,16 @@ public class PopUpSleep {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.popup_window_sleep, null);
         popupWindow = setupPopup(view, popupView);
+        sleepEntry = new SleepEntry();
+        dateTimePicker = new DateTimePicker(context);
 
         dateET = (EditText) popupView.findViewById(R.id.date);
         startTimeET = (EditText) popupView.findViewById(R.id.startTime);
         endTimeET = (EditText) popupView.findViewById(R.id.endTime);
 
-        datePicker();
-        timePicker(startTimeET);
-        timePicker(endTimeET);
+        setUpDate();
+        setUpTime(startTimeET);
+        setUpTime(endTimeET);
         setUpAddButton();
         setUpExit();
     }
@@ -77,28 +71,15 @@ public class PopUpSleep {
         });
     }
 
-    private Map<String, Object> mapSleep(String id, String date, String startTime, String endTime) {
-        HashMap<String, Object> mapSleep = new HashMap<>();
-        mapSleep.put("ID", id);
-        mapSleep.put("date", date);
-        mapSleep.put("startTime", startTime);
-        mapSleep.put("endTime", endTime);
-        return mapSleep;
-    }
-
     private void setUpAddButton() {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String date = dateET.getText().toString();
-                String endTime = endTimeET.getText().toString();
-                String startTime = startTimeET.getText().toString();
-
-                if (isDateValid(date) && isTimeValid(endTime) && isTimeValid(startTime)) {
+                if (isDateValid(sleepEntry.getDate()) && isTimeValid(sleepEntry.getEndTime()) && isTimeValid(sleepEntry.getStartTime())) {
                     CollectionReference sleepCollection = FirebaseFirestore.getInstance()
                             .collection("babies").document(babyID).collection("sleep_reports");
                     String id = sleepCollection.document().getId();
-                    sleepCollection.document(id).set(mapSleep(id, date, startTime, endTime));
+                    sleepCollection.document(id).set(sleepEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }
@@ -142,47 +123,25 @@ public class PopUpSleep {
         return popupWindow;
     }
 
-    private void datePicker() {
+    private void setUpDate() {
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, getDateSetListener(dateET), myCalendar.get(Calendar.YEAR),
-                        myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                dateTimePicker.datePicker(dateET);
+                sleepEntry.setDate(dateET.getText().toString());
             }
         });
     }
 
-    private DatePickerDialog.OnDateSetListener getDateSetListener(final EditText editText) {
-        return new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy", Locale.US); // TODO: 1/10/2020 change US
-                editText.setText(sdf.format(myCalendar.getTime()));
-            }
-        };
-    }
-
-    private TimePickerDialog.OnTimeSetListener getTimeSetListener(final EditText editText) {
-        return new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                editText.setText(selectedHour + ":" + selectedMinute);
-            }
-        };
-    }
-
-
-    private void timePicker(final EditText editText) {
+    private void setUpTime(final EditText editText) {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog mTimePicker = new TimePickerDialog(context, getTimeSetListener(editText),
-                        myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), true);
-                mTimePicker.setTitle("Select Time");
-                mTimePicker.show();
+                dateTimePicker.timePicker(editText);
+                if (v.getId() == R.id.endTime)
+                    sleepEntry.setEndTime(editText.getText().toString());
+                else
+                    sleepEntry.setStartTime(editText.getText().toString());
             }
         });
     }
