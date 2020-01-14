@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,8 +23,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.Baby;
-import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.model.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;

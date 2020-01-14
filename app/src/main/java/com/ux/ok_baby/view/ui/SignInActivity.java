@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +22,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.User;
 
 import java.util.ArrayList;
 
@@ -172,7 +173,6 @@ public class SignInActivity extends AppCompatActivity {
      * @param password
      */
     private void signInToFirebase(String email, String password) {
-        // todo: get if exists, create with auth user uid if doesn't
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null) {
             authenticateUser(email, password);

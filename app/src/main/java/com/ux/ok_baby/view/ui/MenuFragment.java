@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,7 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import static com.ux.ok_baby.Constants.*;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.view.ui.reports.ReportsHolderFragment;
+
+import static com.ux.ok_baby.utils.Constants.*;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View view;

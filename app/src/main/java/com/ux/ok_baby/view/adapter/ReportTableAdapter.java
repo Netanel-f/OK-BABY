@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import com.cleveroad.adaptivetablelayout.LinkedAdaptiveTableAdapter;
 import com.cleveroad.adaptivetablelayout.ViewHolderImpl;
 import com.google.firebase.firestore.CollectionReference;
+import com.ux.ok_baby.R;
 
 public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 

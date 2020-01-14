@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui.reports;
 
 
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.Button;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.google.firebase.firestore.CollectionReference;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui.reports;
 
 
 import android.os.Bundle;
@@ -12,20 +12,21 @@ import android.widget.Button;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.google.firebase.firestore.CollectionReference;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 
 
 /**
- * Contains the diaper report.
+ * Contains the food report.
  */
-public class DiaperFragment extends Fragment {
-
+public class FoodFragment extends Fragment {
 
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
     private Button graphsBtn;
     private Button tableBtn;
 
-    public DiaperFragment() {
+    public FoodFragment() {
         // Required empty public constructor
     }
 
@@ -34,7 +35,7 @@ public class DiaperFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_diaper, container, false);
+        View view = inflater.inflate(R.layout.fragment_food, container, false);
 
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);

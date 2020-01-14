@@ -1,10 +1,11 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
+
+import com.ux.ok_baby.R;
 
 /**
  * First screen when loading the app (after sign in).

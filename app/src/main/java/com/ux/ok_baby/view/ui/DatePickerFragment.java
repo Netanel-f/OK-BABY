@@ -1,12 +1,10 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.widget.DatePicker;
 
 import java.text.SimpleDateFormat;
