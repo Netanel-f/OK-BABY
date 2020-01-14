@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ux.ok_baby.R;
 
 import org.joda.time.DateTime;
 import org.joda.time.Months;
@@ -22,8 +23,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.ux.ok_baby.Constants.BABY_ID;
-import static com.ux.ok_baby.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.BABY_ID;
+import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
 
 /**
  * First screen when loading the app (after sign in).
