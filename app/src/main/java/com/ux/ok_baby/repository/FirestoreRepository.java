@@ -15,8 +15,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.model.DiaperEntry;
+import com.ux.ok_baby.model.FoodEntry;
+import com.ux.ok_baby.model.ReportEntry;
 import com.ux.ok_baby.model.User;
+import com.ux.ok_baby.model.SleepEntry;
+import com.ux.ok_baby.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FirestoreRepository {
 
@@ -25,13 +37,29 @@ public class FirestoreRepository {
     private FirebaseFirestore firestoreDB;
     private MutableLiveData<User> curUser;
     private MutableLiveData<Baby> curBaby;
-    private CollectionReference usersCollection = firestoreDB.collection("users");
-    private CollectionReference babiesCollection = firestoreDB.collection("babies");
+//    private MutableLiveData<List<SleepEntry>> sleepEntries;
+    private MutableLiveData<List<ReportEntry>> curEntries;
+    private CollectionReference usersCollection;
+    private CollectionReference babiesCollection;
+
+    private static final Map<Constants.ReportType, String> reportToCollection = createMap();
 
     public FirestoreRepository() {
         this.firestoreDB = FirebaseFirestore.getInstance();
+        this.usersCollection = firestoreDB.collection("users");
+        this.babiesCollection = firestoreDB.collection("babies");
         this.curUser = new MutableLiveData<>();
         this.curBaby = new MutableLiveData<>();
+        this.curEntries = new MutableLiveData<>();
+    }
+
+    private static Map<Constants.ReportType, String> createMap() {
+        Map<Constants.ReportType,String> myMap = new HashMap<>();
+        myMap.put(Constants.ReportType.SLEEP, "sleep_reports");
+        myMap.put(Constants.ReportType.FOOD, "food_reports");
+        myMap.put(Constants.ReportType.DIAPER, "diaper_reports");
+        myMap.put(Constants.ReportType.OTHER, "other_reports");
+        return myMap;
     }
 
     /* BABY */
@@ -129,7 +157,7 @@ public class FirestoreRepository {
      * @param user - user to update.
      */
     public void updateUser(User user) {
-        DocumentReference userRef = babiesCollection.document(user.getUid());
+        DocumentReference userRef = usersCollection.document(user.getUid());
         userRef.set(user);
     }
 
@@ -173,7 +201,11 @@ public class FirestoreRepository {
                             if (documentSnapshot.exists()) {
                                 User user = documentSnapshot.toObject(User.class);
                                 curUser.postValue(user);
+                            } else {
+                                curUser.postValue(null);
                             }
+                        } else {
+                            curUser.postValue(null);
                         }
                     }
                 });
@@ -192,6 +224,107 @@ public class FirestoreRepository {
 
         // update user
         userRef.update("babies", FieldValue.arrayUnion(babyRef));
+    }
+
+
+//    public LiveData<List<SleepEntry>> getSleepEntries(String bid){
+//        babiesCollection.document(bid)
+//                .collection("sleep_reports")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    List<SleepEntry> entries = new ArrayList<>();
+//                    if (task.isSuccessful()) {
+//                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                            SleepEntry entry = document.toObject(SleepEntry.class);
+//                            entries.add(entry);
+//                            Log.d(TAG, document.getId() + " => " + document.getData());
+//                        }
+//                        sleepEntries.postValue(entries);
+//                    } else {
+//                        Log.d(TAG, "Error getting documents: ", task.getException());
+//                    }
+//
+//                }
+//            });
+//        return sleepEntries;
+//    }
+
+//    public void addSleepEntry(String bid, SleepEntry entry){
+//        CollectionReference reportsRef = babiesCollection.document(bid).collection("sleep_reports");
+//        reportsRef.add(entry)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//            @Override
+//            public void onSuccess(DocumentReference documentReference) {
+//                Log.d(TAG, "onSuccess: Added sleep entry to db.");
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d(TAG, "onFailure: Failed to add sleep entry to db.");
+//            }
+//        });
+//    }
+
+    private static ReportEntry documentToEntry(QueryDocumentSnapshot document, Constants.ReportType type){
+        ReportEntry entry;
+        switch (type){
+            case SLEEP:
+                entry = document.toObject(SleepEntry.class);
+                break;
+            case FOOD:
+                entry = document.toObject(FoodEntry.class);
+                break;
+            case DIAPER:
+                entry = document.toObject(DiaperEntry.class);
+                break;
+            default:
+                Log.w(TAG, "documentToEntry: illegal report type");
+                return null;
+        }
+        return entry;
+    }
+
+    public LiveData<List<ReportEntry>> getEntries(String bid, final Constants.ReportType type){
+        String collectionName = reportToCollection.get(type);
+        babiesCollection.document(bid)
+                .collection(collectionName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<ReportEntry> entries = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                ReportEntry entry = documentToEntry(document, type);
+                                entries.add(entry);
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                            curEntries.postValue(entries);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return curEntries;
+    }
+
+    public void addEntry(Constants.ReportType type, String bid, ReportEntry entry){
+        String collectionName = reportToCollection.get(type);
+        CollectionReference reportsRef = babiesCollection.document(bid).collection(collectionName);
+        reportsRef.add(entry)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "onSuccess: Added entry to db.");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: Failed to add entry to db.");
+            }
+        });
     }
 
 }
