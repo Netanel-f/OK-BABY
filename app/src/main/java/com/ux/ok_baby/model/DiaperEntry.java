@@ -1,6 +1,6 @@
-package com.ux.ok_baby.Model;
+package com.ux.ok_baby.model;
 
-public class DiaperEntry {
+public class DiaperEntry extends ReportEntry{
 
     private String date, time, type, texture, color;
 

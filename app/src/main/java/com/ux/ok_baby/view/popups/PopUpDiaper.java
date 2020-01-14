@@ -16,7 +16,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.DiaperEntry;
+import com.ux.ok_baby.model.DiaperEntry;
 import com.ux.ok_baby.R;
 
 import java.text.ParseException;

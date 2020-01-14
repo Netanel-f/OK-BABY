@@ -20,6 +20,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.view.adapter.ReportTableAdapter;
+import com.ux.ok_baby.view.popups.PopUpSleep;
 
 
 /**

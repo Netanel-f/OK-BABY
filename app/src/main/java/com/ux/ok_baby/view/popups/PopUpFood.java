@@ -16,7 +16,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.FoodEntry;
+import com.ux.ok_baby.model.FoodEntry;
 import com.ux.ok_baby.R;
 
 import java.text.ParseException;
