@@ -1,6 +1,6 @@
-package com.ux.ok_baby.Model;
+package com.ux.ok_baby.model;
 
-public class SleepEntry {
+public class SleepEntry extends ReportEntry{
     private String date, StartTime, endTime;
 
     public SleepEntry(String date, String startTime, String endTime) {

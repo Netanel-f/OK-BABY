@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui.reports;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,9 +12,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import static com.ux.ok_baby.Constants.*;
+import static com.ux.ok_baby.utils.Constants.*;
 
 import com.google.android.material.tabs.TabLayout;
+import com.ux.ok_baby.R;
 
 
 public class ReportsHolderFragment extends Fragment {

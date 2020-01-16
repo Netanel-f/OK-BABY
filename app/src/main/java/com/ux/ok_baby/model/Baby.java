@@ -1,8 +1,4 @@
-package com.ux.ok_baby.Model;
-
-import com.google.firebase.firestore.DocumentReference;
-
-import java.util.List;
+package com.ux.ok_baby.model;
 
 public class Baby {
 

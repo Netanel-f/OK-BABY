@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.popups;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -16,7 +16,8 @@ import androidx.appcompat.widget.PopupMenu;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.DiaperEntry;
+import com.ux.ok_baby.model.FoodEntry;
+import com.ux.ok_baby.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,40 +26,45 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Calendar;
 
-import static com.ux.ok_baby.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
 
-public class PopUpDiaper {
+public class PopUpFood {
     private Context context;
-    private View popupView;
-    private DiaperEntry diaperEntry;
+    private FoodEntry foodEntry;
     private DateTimePicker dateTimePicker;
-    private PopupWindow popupWindow;
     private Calendar myCalendar = Calendar.getInstance();
+    private EditText dateET, startTimeET, endTimeET;
+    private Button typeB, sideB, amountB;
+    private PopupWindow popupWindow;
+    private View popupView;
     private String babyID;
-    private EditText dateET, timeET, endTimeET;
-    private Button typeB, textureB;
 
-
-    public PopUpDiaper(Context context, String babyID) {
+    public PopUpFood(Context context, String babyID) {
         this.context = context;
         this.babyID = babyID;
     }
 
     public void showPopupWindow(View view) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
-        popupView = inflater.inflate(R.layout.popup_window_diaper, null);
+        popupView = inflater.inflate(R.layout.popup_window_food, null);
         popupWindow = setupPopup(view, popupView);
-        diaperEntry = new DiaperEntry();
+        foodEntry = new FoodEntry();
         dateTimePicker = new DateTimePicker(context);
 
         dateET = popupView.findViewById(R.id.date);
-        timeET = popupView.findViewById(R.id.time);
+        startTimeET = popupView.findViewById(R.id.startTime);
+        endTimeET = popupView.findViewById(R.id.endTime);
         typeB = popupView.findViewById(R.id.type);
-        textureB = popupView.findViewById(R.id.texture);
-        // TODO: 1/12/2020 update texture and color.
+        sideB = popupView.findViewById(R.id.side);
+        amountB = popupView.findViewById(R.id.amount);
+
         setUpDate();
-        setUpTime();
+        setUpTime(startTimeET);
+        setUpTime(endTimeET);
         onTypeClick();
+        onSideClick();
+        onAmountClick();
+
         setUpAddButton();
         setUpExit();
     }
@@ -83,11 +89,10 @@ public class PopUpDiaper {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (isDateValid(diaperEntry.getDate()) && isTimeValid(diaperEntry.getTime())) { // TODO: 1/12/2020 check validation of other variables
-                    CollectionReference foodCollection = FirebaseFirestore.getInstance().collection("babies").document(babyID).collection("diaper_reports");
+                if (isDateValid(foodEntry.getDate()) && isTimeValid(foodEntry.getEndTime()) && isTimeValid(foodEntry.getStartTime())) { // TODO: 1/12/2020 check validation of other variables
+                    CollectionReference foodCollection = FirebaseFirestore.getInstance().collection("babies").document(babyID).collection("food_reports");
                     String id = foodCollection.document().getId();
-                    foodCollection.document(id).set(diaperEntry);
+                    foodCollection.document(id).set(foodEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }
@@ -121,26 +126,68 @@ public class PopUpDiaper {
         return true;
     }
 
-
     private void onTypeClick() {
         typeB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 PopupMenu popup = new PopupMenu(context, view);
-                popup.getMenuInflater().inflate(R.menu.diaper_type_menu, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.food_type_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.poo) {
-                            popupView.findViewById(R.id.textureLayout).setVisibility(View.VISIBLE);
-                            popupView.findViewById(R.id.colorLayout).setVisibility(View.VISIBLE);
-                            typeB.setText("Poo");
-                            diaperEntry.setType("Poo");
+                        if (item.getItemId() == R.id.bottle) {
+                            popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
+                            popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
+                            typeB.setText("Bottle");
+                            foodEntry.setType("Bottle");
+                            foodEntry.setSide(null);
                         } else {
-                            popupView.findViewById(R.id.textureLayout).setVisibility(View.GONE);
-                            popupView.findViewById(R.id.colorLayout).setVisibility(View.GONE);
-                            typeB.setText("Pee");
-                            diaperEntry.setType("Pee");
+                            popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
+                            popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
+                            typeB.setText("Breastfeeding");
+                            foodEntry.setType("Breastfeeding");
+                            foodEntry.setAmount(null);
                         }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
+    }
+
+    private void onSideClick() {
+        sideB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.getMenuInflater().inflate(R.menu.food_side_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.right) {
+                            sideB.setText("Right");
+                            foodEntry.setSide("Right");
+                        } else {
+                            sideB.setText("Left");
+                            foodEntry.setSide("Left");
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
+    }
+
+
+    private void onAmountClick() {
+        amountB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.getMenuInflater().inflate(R.menu.food_amount_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        //TODO update amount menu.
                         return true;
                     }
                 });
@@ -162,19 +209,22 @@ public class PopUpDiaper {
             @Override
             public void onClick(View v) {
                 dateTimePicker.datePicker(dateET);
-                diaperEntry.setDate(dateET.getText().toString());
+                foodEntry.setDate(dateET.getText().toString());
             }
         });
     }
 
-    private void setUpTime() {
-        timeET.setOnClickListener(new View.OnClickListener() {
+
+    private void setUpTime(final EditText editText) {
+        editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.timePicker(timeET);
-                diaperEntry.setTime(timeET.getText().toString());
+                dateTimePicker.timePicker(editText);
+                if (v.getId() == R.id.endTime)
+                    foodEntry.setEndTime(editText.getText().toString());
+                else
+                    foodEntry.setStartTime(editText.getText().toString());
             }
         });
     }
 }
-

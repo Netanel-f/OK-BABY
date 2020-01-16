@@ -1,7 +1,10 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.User;
+import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
@@ -43,7 +47,8 @@ public class SignInActivity extends AppCompatActivity {
     private Context context;
 
     private FirebaseAuth auth;
-    private FirebaseFirestore firestoreDB;
+
+    private UserViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,9 @@ public class SignInActivity extends AppCompatActivity {
 
         // initialize Firebase
         auth = FirebaseAuth.getInstance();
-        firestoreDB = FirebaseFirestore.getInstance();
+        viewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        checkIfLoggedIn(auth.getCurrentUser());
 
         setUpUI();
     }
@@ -68,6 +75,12 @@ public class SignInActivity extends AppCompatActivity {
     private void setUpUI(){
         setUpSignInButton();
         setUpSignUpButton();
+    }
+
+    private void checkIfLoggedIn(FirebaseUser authCurrentUser){
+        if (authCurrentUser != null){
+            getUserFromDatabase(authCurrentUser);
+        }
     }
 
     /**
@@ -172,13 +185,8 @@ public class SignInActivity extends AppCompatActivity {
      * @param password
      */
     private void signInToFirebase(String email, String password) {
-        // todo: get if exists, create with auth user uid if doesn't
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser == null) {
+            Log.w(TAG, "signInToFirebase: Attempthing to authenticate user");
             authenticateUser(email, password);
-        } else {
-            getUserFromDatabase(currentUser);
-        }
     }
 
     private void authenticateUser(String email, String password){
@@ -189,6 +197,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
+                            Log.w(TAG, "onComplete: succussfully logged in "+user.getUid());
 //                            createUser(user);
                             getUserFromDatabase(user);
                         } else {
@@ -230,30 +239,22 @@ public class SignInActivity extends AppCompatActivity {
     private void getUserFromDatabase(FirebaseUser authUser) {
         final String uid = authUser.getUid();
         final String email = authUser.getEmail();
-        DocumentReference userRef = firestoreDB.collection("users").document(uid);
-
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        viewModel.getUser(uid).observe(this, new Observer<User>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        // existing user
-                        User user = document.toObject(User.class);
-                        if (user.getBabies() == null || user.getBabies().isEmpty()){
-                            // baby list is empty -> treat like new user
-                            navigateToNextActivity(true);
-                        } else {
-                            navigateToNextActivity(false);
-                        }
+            public void onChanged(User user) {
+                // got user
+                if (user != null) {
+                    Log.w(TAG, "onChanged: observed user "+user.getUid());
+                    if (user.getBabies() == null || user.getBabies().isEmpty()) {
+                        // baby list is empty -> treat like new user
+                        navigateToNextActivity(true);
                     } else {
-                        // user doesn't exist
-                        Log.d(TAG, "User doesn't exist in database");
-                        addNewUser(uid, email);
+                        navigateToNextActivity(false);
                     }
-                } else {
-                    // error retrieving data
-                    Log.w(TAG, "Error retrieving data from database");
+                }
+                else {
+                    Log.w(TAG, "User doesn't exist in database");
+                    addNewUser(uid, email);
                 }
             }
         });
@@ -283,7 +284,6 @@ public class SignInActivity extends AppCompatActivity {
      */
     private void newUserNavigation() {
         Intent addBabyIntent = new Intent(this, BabyProfileActivity.class);
-        // todo: firebase user? check what we want to pass on
         startActivity(addBabyIntent);
 
     }
@@ -293,7 +293,6 @@ public class SignInActivity extends AppCompatActivity {
      */
     private void existingUserNavigation() {
         Intent homeIntent = new Intent(this, HomeFragment.class);
-        // todo: firebase user?
         startActivity(homeIntent);
     }
 
@@ -304,8 +303,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void addUserToDatabase(String uid, String email) {
         User user = new User(uid, email, new ArrayList<DocumentReference>());
-        DocumentReference userRef = firestoreDB.collection("users").document(uid);
-        userRef.set(user);
+        viewModel.addNewUser(user);
     }
 
 

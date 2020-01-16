@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.popups;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.ux.ok_baby.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
 
 public class DateTimePicker {
     private Calendar myCalendar = Calendar.getInstance();
