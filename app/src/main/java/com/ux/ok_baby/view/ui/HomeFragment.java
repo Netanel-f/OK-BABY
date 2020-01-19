@@ -1,6 +1,7 @@
 package com.ux.ok_baby.view.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.TableRow;
@@ -15,6 +16,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.Months;
@@ -23,50 +26,58 @@ import org.joda.time.format.DateTimeFormatter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.ux.ok_baby.utils.Constants.BABY_ID;
-import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.*;
 
 /**
  * First screen when loading the app (after sign in).
  * Contains buttons to navigate to other screens.
  */
 public class HomeFragment extends FragmentActivity {
+    private CollectionReference babiesCollection = FirebaseFirestore.getInstance().collection("babies");
     private final String TAG = "HomeFragment";
-    private String babyID, babyDOB, babyName;
+    private UserViewModel userViewModel;
+    private String babyID, userID;
+    private Baby baby;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
-        // TODO: 1/4/2020 get baby details from parent activity.
 
-        babyID = getIntent().getStringExtra(BABY_ID);
-        babyID = "69kkdHZH48TOYdXWq1hP";
-        setUpBabyDetails();
-        if (findViewById(R.id.fragment_container) != null) {
+        userID = getIntent().getStringExtra(USER_ID); //TODO change?
 
-            if (savedInstanceState != null) {
-                return;
-            }
-
-            MenuFragment menuFragment = new MenuFragment(babyID);
-//            menuFragment.setArguments(intent.getExtras());
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, menuFragment).commit();
+        if (babyID == null) {
+            addNewBaby();
         }
+
+        setUpBabyDetails();
+        setUpMenu(savedInstanceState);
         setUpOtherBabies();
     }
 
+    private void setUpMenu(@Nullable Bundle savedInstanceState) {
+        if (findViewById(R.id.fragment_container) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+            MenuFragment menuFragment = new MenuFragment(babyID);
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, menuFragment).commit();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == START_BABY_PROF_ACT && resultCode == RESULT_OK) {
+            baby = data.getParcelableExtra(BABY_OBJECT_TAG);
+            userViewModel.addBaby(userID, baby);
+            setUpBabyDetails();
+        }
+    }
 
     private void setUpBabyDetails() {
-        CollectionReference babiesCollection = FirebaseFirestore.getInstance().collection("babies");
-        DocumentReference babyRef = babiesCollection.document(babyID);
-        babyRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                ((TextView) findViewById(R.id.babyName)).setText(documentSnapshot.getString("babyName"));
-                ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(documentSnapshot.getString("babyDOB")) + " months old");
-            }
-        });
+        ((TextView) findViewById(R.id.babyName)).setText(baby.getBabyName());
+        ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(baby.getBabyDOB()) + " months old");
     }
 
     public String getAgeByMonths(String dob) {
@@ -98,5 +109,13 @@ public class HomeFragment extends FragmentActivity {
 
     private void loadOtherBabies() {
         // TODO: 1/9/2020  load other babies from firebase.
+    }
+
+    private void addNewBaby() {
+        babyID = babiesCollection.document().getId();
+        baby = new Baby(babyID);
+        Intent intent = new Intent(this, BabyProfileActivity.class);
+        intent.putExtra(BABY_OBJECT_TAG, baby);
+        startActivityForResult(intent, START_BABY_PROF_ACT);
     }
 }

@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.firestore.DocumentReference;
-
-import java.util.List;
-
 public class Baby implements Parcelable {
 
     private String bid;
@@ -16,9 +12,13 @@ public class Baby implements Parcelable {
     private String babyDOB;
     private String imageUrl;
 
-    public Baby(){
+    public Baby() {
 //        this.babyName = "";
 //        this.babyDOB = "";
+    }
+
+    public Baby(String bid) {
+        this.bid = bid;
     }
 
     public Baby(@NonNull String bid, String babyName, String babyDOB) {
@@ -92,5 +92,4 @@ public class Baby implements Parcelable {
             return new Baby[size];
         }
     };
-
 }

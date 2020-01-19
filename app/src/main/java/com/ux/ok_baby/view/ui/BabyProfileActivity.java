@@ -21,15 +21,12 @@ import com.bumptech.glide.request.RequestOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import com.ux.ok_baby.Model.Baby;
 import com.ux.ok_baby.R;
-import com.ux.ok_baby.Model.Baby;
-import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.model.Baby;
 import com.ux.ok_baby.view.popups.DateTimePicker;
 import com.ux.ok_baby.view.ui.HomeFragment;
 import com.ux.ok_baby.utils.Constants;

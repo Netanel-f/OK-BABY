@@ -25,7 +25,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import com.ux.ok_baby.Model.Baby;
+import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.view.popups.DateTimePicker;
 
 import java.util.Calendar;
 
@@ -42,7 +43,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     private EditText babyName;
     private TextView babyDob;
     private Button updateProfileBtn;
-//    private String dobString;
+    //    private String dobString;
     public static Calendar myCalendar;
 
     // TODO fixed next variables to Model architecture
@@ -148,10 +149,8 @@ public class BabyProfileActivity extends AppCompatActivity {
 //                        updateBabyInDatabase(bid, name, dob);
 //                    }
                 }
-
             }
         });
-
     }
 
     private void setupProfileImage() {
@@ -233,6 +232,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * check that the user has typed a name for the baby
+     *
      * @return True iff babyName is not null && not empty, false otherwise.
      */
     private boolean checkBabyName() {
@@ -249,6 +249,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * check that the user has typed a dob for the baby
+     *
      * @return True iff baby dob is not empty, false otherwise.
      */
     private boolean checkBabyDob() {
@@ -269,7 +270,7 @@ public class BabyProfileActivity extends AppCompatActivity {
             upload to Firebase
             return to activity
          */
-         startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
+        startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
     }
 
 
@@ -308,16 +309,18 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * This method will initiate a date Picker Dialog fragment
+     *
      * @param view current view.
      */
     public void showDatePickerDialog(View view) {
-        DatePickerFragment datePickerFragment = new DatePickerFragment();
-        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+        DateTimePicker dateTimePicker = new DateTimePicker(this);
+        dateTimePicker.datePicker(babyDob);
     }
 
     /**
      * This method will save the date that has been picked into the profile.
      * This method will be called only from the DialogFragment class.
+     *
      * @param dateString D.O.B string to save
      */
     public void processDatePickerResult(String dateString) {
