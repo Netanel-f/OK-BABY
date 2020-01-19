@@ -5,12 +5,11 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ReportFragment;
 
-import com.ux.ok_baby.Model.DiaperEntry;
-import com.ux.ok_baby.Model.FoodEntry;
-import com.ux.ok_baby.Model.ReportEntry;
-import com.ux.ok_baby.Model.SleepEntry;
+import com.ux.ok_baby.model.DiaperEntry;
+import com.ux.ok_baby.model.FoodEntry;
+import com.ux.ok_baby.model.ReportEntry;
+import com.ux.ok_baby.model.SleepEntry;
 import com.ux.ok_baby.repository.FirestoreRepository;
 import com.ux.ok_baby.utils.Constants;
 

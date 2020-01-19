@@ -17,12 +17,12 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.ux.ok_baby.Model.Baby;
-import com.ux.ok_baby.Model.DiaperEntry;
-import com.ux.ok_baby.Model.FoodEntry;
-import com.ux.ok_baby.Model.ReportEntry;
-import com.ux.ok_baby.Model.User;
-import com.ux.ok_baby.Model.SleepEntry;
+import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.model.DiaperEntry;
+import com.ux.ok_baby.model.FoodEntry;
+import com.ux.ok_baby.model.ReportEntry;
+import com.ux.ok_baby.model.User;
+import com.ux.ok_baby.model.SleepEntry;
 import com.ux.ok_baby.utils.Constants;
 
 import java.util.ArrayList;

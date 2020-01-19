@@ -1,4 +1,4 @@
-package com.ux.ok_baby.Model;
+package com.ux.ok_baby.model;
 
 public abstract class ReportEntry {
 

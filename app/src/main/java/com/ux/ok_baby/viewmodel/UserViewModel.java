@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.ux.ok_baby.Model.Baby;
-import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.model.User;
 import com.ux.ok_baby.repository.FirestoreRepository;
 
 public class UserViewModel extends AndroidViewModel {

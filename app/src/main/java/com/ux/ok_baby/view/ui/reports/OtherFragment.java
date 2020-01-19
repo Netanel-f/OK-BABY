@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -14,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ux.ok_baby.R;
-import com.ux.ok_baby.Model.ReportEntry;
-import com.ux.ok_baby.Model.SleepEntry;
+import com.ux.ok_baby.model.ReportEntry;
+import com.ux.ok_baby.model.SleepEntry;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.List;

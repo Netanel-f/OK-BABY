@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ux.ok_baby.R;
-import com.ux.ok_baby.Model.SleepEntry;
+import com.ux.ok_baby.model.SleepEntry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
