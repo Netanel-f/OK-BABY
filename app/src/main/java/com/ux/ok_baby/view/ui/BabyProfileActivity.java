@@ -1,9 +1,10 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,10 +27,18 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import com.ux.ok_baby.Model.Baby;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.Model.Baby;
+import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.view.popups.DateTimePicker;
+import com.ux.ok_baby.view.ui.HomeFragment;
+import com.ux.ok_baby.utils.Constants;
 
 import java.util.Calendar;
+import java.util.List;
 
-import static com.ux.ok_baby.Constants.BABY_OBJECT_TAG;
+import static com.ux.ok_baby.utils.Constants.BABY_ID;
+import static com.ux.ok_baby.utils.Constants.BABY_OBJECT_TAG;
 
 public class BabyProfileActivity extends AppCompatActivity {
 
@@ -43,6 +52,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     private TextView babyDob;
     private Button updateProfileBtn;
     public static Calendar myCalendar;
+    private Context context;
 
     private Baby babyProfile;
 
@@ -53,6 +63,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
 
         // set views
+        context = this;
         profilePicture = findViewById(R.id.profile_image);
         babyName = findViewById(R.id.baby_name);
         babyDob = findViewById(R.id.dob);
@@ -108,6 +119,10 @@ public class BabyProfileActivity extends AppCompatActivity {
                     babyProfile.setBabyDOB(babyDob.getText().toString());
 
                     // TODO return to last activity ?
+
+                    Intent intent = new Intent(context, HomeFragment.class);
+                    intent.putExtra(BABY_OBJECT_TAG, babyProfile);
+                    startActivity(intent);
                 }
 
             }
@@ -246,10 +261,9 @@ public class BabyProfileActivity extends AppCompatActivity {
      * @param view current view.
      */
     public void showDatePickerDialog(View view) {
-        DatePickerFragment datePickerFragment = new DatePickerFragment();
-        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+        DateTimePicker dateTimePicker = new DateTimePicker(context);
+        dateTimePicker.datePicker(babyDob);
     }
-
 
     /**
      * This method will save the date that has been picked into the profile.

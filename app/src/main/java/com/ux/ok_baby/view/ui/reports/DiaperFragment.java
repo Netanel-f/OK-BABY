@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui.reports;
 
 
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.widget.Button;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.google.firebase.firestore.CollectionReference;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.view.adapter.ReportTableAdapter;
+import com.ux.ok_baby.view.popups.PopUpDiaper;
 
 
 /**
@@ -22,11 +25,11 @@ public class DiaperFragment extends Fragment {
 
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn;
-    private Button tableBtn;
+    private Button graphsBtn, tableBtn;
+    private String babyID;
 
-    public DiaperFragment() {
-        // Required empty public constructor
+    public DiaperFragment(String babyID) {
+        this.babyID = babyID;
     }
 
 
@@ -42,11 +45,12 @@ public class DiaperFragment extends Fragment {
         tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
         setUpGraphsBtn();
+        onAddClickListener(view.findViewById(R.id.addReport));
 
         return view;
     }
 
-    private void setUpReportTable(){
+    private void setUpReportTable() {
         CollectionReference dataSource = null; // todo - query from firebase
         mTableAdapter = new ReportTableAdapter(getContext(), dataSource);
         mTableLayout.setAdapter(mTableAdapter);
@@ -55,7 +59,7 @@ public class DiaperFragment extends Fragment {
         mTableAdapter.notifyDataSetChanged();
     }
 
-    private void setUpGraphsBtn(){
+    private void setUpGraphsBtn() {
         graphsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,4 +78,13 @@ public class DiaperFragment extends Fragment {
         });
     }
 
+    private void onAddClickListener(View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpDiaper popUpClass = new PopUpDiaper(getActivity(), babyID);
+                popUpClass.showPopupWindow(view);
+            }
+        });
+    }
 }

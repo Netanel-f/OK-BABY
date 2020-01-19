@@ -1,4 +1,4 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui.reports;
 
 
 import android.os.Bundle;
@@ -12,27 +12,30 @@ import android.widget.Button;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.google.firebase.firestore.CollectionReference;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.view.adapter.ReportTableAdapter;
+import com.ux.ok_baby.view.popups.PopUpFood;
 
 
 /**
- * Contains the sleep report.
+ * Contains the food report.
  */
-public class SleepFragment extends Fragment {
+public class FoodFragment extends Fragment {
+
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn;
-    private Button tableBtn;
+    private Button graphsBtn,tableBtn;
+    private String babyID;
 
-    public SleepFragment() {
-        // Required empty public constructor
+    public FoodFragment(String babyID) {
+        this.babyID = babyID;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sleep, container, false);
+        View view = inflater.inflate(R.layout.fragment_food, container, false);
 
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
@@ -40,7 +43,7 @@ public class SleepFragment extends Fragment {
         tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
         setUpGraphsBtn();
-
+        onAddClickListener(view.findViewById(R.id.addReport));
         return view;
     }
 
@@ -68,6 +71,15 @@ public class SleepFragment extends Fragment {
                 graphsBtn.setVisibility(View.VISIBLE);
                 tableBtn.setVisibility(View.GONE);
                 mTableLayout.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    private void onAddClickListener(View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpFood popUpClass = new PopUpFood(getActivity(),babyID);
+                popUpClass.showPopupWindow(view);
             }
         });
     }
