@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ReportFragment;
 
 import com.ux.ok_baby.model.DiaperEntry;
 import com.ux.ok_baby.model.FoodEntry;

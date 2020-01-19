@@ -1,6 +1,6 @@
 package com.ux.ok_baby.model;
 
-public class FoodEntry extends ReportEntry{
+public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
     private String date, endTime, startTime, type, side, amount;
 
     public FoodEntry(String date, String endTime, String startTime, String type, String side, String amount) {
