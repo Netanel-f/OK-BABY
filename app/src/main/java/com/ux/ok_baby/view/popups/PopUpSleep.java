@@ -10,10 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.SleepEntry;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,13 +24,14 @@ import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
 
 
 public class PopUpSleep {
-    private Context context;
+    private String babyID;
     private View popupView;
+    private Context context;
+    private SleepEntry sleepEntry;
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
-    private SleepEntry sleepEntry;
+    private EntriesViewModel entriesViewModel;
     private EditText dateET, startTimeET, endTimeET;
-    private String babyID;
 
     public PopUpSleep(Context context, String babyID) {
         this.context = context;
@@ -45,9 +45,9 @@ public class PopUpSleep {
         sleepEntry = new SleepEntry();
         dateTimePicker = new DateTimePicker(context);
 
-        dateET = (EditText) popupView.findViewById(R.id.date);
-        startTimeET = (EditText) popupView.findViewById(R.id.startTime);
-        endTimeET = (EditText) popupView.findViewById(R.id.endTime);
+        dateET = popupView.findViewById(R.id.date);
+        startTimeET = popupView.findViewById(R.id.startTime);
+        endTimeET = popupView.findViewById(R.id.endTime);
 
         setUpDate();
         setUpTime(startTimeET);
@@ -77,10 +77,7 @@ public class PopUpSleep {
             @Override
             public void onClick(View view) {
                 if (isDateValid(sleepEntry.getDate()) && isTimeValid(sleepEntry.getEndTime()) && isTimeValid(sleepEntry.getStartTime())) {
-                    CollectionReference sleepCollection = FirebaseFirestore.getInstance()
-                            .collection("babies").document(babyID).collection("sleep_reports");
-                    String id = sleepCollection.document().getId();
-                    sleepCollection.document(id).set(sleepEntry);
+                    entriesViewModel.addSleepEntry(babyID, sleepEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }

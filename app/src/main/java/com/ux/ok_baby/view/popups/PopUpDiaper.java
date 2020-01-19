@@ -14,30 +14,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.ux.ok_baby.model.DiaperEntry;
 import com.ux.ok_baby.R;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.util.Calendar;
 
 import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
 
 public class PopUpDiaper {
-    private Context context;
-    private View popupView;
-    private DiaperEntry diaperEntry;
-    private DateTimePicker dateTimePicker;
-    private PopupWindow popupWindow;
-    private Calendar myCalendar = Calendar.getInstance();
     private String babyID;
-    private EditText dateET, timeET, endTimeET;
+    private View popupView;
+    private Context context;
     private Button typeB, textureB;
+    private DiaperEntry diaperEntry;
+    private PopupWindow popupWindow;
+    private DateTimePicker dateTimePicker;
+    private EntriesViewModel entriesViewModel;
+    private EditText dateET, timeET, endTimeET;
 
 
     public PopUpDiaper(Context context, String babyID) {
@@ -84,11 +82,8 @@ public class PopUpDiaper {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (isDateValid(diaperEntry.getDate()) && isTimeValid(diaperEntry.getTime())) { // TODO: 1/12/2020 check validation of other variables
-                    CollectionReference foodCollection = FirebaseFirestore.getInstance().collection("babies").document(babyID).collection("diaper_reports");
-                    String id = foodCollection.document().getId();
-                    foodCollection.document(id).set(diaperEntry);
+                    entriesViewModel.addDiaperEntry(babyID, diaperEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }

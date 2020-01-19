@@ -1,5 +1,10 @@
 package com.ux.ok_baby.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.List;
