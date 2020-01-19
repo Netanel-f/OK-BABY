@@ -1,25 +1,37 @@
 package com.ux.ok_baby.model;
 
-public class Baby {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Baby implements Parcelable {
 
     private String bid;
     private String babyName;
     private String babyDOB;
-//    private List<DocumentReference> babies;
+    private String imageUrl;
 
     public Baby(){
-        this.babyName = "";
-        this.babyDOB = "";
+//        this.babyName = "";
+//        this.babyDOB = "";
     }
 
-    public Baby(String bid, String babyName, String babyDOB) {
+    public Baby(@NonNull String bid, String babyName, String babyDOB) {
         this.bid = bid;
         this.babyName = babyName;
         this.babyDOB = babyDOB;
     }
 
+    protected Baby(Parcel in) {
+        bid = in.readString();
+        babyName = in.readString();
+        babyDOB = in.readString();
+        imageUrl = in.readString();
+    }
+
     public String getBid() {
-        return bid;
+        return this.bid;
     }
 
     public void setBid(String bid) {
@@ -42,12 +54,39 @@ public class Baby {
         return this.babyDOB;
     }
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
 
-//    public List<DocumentReference> getBabies() {
-//        return babies;
-//    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-//    public void setBabies(List<DocumentReference> babies) {
-//        this.babies = babies;
-//    }
+    /* Parcelable */
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(bid);
+        parcel.writeString(babyName);
+        parcel.writeString(babyDOB);
+        parcel.writeString(imageUrl);
+    }
+
+    public static final Creator<Baby> CREATOR = new Creator<Baby>() {
+        @Override
+        public Baby createFromParcel(Parcel parcel) {
+            return new Baby(parcel);
+        }
+
+        @Override
+        public Baby[] newArray(int size) {
+            return new Baby[size];
+        }
+    };
+
 }
