@@ -35,6 +35,7 @@ import com.ux.ok_baby.view.popups.PopUpSleep;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
@@ -94,9 +95,7 @@ public class SleepFragment extends Fragment {
         LineChartView chart = new LineChartView(view.getContext());
         mGraphsLayout.addView(chart);
 
-        chart.setInteractive(false);
-//        chart.setZoomType(ZoomType.HORIZONTAL);
-//        chart.setZoomEnabled(true);
+        chart.setInteractive(true);
         chart.setScrollEnabled(true);
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
 
@@ -106,7 +105,7 @@ public class SleepFragment extends Fragment {
         List<Line> lines = new ArrayList<Line>();
         for (int j = 0; j < entries.size(); ++j) {
             SleepEntry entry = (SleepEntry) entries.get(j);
-            PointValue pointValue = new PointValue(j*100, ReportTableAdapter.calculateDurationInt(entry));
+            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
             values.add(pointValue);
             Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
             line.setHasLabels(true);
@@ -134,6 +133,7 @@ public class SleepFragment extends Fragment {
 //            data.setAxisYLeft(null);
 //        }
 
+//        data.setBaseValue(0);
         data.setLines(lines);
         chart.setLineChartData(data);
 
@@ -141,12 +141,15 @@ public class SleepFragment extends Fragment {
 //        resetViewport(chart, entries.size());
 
         Viewport v = new Viewport(chart.getMaximumViewport());
-        v.left = axisX.getValues().size() - 0.5f;
-        v.right = axisX.getValues().size();
-        chart.setCurrentViewport(v);
-        chart.setViewportCalculationEnabled(false);
+        v.left = 0;
+//        v.left = axisX.getValues().size() - 0.5f;
+        v.right = v.right - 3;
+//        v.top = axisY.getValues().size() - 1;
+//        v.bottom = axisY.getValues().size();
+//        chart.setCurrentViewport(v);
+//        chart.setViewportCalculationEnabled(false);
+        chart.setCurrentViewportWithAnimation(v);
         chart.setScrollEnabled(true);
-//        chart.setHorizontalScrollBarEnabled(true);
         chart.setZoomEnabled(false);
 
     }
@@ -198,6 +201,15 @@ public class SleepFragment extends Fragment {
                     @Override
                     public void onChanged(List<ReportEntry> reportEntries) {
                         if (reportEntries != null && reportEntries.size() > 0) {
+                            // todo: remove sort from here- maybe in viewmodel when getting entries
+                            reportEntries.sort(new Comparator<ReportEntry>() {
+                                @Override
+                                public int compare(ReportEntry o1, ReportEntry o2) {
+                                    SleepEntry s1 = (SleepEntry) o1;
+                                    SleepEntry s2 = (SleepEntry) o2;
+                                    return s1.getDate().compareTo(s2.getDate());
+                                }
+                            });
                             mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
                             mTableLayout.setAdapter(mTableAdapter);
                             mTableLayout.setHeaderFixed(true);
