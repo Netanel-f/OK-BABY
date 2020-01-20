@@ -3,6 +3,7 @@ package com.ux.ok_baby.view.ui;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -11,11 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.BabyProfileActivity;
-import com.ux.ok_baby.MenuFragment;
+//import com.ux.ok_baby.BabyProfileActivity;
+//import com.ux.ok_baby.MenuFragment;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.model.User;
+import com.ux.ok_baby.utils.Constants;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
@@ -23,6 +28,9 @@ import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.ux.ok_baby.utils.Constants.*;
@@ -43,17 +51,28 @@ public class HomeFragment extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
 
-        userID = getIntent().getStringExtra(USER_ID); //TODO change?
-
         userID = getIntent().getStringExtra(USER_ID_TAG); //TODO change?
         Boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
+        babyID = getIntent().getStringExtra(Constants.BABY_ID);
+
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+//        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
 //        if (babyID == null) {
         if (isNewUser) {
             addNewBaby();
+
+        } else {
+            userViewModel.getBaby(babyID).observe(this, new Observer<Baby>() {
+                @Override
+                public void onChanged(Baby babyChanged) {
+                    baby = babyChanged;
+                    setUpBabyDetails();
+                }
+            });
+//            setUpBabyDetails();
         }
 
-        setUpBabyDetails();
         setUpMenu(savedInstanceState);
         setUpOtherBabies();
     }
@@ -119,6 +138,8 @@ public class HomeFragment extends FragmentActivity {
         baby = new Baby(babyID);
         Intent intent = new Intent(this, BabyProfileActivity.class);
         intent.putExtra(BABY_OBJECT_TAG, baby);
+
+        Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_BABY_PROF_ACT);
     }
 }
