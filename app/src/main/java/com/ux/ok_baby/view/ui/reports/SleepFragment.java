@@ -95,8 +95,8 @@ public class SleepFragment extends Fragment {
         mGraphsLayout.addView(chart);
 
         chart.setInteractive(false);
-        chart.setZoomType(ZoomType.HORIZONTAL);
-        chart.setZoomEnabled(true);
+//        chart.setZoomType(ZoomType.HORIZONTAL);
+//        chart.setZoomEnabled(true);
         chart.setScrollEnabled(true);
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
 
@@ -104,7 +104,7 @@ public class SleepFragment extends Fragment {
         // add values to graph
         List<PointValue> values = new ArrayList<PointValue>();
         List<Line> lines = new ArrayList<Line>();
-        for (int j = 1; j < entries.size(); ++j) {
+        for (int j = 0; j < entries.size(); ++j) {
             SleepEntry entry = (SleepEntry) entries.get(j);
             PointValue pointValue = new PointValue(j*100, ReportTableAdapter.calculateDurationInt(entry));
             values.add(pointValue);
@@ -118,54 +118,50 @@ public class SleepFragment extends Fragment {
         boolean hasAxesNames = true;
         LineChartData data = new LineChartData();
 
-        if (hasAxes) {
-            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
+        Axis axisX;
+        Axis axisY;
+//        if (hasAxes) {
+            axisX = new Axis();
+            axisY = new Axis().setHasLines(true);
             if (hasAxesNames) {
 //                axisX.setName("Axis X");
                 axisY.setName("Duration in minutes");
             }
             data.setAxisXBottom(null);
             data.setAxisYLeft(axisY);
-        } else {
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(null);
-        }
-
-//        final Viewport v = new Viewport(chart.getMaximumViewport());
-//        v.bottom = -5;
-//        v.top = 105;
-//        // You have to set max and current viewports separately.
-//        chart.setMaximumViewport(v);
-//        // I changing current viewport with animation in this case.
-//        chart.setCurrentViewportWithAnimation(v);
-
-
-//        final Viewport v = new Viewport(chart.getMaximumViewport());
-//        v.bottom = 0;
-//        v.top = 0;
-//        v.left = 0;
-//        v.right = 2;
-//
-////        chart.setMaximumViewport(v);
-//        chart.setCurrentViewportWithAnimation(v);
-
-        final Viewport orig_v = new Viewport(chart.getMaximumViewport());
-        final Viewport v = new Viewport(chart.getMaximumViewport());
-        v.bottom = v.bottom-1;
-        v.top = v.top+1;
-        chart.setMaximumViewport(v);
-        chart.setCurrentViewport(orig_v);
-        // You have to set max and curre
-
+//        } else {
+//            data.setAxisXBottom(null);
+//            data.setAxisYLeft(null);
+//        }
 
         data.setLines(lines);
-
-        data.setBaseValue(Float.NEGATIVE_INFINITY);
         chart.setLineChartData(data);
+
+//        chart.setViewportCalculationEnabled(false);
+//        resetViewport(chart, entries.size());
+
+        Viewport v = new Viewport(chart.getMaximumViewport());
+        v.left = axisX.getValues().size() - 0.5f;
+        v.right = axisX.getValues().size();
+        chart.setCurrentViewport(v);
+        chart.setViewportCalculationEnabled(false);
+        chart.setScrollEnabled(true);
+//        chart.setHorizontalScrollBarEnabled(true);
+        chart.setZoomEnabled(false);
 
     }
 
+
+    private void resetViewport(LineChartView chart, int numberOfPoints) {
+        // Reset viewport height range to (0,100)
+        final Viewport v = new Viewport(chart.getMaximumViewport());
+        v.bottom = 0;
+        v.top = 3;
+        v.left = 0;
+        v.right = numberOfPoints - 1;
+        chart.setMaximumViewport(v);
+        chart.setCurrentViewport(v);
+    }
 
     private void loadFromFirebase() {
         CollectionReference sleepCollection = FirebaseFirestore.getInstance().collection("babies")
@@ -198,16 +194,17 @@ public class SleepFragment extends Fragment {
     }
 
     private void setUpReportTable(String babyID) {
-//        CollectionReference dataSource = null; // todo - query from firebase
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
                     @Override
                     public void onChanged(List<ReportEntry> reportEntries) {
-                        mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
-                        mTableLayout.setAdapter(mTableAdapter);
-                        mTableLayout.setHeaderFixed(true);
-                        mTableLayout.setSolidRowHeader(false);
-                        mTableAdapter.notifyDataSetChanged();
-                        setUpGraphs(reportEntries);
+                        if (reportEntries != null && reportEntries.size() > 0) {
+                            mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
+                            mTableLayout.setAdapter(mTableAdapter);
+                            mTableLayout.setHeaderFixed(true);
+                            mTableLayout.setSolidRowHeader(false);
+                            mTableAdapter.notifyDataSetChanged();
+                            setUpGraphs(reportEntries);
+                        }
                     }
                 });
 
