@@ -116,10 +116,6 @@ public class PopUpSleep {
             @Override
             public void onClick(View v) {
                 dateTimePicker.timePicker(editText);
-                if (v.getId() == R.id.endTime)
-                    sleepEntry.setEndTime(editText.getText().toString());
-                else
-                    sleepEntry.setStartTime(editText.getText().toString());
             }
         });
     }
