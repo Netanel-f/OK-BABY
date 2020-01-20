@@ -194,7 +194,6 @@ public class SleepFragment extends Fragment {
     }
 
     private void setUpReportTable(String babyID) {
-//        CollectionReference dataSource = null; // todo - query from firebase
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
                     @Override
                     public void onChanged(List<ReportEntry> reportEntries) {
