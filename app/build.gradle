@@ -50,6 +50,9 @@ dependencies {
     // Saved state module
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha03"
 
+    // Graphs
+    implementation "com.github.lecho:hellocharts-library:1.5.8@aar"
+
 
 }
 

@@ -16,19 +16,26 @@ import com.cleveroad.adaptivetablelayout.LinkedAdaptiveTableAdapter;
 import com.cleveroad.adaptivetablelayout.ViewHolderImpl;
 import com.google.firebase.firestore.CollectionReference;
 import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.ReportEntry;
+import com.ux.ok_baby.model.SleepEntry;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
     private static final int NUM_OF_COLS_IN_REPORT = 4;
     private final LayoutInflater mLayoutInflater;
-    private final CollectionReference mTableDataSource;
+    private final List<ReportEntry> mTableDataSource;
     private final int mColumnWidth;
     private final int mRowHeight;
     private final int mHeaderHeight;
     private final int mHeaderWidth;
 
 
-    public ReportTableAdapter(Context context, CollectionReference dataSource) {
+    public ReportTableAdapter(Context context, List<ReportEntry> dataSource) {
         mLayoutInflater = LayoutInflater.from(context);
         mTableDataSource = dataSource;
 
@@ -42,7 +49,7 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
 
     @Override
     public int getRowCount() {
-        return 3; // todo: change
+        return mTableDataSource.size();
     }
 
     @Override
@@ -82,7 +89,25 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
         // todo: change to get it from datasource
 //        String itemData = mTableDataSource.getItemData(row, column); // skip headers
         // extract data
-        String itemData = "test data";
+
+        SleepEntry entry = (SleepEntry) mTableDataSource.get(row);
+        String itemData;
+        switch (column){
+            case 1:
+                itemData = entry.getStartTime();
+                break;
+            case 2:
+                itemData = entry.getEndTime();
+                break;
+            case 3:
+                itemData = calculateDuration(entry);
+                break;
+            default:
+                itemData = "error";
+                break;
+        }
+
+//        String itemData = entry.getStartTime();
         itemData = itemData.trim();
 
 //        if (TextUtils.isEmpty(itemData)) {
@@ -92,6 +117,60 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
         // update views
         vh.tvText.setVisibility(View.VISIBLE);
         vh.tvText.setText(itemData);
+    }
+
+    public static long calculateDurationInt(SleepEntry entry){ // todo change
+        String time1 = entry.getStartTime();
+        String time2 = entry.getEndTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = format.parse(time1);
+            date2 = format.parse(time2);
+            long diff = date2.getTime() - date1.getTime();
+            return diff / (60 * 1000);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+    public static String calculateDuration(SleepEntry entry) { // todo: move somewhere else
+        String time1 = entry.getStartTime();
+        String time2 = entry.getEndTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = format.parse(time1);
+            date2 = format.parse(time2);
+            long diff = date2.getTime() - date1.getTime();
+            long diffMinutes = diff / (60 * 1000);
+            if (diffMinutes > 60){
+                diffMinutes = diffMinutes % 60;
+                long diffHours = diff / (60 * 60 * 1000) % 24;
+                String mins;
+                if (diffMinutes < 10){
+                    mins = "0"+diffMinutes;
+                } else {
+                    mins = ""+diffMinutes;
+                }
+
+                return diffHours+":"+mins+" hrs";
+            } else {
+                return diffMinutes+" mins";
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "0";
+        }
+
     }
 
     @Override
@@ -114,7 +193,10 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
         TestHeaderRowViewHolder vh = (TestHeaderRowViewHolder) viewHolder;
 //        vh.tvText.setText(mTableDataSource.getItemData(row, 0));
         // todo: change
-        vh.tvText.setText("row info");
+//        vh.tvText.setText("row info");
+        SleepEntry entry = (SleepEntry) mTableDataSource.get(row);
+        String itemData = entry.getDate();
+        vh.tvText.setText(itemData);
 
     }
 
