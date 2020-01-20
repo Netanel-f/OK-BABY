@@ -1,9 +1,12 @@
 package com.ux.ok_baby.view.ui.reports;
 
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,11 +29,24 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.ReportEntry;
+import com.ux.ok_baby.model.SleepEntry;
 import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 import com.ux.ok_baby.view.popups.PopUpSleep;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.Chart;
+import lecho.lib.hellocharts.view.LineChartView;
 
 
 /**
@@ -38,9 +56,12 @@ public class SleepFragment extends Fragment {
     private final String TAG = "SleepFragment";
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
+    private LinearLayout mGraphsLayout;
+//    private HorizontalScrollView mGraphsLayout;
     private Button graphsBtn, tableBtn;
     private String babyID;
     private EntriesViewModel entriesViewModel;
+    private View view;
 
     public SleepFragment(String babyID) {
         this.babyID = babyID;
@@ -51,12 +72,13 @@ public class SleepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sleep, container, false);
+        view = inflater.inflate(R.layout.fragment_sleep, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
 
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
+        mGraphsLayout = (LinearLayout) view.findViewById(R.id.sleepGraphsLayout);
         graphsBtn = (Button) view.findViewById(R.id.switch_to_graph_btn);
         tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
@@ -66,6 +88,84 @@ public class SleepFragment extends Fragment {
         loadFromFirebase();
         return view;
     }
+
+    private void setUpGraphs(List<ReportEntry> entries) {
+        // set up graph ui
+        LineChartView chart = new LineChartView(view.getContext());
+        mGraphsLayout.addView(chart);
+
+        chart.setInteractive(false);
+        chart.setZoomType(ZoomType.HORIZONTAL);
+        chart.setZoomEnabled(true);
+        chart.setScrollEnabled(true);
+        chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+
+
+        // add values to graph
+        List<PointValue> values = new ArrayList<PointValue>();
+        List<Line> lines = new ArrayList<Line>();
+        for (int j = 1; j < entries.size(); ++j) {
+            SleepEntry entry = (SleepEntry) entries.get(j);
+            PointValue pointValue = new PointValue(j*100, ReportTableAdapter.calculateDurationInt(entry));
+            values.add(pointValue);
+            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
+            line.setHasLabels(true);
+//            line.setPointColor(ChartUtils.COLORS[j % ChartUtils.COLORS.length]);
+            lines.add(line);
+        }
+
+        boolean hasAxes = true;
+        boolean hasAxesNames = true;
+        LineChartData data = new LineChartData();
+
+        if (hasAxes) {
+            Axis axisX = new Axis();
+            Axis axisY = new Axis().setHasLines(true);
+            if (hasAxesNames) {
+//                axisX.setName("Axis X");
+                axisY.setName("Duration in minutes");
+            }
+            data.setAxisXBottom(null);
+            data.setAxisYLeft(axisY);
+        } else {
+            data.setAxisXBottom(null);
+            data.setAxisYLeft(null);
+        }
+
+//        final Viewport v = new Viewport(chart.getMaximumViewport());
+//        v.bottom = -5;
+//        v.top = 105;
+//        // You have to set max and current viewports separately.
+//        chart.setMaximumViewport(v);
+//        // I changing current viewport with animation in this case.
+//        chart.setCurrentViewportWithAnimation(v);
+
+
+//        final Viewport v = new Viewport(chart.getMaximumViewport());
+//        v.bottom = 0;
+//        v.top = 0;
+//        v.left = 0;
+//        v.right = 2;
+//
+////        chart.setMaximumViewport(v);
+//        chart.setCurrentViewportWithAnimation(v);
+
+        final Viewport orig_v = new Viewport(chart.getMaximumViewport());
+        final Viewport v = new Viewport(chart.getMaximumViewport());
+        v.bottom = v.bottom-1;
+        v.top = v.top+1;
+        chart.setMaximumViewport(v);
+        chart.setCurrentViewport(orig_v);
+        // You have to set max and curre
+
+
+        data.setLines(lines);
+
+        data.setBaseValue(Float.NEGATIVE_INFINITY);
+        chart.setLineChartData(data);
+
+    }
+
 
     private void loadFromFirebase() {
         CollectionReference sleepCollection = FirebaseFirestore.getInstance().collection("babies")
@@ -107,6 +207,7 @@ public class SleepFragment extends Fragment {
                         mTableLayout.setHeaderFixed(true);
                         mTableLayout.setSolidRowHeader(false);
                         mTableAdapter.notifyDataSetChanged();
+                        setUpGraphs(reportEntries);
                     }
                 });
 
@@ -119,6 +220,7 @@ public class SleepFragment extends Fragment {
                 graphsBtn.setVisibility(View.GONE);
                 tableBtn.setVisibility(View.VISIBLE);
                 mTableLayout.setVisibility(View.GONE);
+                mGraphsLayout.setVisibility(View.VISIBLE);
             }
         });
         tableBtn.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +229,7 @@ public class SleepFragment extends Fragment {
                 graphsBtn.setVisibility(View.VISIBLE);
                 tableBtn.setVisibility(View.GONE);
                 mTableLayout.setVisibility(View.VISIBLE);
+                mGraphsLayout.setVisibility(View.GONE);
             }
         });
     }

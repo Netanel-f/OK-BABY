@@ -119,7 +119,27 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
         vh.tvText.setText(itemData);
     }
 
-    private String calculateDuration(SleepEntry entry) {
+    public static long calculateDurationInt(SleepEntry entry){ // todo change
+        String time1 = entry.getStartTime();
+        String time2 = entry.getEndTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = format.parse(time1);
+            date2 = format.parse(time2);
+            long diff = date2.getTime() - date1.getTime();
+            return diff / (60 * 1000);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+    public static String calculateDuration(SleepEntry entry) { // todo: move somewhere else
         String time1 = entry.getStartTime();
         String time2 = entry.getEndTime();
 

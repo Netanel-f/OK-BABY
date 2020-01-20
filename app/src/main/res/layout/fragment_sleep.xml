@@ -55,6 +55,22 @@
             app:dragAndDropEnabled="true"
             android:visibility="visible"/>
 
+        <!-- Graphs layout -->
+<!--        <HorizontalScrollView-->
+<!--            android:id="@+id/sleepGraphsLayout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="300dp">-->
+
+            <LinearLayout
+                android:id="@+id/sleepGraphsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                />
+
+<!--        </HorizontalScrollView>-->
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addReport"
