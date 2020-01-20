@@ -12,9 +12,13 @@ public class Baby implements Parcelable {
     private String babyDOB;
     private String imageUrl;
 
-    public Baby(){
+    public Baby() {
 //        this.babyName = "";
 //        this.babyDOB = "";
+    }
+
+    public Baby(String bid) {
+        this.bid = bid;
     }
 
     public Baby(@NonNull String bid, String babyName, String babyDOB) {
@@ -88,5 +92,4 @@ public class Baby implements Parcelable {
             return new Baby[size];
         }
     };
-
 }

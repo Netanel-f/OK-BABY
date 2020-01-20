@@ -43,9 +43,10 @@ public class HomeFragment extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
 
+        userID = getIntent().getStringExtra(USER_ID); //TODO change?
+
         userID = getIntent().getStringExtra(USER_ID_TAG); //TODO change?
         Boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
-
 
 //        if (babyID == null) {
         if (isNewUser) {
