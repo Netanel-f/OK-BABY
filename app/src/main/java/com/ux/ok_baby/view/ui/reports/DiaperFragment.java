@@ -51,12 +51,12 @@ public class DiaperFragment extends Fragment {
     }
 
     private void setUpReportTable() {
-        CollectionReference dataSource = null; // todo - query from firebase
-        mTableAdapter = new ReportTableAdapter(getContext(), dataSource);
-        mTableLayout.setAdapter(mTableAdapter);
-        mTableLayout.setHeaderFixed(true);
-        mTableLayout.setSolidRowHeader(false);
-        mTableAdapter.notifyDataSetChanged();
+//        CollectionReference dataSource = null; // todo - query from firebase
+//        mTableAdapter = new ReportTableAdapter(getContext(), dataSource);
+//        mTableLayout.setAdapter(mTableAdapter);
+//        mTableLayout.setHeaderFixed(true);
+//        mTableLayout.setSolidRowHeader(false);
+//        mTableAdapter.notifyDataSetChanged();
     }
 
     private void setUpGraphsBtn() {
