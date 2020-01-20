@@ -28,6 +28,8 @@ import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
+import com.ux.ok_baby.utils.Constants;
+
 public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = "SignInActivity";
@@ -245,9 +247,11 @@ public class SignInActivity extends AppCompatActivity {
                     Log.w(TAG, "onChanged: observed user "+user.getUid());
                     if (user.getBabies() == null || user.getBabies().isEmpty()) {
                         // baby list is empty -> treat like new user
-                        navigateToNextActivity(true);
+                        navigateToNextActivity(uid, true);
+//                        navigateToNextActivity(true);
                     } else {
-                        navigateToNextActivity(false);
+                        navigateToNextActivity(uid, false);
+//                        navigateToNextActivity(false);
                     }
                 }
                 else {
@@ -260,7 +264,18 @@ public class SignInActivity extends AppCompatActivity {
 
     private void addNewUser(String uid, String email) {
         addUserToDatabase(uid, email);
-        navigateToNextActivity(true);
+        navigateToNextActivity(uid, true);
+//        navigateToNextActivity(true);
+    }
+
+
+
+    private void navigateToNextActivity(String uid, Boolean isNewUser) {
+        Intent homeIntent = new Intent(this, HomeFragment.class);
+
+        homeIntent.putExtra(Constants.USER_ID_TAG, uid);
+        homeIntent.putExtra(Constants.IS_NEW_USER_TAG, isNewUser);
+        startActivity(homeIntent);
     }
 
 
