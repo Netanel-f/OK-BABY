@@ -207,7 +207,6 @@ public class SleepFragment extends Fragment {
                         }
                     }
                 });
-
     }
 
     private void setUpGraphsBtn() {
@@ -235,7 +234,7 @@ public class SleepFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpSleep popUpClass = new PopUpSleep(getActivity(), babyID);
+                PopUpSleep popUpClass = new PopUpSleep(getActivity(), babyID,entriesViewModel);
                 popUpClass.showPopupWindow(view);
             }
         });

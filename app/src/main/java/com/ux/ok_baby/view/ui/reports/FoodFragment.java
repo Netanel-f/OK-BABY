@@ -38,9 +38,9 @@ public class FoodFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_food, container, false);
 
         // bind
-        mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
-        graphsBtn = (Button) view.findViewById(R.id.switch_to_graph_btn);
-        tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
+        mTableLayout =  view.findViewById(R.id.tableReportLayout);
+        graphsBtn =  view.findViewById(R.id.switch_to_graph_btn);
+        tableBtn =  view.findViewById(R.id.switch_to_table_btn);
 
         setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
