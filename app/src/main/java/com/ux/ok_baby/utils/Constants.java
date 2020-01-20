@@ -14,7 +14,8 @@ public class Constants {
     public static final String DATE_PATTERN = "MM/dd/yy";
     public static final String REPORT_TYPE = "report type";
     public static final String BABY_OBJECT_TAG = "BabyObject";
-    public static final String USER_ID = "userID";
+    public static final String USER_ID_TAG = "userID";
+    public static final String IS_NEW_USER_TAG = "isNewUser";
 
 
     public enum ReportType {FOOD, SLEEP, DIAPER, OTHER}

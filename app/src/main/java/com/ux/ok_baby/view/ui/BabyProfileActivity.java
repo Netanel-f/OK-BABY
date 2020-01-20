@@ -71,6 +71,7 @@ public class BabyProfileActivity extends AppCompatActivity {
         myCalendar = Calendar.getInstance();
 
         // get Baby object for editing
+        babyProfile = null;
         babyProfile = getIntent().getParcelableExtra(BABY_OBJECT_TAG);
 
         // setup views + image.
@@ -117,9 +118,12 @@ public class BabyProfileActivity extends AppCompatActivity {
 
                     // TODO return to last activity ?
 
-                    Intent intent = new Intent(context, HomeFragment.class);
-                    intent.putExtra(BABY_OBJECT_TAG, babyProfile);
-                    startActivity(intent);
+                    Intent homeIntent = new Intent(context, HomeFragment.class);
+                    homeIntent.putExtra(BABY_OBJECT_TAG, babyProfile);
+                    setResult(RESULT_OK, homeIntent);
+
+                    Log.d(ACTIVITY_TAG, "updating profile returing to home fragment baby id: " + babyProfile.getBid() + " babyName: " + babyName + " babyDOB: " + babyDob);
+                    finish();
                 }
 
             }
@@ -157,19 +161,21 @@ public class BabyProfileActivity extends AppCompatActivity {
      * load the data from Baby object to present on UI
      */
     private void loadFromBabyObject() {
-        String babyNameString = babyProfile.getBabyName();
-        if (babyNameString != null && !babyNameString.isEmpty()) {
-            babyName.setText(babyNameString);
-        }
+        if (babyProfile != null) {
+            String babyNameString = babyProfile.getBabyName();
+            if (babyNameString != null && !babyNameString.isEmpty()) {
+                babyName.setText(babyNameString);
+            }
 
-        String babyDobString = babyProfile.getBabyDOB();
-        if (babyDobString != null && !babyDobString.isEmpty()) {
-            babyDob.setText(babyDobString);
-        }
+            String babyDobString = babyProfile.getBabyDOB();
+            if (babyDobString != null && !babyDobString.isEmpty()) {
+                babyDob.setText(babyDobString);
+            }
 
-        String imgUrl = babyProfile.getImageUrl();
-        if (imgUrl != null && !imgUrl.equals("")) {
-            loadImage(imgUrl);
+            String imgUrl = babyProfile.getImageUrl();
+            if (imgUrl != null && !imgUrl.equals("")) {
+                loadImage(imgUrl);
+            }
         }
     }
 
