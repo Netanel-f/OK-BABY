@@ -6,8 +6,11 @@ public class Constants {
     public static final int SLEEP_TAB = 0;
     public static final int DIAPER_TAB = 2;
     public static final String FOOD = "Food";
+    public static final String LEFT = "left";
     public static final String OTHER = "Other";
+    public static final String RIGHT = "right";
     public static final String SLEEP = "Sleep";
+    public static final String BOTTLE = "Bottle";
     public static final String DIAPER = "Diaper";
     public static final String BABY_ID = "baby id";
     public static final int START_BABY_PROF_ACT = 1;
@@ -16,6 +19,7 @@ public class Constants {
     public static final String REPORT_TYPE = "report type";
     public static final String IS_NEW_USER_TAG = "isNewUser";
     public static final String BABY_OBJECT_TAG = "BabyObject";
+    public static final String BREASTFEEDING = "Breastfeeding";
 
 
     public enum ReportType {FOOD, SLEEP, DIAPER, OTHER}

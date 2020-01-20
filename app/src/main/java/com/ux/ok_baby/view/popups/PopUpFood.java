@@ -18,13 +18,7 @@ import com.ux.ok_baby.model.FoodEntry;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
-
-import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.*;
 
 public class PopUpFood {
     private String babyID;
@@ -37,9 +31,10 @@ public class PopUpFood {
     private EntriesViewModel entriesViewModel;
     private EditText dateET, startTimeET, endTimeET;
 
-    public PopUpFood(Context context, String babyID) {
+    public PopUpFood(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.context = context;
         this.babyID = babyID;
+        this.entriesViewModel = entriesViewModel;
     }
 
     public void showPopupWindow(View view) {
@@ -87,40 +82,15 @@ public class PopUpFood {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isDateValid(foodEntry.getDate()) && isTimeValid(foodEntry.getEndTime()) && isTimeValid(foodEntry.getStartTime())) { // TODO: 1/12/2020 check validation of other variables
+                if (foodEntry.isValidEntry()) {
                     entriesViewModel.addFoodEntry(babyID, foodEntry);
                 } else {
-                    Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "One or more fields are empty", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    private boolean isDateValid(String dobString) {
-        if (dobString.isEmpty()) {
-            return false;
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
-        try {
-            sdf.parse(dobString);
-        } catch (ParseException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isTimeValid(String time) {
-        if (time.isEmpty()) {
-            return false;
-        }
-        DateTimeFormatter strictTimeFormatter = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
-        try {
-            LocalTime.parse(time, strictTimeFormatter);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
 
     private void onTypeClick() {
         typeB.setOnClickListener(new View.OnClickListener() {
@@ -133,14 +103,14 @@ public class PopUpFood {
                         if (item.getItemId() == R.id.bottle) {
                             popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
                             popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
-                            typeB.setText("Bottle");
-                            foodEntry.setType("Bottle");
+                            typeB.setText(BOTTLE);
+                            foodEntry.setType(BOTTLE);
                             foodEntry.setSide(null);
                         } else {
                             popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
                             popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
-                            typeB.setText("Breastfeeding");
-                            foodEntry.setType("Breastfeeding");
+                            typeB.setText(BREASTFEEDING);
+                            foodEntry.setType(BREASTFEEDING);
                             foodEntry.setAmount(null);
                         }
                         return true;
@@ -160,11 +130,11 @@ public class PopUpFood {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.right) {
-                            sideB.setText("Right");
-                            foodEntry.setSide("Right");
+                            sideB.setText(RIGHT);
+                            foodEntry.setSide(RIGHT);
                         } else {
-                            sideB.setText("Left");
-                            foodEntry.setSide("Left");
+                            sideB.setText(LEFT);
+                            foodEntry.setSide(LEFT);
                         }
                         return true;
                     }
