@@ -121,8 +121,29 @@ public class HomeFragment extends FragmentActivity {
 
     private void setUpBabyDetails() {
         ((TextView) findViewById(R.id.babyName)).setText(baby.getBabyName());
-        ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(baby.getBabyDOB()) + " months old");
+        //todo fix text for child less than 1 month
+//        ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(baby.getBabyDOB()) + " months old");
+        ((TextView) findViewById(R.id.babyAge)).setText(getAgeString(baby.getBabyDOB()));
+        //todo update photo
     }
+
+    public String getAgeString(String dob) {
+        String ageString = getAgeByMonths(dob);
+
+        if (ageString.equals("0")) {
+            return getAgeByDays(dob) + " days old";
+        } else {
+            return ageString + " months old";
+        }
+    }
+
+    public String getAgeByDays(String dob) {
+        DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
+        DateTime date = format.parseDateTime(dob);
+        DateTime today = new DateTime();
+        return Integer.toString(Days.daysBetween(date, today).getDays());
+    }
+
 
     public String getAgeByMonths(String dob) {
         DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
