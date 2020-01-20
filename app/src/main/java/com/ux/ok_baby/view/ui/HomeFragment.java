@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -46,16 +48,20 @@ public class HomeFragment extends FragmentActivity {
     private String babyID, userID;
     private Baby baby;
 
+    private CircleImageView babyImgView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
 
+        babyImgView = findViewById(R.id.babyImage);
+
         userID = getIntent().getStringExtra(USER_ID_TAG); //TODO change?
         Boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
         babyID = getIntent().getStringExtra(Constants.BABY_ID);
 
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class); //todo fix deprecated
 //        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
 //        if (babyID == null) {
@@ -74,6 +80,7 @@ public class HomeFragment extends FragmentActivity {
         }
 
         setUpMenu(savedInstanceState);
+        setupEditButton();
         setUpOtherBabies();
     }
 
@@ -87,12 +94,27 @@ public class HomeFragment extends FragmentActivity {
         }
     }
 
+    private void setupEditButton() {
+        babyImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editCurrentBaby();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == START_BABY_PROF_ACT && resultCode == RESULT_OK) {
             baby = data.getParcelableExtra(BABY_OBJECT_TAG);
             userViewModel.addBaby(userID, baby);
+            setUpBabyDetails();
+        }
+
+        if (requestCode == START_BABY_PROF_EDIT_ACT && resultCode == RESULT_OK) {
+            baby = data.getParcelableExtra(BABY_OBJECT_TAG);
+            userViewModel.updateBaby(baby);
             setUpBabyDetails();
         }
     }
@@ -134,12 +156,20 @@ public class HomeFragment extends FragmentActivity {
     }
 
     private void addNewBaby() {
-        babyID = babiesCollection.document().getId();
+//        babyID = babiesCollection.document().getId();
         baby = new Baby(babyID);
         Intent intent = new Intent(this, BabyProfileActivity.class);
         intent.putExtra(BABY_OBJECT_TAG, baby);
 
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_BABY_PROF_ACT);
+    }
+
+    private void editCurrentBaby() {
+        Intent intent = new Intent(this, BabyProfileActivity.class);
+        intent.putExtra(BABY_OBJECT_TAG, baby);
+
+        Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
+        startActivityForResult(intent, START_BABY_PROF_EDIT_ACT);
     }
 }

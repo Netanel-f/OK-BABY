@@ -7,6 +7,7 @@ public class Constants {
     public static final int DIAPER_TAB = 2;
     public static final String FOOD = "Food";
     public static final int START_BABY_PROF_ACT = 1;
+    public static final int START_BABY_PROF_EDIT_ACT = 2;
     public static final String OTHER = "Other";
     public static final String SLEEP = "Sleep";
     public static final String DIAPER = "Diaper";
