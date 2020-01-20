@@ -14,30 +14,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.ux.ok_baby.model.FoodEntry;
 import com.ux.ok_baby.R;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.util.Calendar;
 
 import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
 
 public class PopUpFood {
+    private String babyID;
+    private View popupView;
     private Context context;
     private FoodEntry foodEntry;
-    private DateTimePicker dateTimePicker;
-    private Calendar myCalendar = Calendar.getInstance();
-    private EditText dateET, startTimeET, endTimeET;
-    private Button typeB, sideB, amountB;
     private PopupWindow popupWindow;
-    private View popupView;
-    private String babyID;
+    private Button typeB, sideB, amountB;
+    private DateTimePicker dateTimePicker;
+    private EntriesViewModel entriesViewModel;
+    private EditText dateET, startTimeET, endTimeET;
 
     public PopUpFood(Context context, String babyID) {
         this.context = context;
@@ -90,9 +88,7 @@ public class PopUpFood {
             @Override
             public void onClick(View view) {
                 if (isDateValid(foodEntry.getDate()) && isTimeValid(foodEntry.getEndTime()) && isTimeValid(foodEntry.getStartTime())) { // TODO: 1/12/2020 check validation of other variables
-                    CollectionReference foodCollection = FirebaseFirestore.getInstance().collection("babies").document(babyID).collection("food_reports");
-                    String id = foodCollection.document().getId();
-                    foodCollection.document(id).set(foodEntry);
+                    entriesViewModel.addFoodEntry(babyID, foodEntry);
                 } else {
                     Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
                 }
