@@ -62,7 +62,7 @@ public class UserViewModel extends AndroidViewModel {
 
         // add baby with bid to user
         // todo: check if doesn't try to add baby before there's a user
-        dbRepo.addBaby(user.getUid(), null);
+//        dbRepo.addBaby(user.getUid(), null);
     }
 
     /**

@@ -259,10 +259,11 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onChanged(Baby baby) {
                                 if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
-                                    navigateToNextActivity(uid, babyRef, true);
-
+//                                    navigateToNextActivity(uid, babyRef, true);
+                                    navigateToNextActivity(uid, true);
                                 } else {
                                     navigateToNextActivity(uid, babyRef, false);
+//                                    navigateToNextActivity(uid, false);
                                 }
                             }
                         });
@@ -270,19 +271,26 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "user has babies");
                         navigateToNextActivity(uid, user.getBabies().get(0), false);
+//                        navigateToNextActivity(uid, false);
 //                        navigateToNextActivity(false);
                     }
                 }
                 else {
-                    Log.w(TAG, "User doesn't exist in database");
+                    Log.w(TAG, "User doesn't exist in database. UID: " + uid + " email: " +email);
                     addNewUser(uid, email);//todo handle this flow
                 }
             }
         });
     }
 
-    private void addNewUser(String uid, String email) {
+    private void addNewUser(final String uid, String email) {
         addUserToDatabase(uid, email);
+//        viewModel.getUser(uid).observe(this, new Observer<User>() {
+//            @Override
+//            public void onChanged(User user) {
+//                navigateToNextActivity(uid, user.getBabies().get(0), true);
+//            }
+//        });
         navigateToNextActivity(uid, true);
 //        navigateToNextActivity(true);
     }

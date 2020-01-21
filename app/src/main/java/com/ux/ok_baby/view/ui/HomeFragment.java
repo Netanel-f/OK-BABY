@@ -177,7 +177,7 @@ public class HomeFragment extends FragmentActivity {
     }
 
     private void addNewBaby() {
-//        babyID = babiesCollection.document().getId();
+        babyID = babiesCollection.document().getId();
         baby = new Baby(babyID);
         Intent intent = new Intent(this, BabyProfileActivity.class);
         intent.putExtra(BABY_OBJECT_TAG, baby);
