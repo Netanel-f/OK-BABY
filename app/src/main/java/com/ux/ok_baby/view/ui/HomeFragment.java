@@ -2,16 +2,25 @@ package com.ux.ok_baby.view.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,7 +57,8 @@ public class HomeFragment extends FragmentActivity {
     private String babyID, userID;
     private Baby baby;
 
-    private CircleImageView babyImgView;
+//    private CircleImageView babyImgView;
+    private ImageView babyImgView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,6 +135,13 @@ public class HomeFragment extends FragmentActivity {
 //        ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(baby.getBabyDOB()) + " months old");
         ((TextView) findViewById(R.id.babyAge)).setText(getAgeString(baby.getBabyDOB()));
         //todo update photo
+        Glide.with(this)
+                .load(baby.getImageUrl())
+                .placeholder(R.mipmap.ic_baby)
+                .error(R.mipmap.ic_baby)
+                .apply(RequestOptions.circleCropTransform())
+                .into(babyImgView);
+
     }
 
     public String getAgeString(String dob) {
