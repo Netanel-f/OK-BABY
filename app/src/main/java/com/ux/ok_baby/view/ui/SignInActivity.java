@@ -200,7 +200,6 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
                             Log.w(TAG, "onComplete: succussfully logged in "+user.getUid());
-//                            createUser(user);
                             getUserFromDatabase(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -220,7 +219,6 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
-//                            createUser(user);
                             getUserFromDatabase(user);
 
                         } else {
@@ -252,18 +250,17 @@ public class SignInActivity extends AppCompatActivity {
                         // baby list is empty -> treat like new user
                         Log.w(TAG, "user has no babies");
                         navigateToNextActivity(uid, true);
-//                        navigateToNextActivity(true);
+
                     } else if (user.getBabies().get(0) != null) {
                         final DocumentReference babyRef = user.getBabies().get(0);
                         viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
                             @Override
                             public void onChanged(Baby baby) {
                                 if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
-//                                    navigateToNextActivity(uid, babyRef, true);
                                     navigateToNextActivity(uid, true);
+
                                 } else {
                                     navigateToNextActivity(uid, babyRef, false);
-//                                    navigateToNextActivity(uid, false);
                                 }
                             }
                         });
@@ -271,13 +268,11 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "user has babies");
                         navigateToNextActivity(uid, user.getBabies().get(0), false);
-//                        navigateToNextActivity(uid, false);
-//                        navigateToNextActivity(false);
                     }
                 }
                 else {
                     Log.w(TAG, "User doesn't exist in database. UID: " + uid + " email: " +email);
-                    addNewUser(uid, email);//todo handle this flow
+                    addNewUser(uid, email);
                 }
             }
         });
@@ -285,18 +280,14 @@ public class SignInActivity extends AppCompatActivity {
 
     private void addNewUser(final String uid, String email) {
         addUserToDatabase(uid, email);
-//        viewModel.getUser(uid).observe(this, new Observer<User>() {
-//            @Override
-//            public void onChanged(User user) {
-//                navigateToNextActivity(uid, user.getBabies().get(0), true);
-//            }
-//        });
         navigateToNextActivity(uid, true);
-//        navigateToNextActivity(true);
     }
 
-
-
+    /**
+     * Determines if the user is a new user or an existing user and navigates accordingly.
+     * @param uid - user id
+     * @param isNewUser  - true if the user is new or has no babies.
+     */
     private void navigateToNextActivity(String uid, Boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
@@ -311,40 +302,6 @@ public class SignInActivity extends AppCompatActivity {
         homeIntent.putExtra(Constants.USER_ID_TAG, uid);
         homeIntent.putExtra(Constants.IS_NEW_USER_TAG, isNewUser);
         homeIntent.putExtra(Constants.BABY_ID, babyRef.getId());
-        startActivity(homeIntent);
-    }
-
-
-    /**
-     * Determines if the user is a new user or an existing user and navigates accordingly.
-     * @param isNewUser - true if the user is new or has no babies.
-     */
-    private void navigateToNextActivity(Boolean isNewUser){
-        // todo delete
-        if (isNewUser) {
-            newUserNavigation();
-        } else {
-            existingUserNavigation();
-        }
-    }
-
-
-    /**
-     * Navigates to the screen a new user should go to: AddBabyActivity.
-     */
-    private void newUserNavigation() {
-        // todo delete
-        Intent addBabyIntent = new Intent(this, BabyProfileActivity.class);
-        startActivity(addBabyIntent);
-
-    }
-
-    /**
-     * Navigates to the screen an existing user should go to: HomeFragment.
-     */
-    private void existingUserNavigation() {
-        // todo delete
-        Intent homeIntent = new Intent(this, HomeFragment.class);
         startActivity(homeIntent);
     }
 
