@@ -28,9 +28,15 @@ import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.joda.time.LocalDate;
 import org.joda.time.Months;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.Period;
+//import java.time.format.DateTimeFormatter;
+
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -133,8 +139,6 @@ public class HomeFragment extends FragmentActivity {
 
     private void setUpBabyDetails() {
         ((TextView) findViewById(R.id.babyName)).setText(baby.getBabyName());
-        //todo fix text for child less than 1 month
-//        ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(baby.getBabyDOB()) + " months old");
         ((TextView) findViewById(R.id.babyAge)).setText(getAgeString(baby.getBabyDOB()));
         //todo update photo
         Glide.with(this)
@@ -147,29 +151,39 @@ public class HomeFragment extends FragmentActivity {
     }
 
     public String getAgeString(String dob) {
-        String ageString = getAgeByMonths(dob);
 
-        if (ageString.equals("0")) {
-            return getAgeByDays(dob) + " days old";
+//        LocalDate bday = LocalDate.parse(dob, format);
+//        LocalDate today = LocalDate.now();
+//
+//        Period age = Period.between(bday, today);
+//
+//        int months = age.getMonths();
+//        int days = age.getDays();
+//
+//        String ageString = "";
+//        if (months != 0) {
+//            ageString += months + " months old";
+//        }
+//
+//        if (days != 0) {
+//            ageString += days + " days old";
+//        }
+
+
+        DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
+        DateTime date = format.parseDateTime(dob);
+        DateTime today = new DateTime();
+
+        int monthsAge = Months.monthsBetween(date, today).getMonths();
+
+        if (monthsAge == 0) {
+            return Days.daysBetween(date, today).getDays() + " days old";
         } else {
-            return ageString + " months old";
+            return monthsAge + " months old";
         }
+
     }
 
-    public String getAgeByDays(String dob) {
-        DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
-        DateTime date = format.parseDateTime(dob);
-        DateTime today = new DateTime();
-        return Integer.toString(Days.daysBetween(date, today).getDays());
-    }
-
-
-    public String getAgeByMonths(String dob) {
-        DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
-        DateTime date = format.parseDateTime(dob);
-        DateTime today = new DateTime();
-        return Integer.toString(Months.monthsBetween(date, today).getMonths());
-    }
 
     @SuppressLint("ResourceAsColor")
     private void setUpOtherBabies() {
