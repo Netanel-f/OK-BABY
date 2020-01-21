@@ -2,9 +2,6 @@ package com.ux.ok_baby.view.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -14,18 +11,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-//import com.ux.ok_baby.BabyProfileActivity;
-//import com.ux.ok_baby.MenuFragment;
+
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.Baby;
 import com.ux.ok_baby.model.User;
@@ -57,7 +50,6 @@ public class HomeFragment extends FragmentActivity {
     private String babyID, userID;
     private Baby baby;
 
-//    private CircleImageView babyImgView;
     private ImageView babyImgView;
 
     @Override
@@ -74,7 +66,6 @@ public class HomeFragment extends FragmentActivity {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class); //todo fix deprecated
 //        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
-//        if (babyID == null) {
         if (isNewUser) {
             addNewBaby();
 
@@ -86,7 +77,6 @@ public class HomeFragment extends FragmentActivity {
                     setUpBabyDetails();
                 }
             });
-//            setUpBabyDetails();
         }
 
         setUpMenu(savedInstanceState);
@@ -116,16 +106,28 @@ public class HomeFragment extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // returning from edit a new baby profile
         if (requestCode == START_BABY_PROF_ACT && resultCode == RESULT_OK) {
-            baby = data.getParcelableExtra(BABY_OBJECT_TAG);
-            userViewModel.addBaby(userID, baby);
-            setUpBabyDetails();
+            if (data == null ) {
+                Log.d(TAG, "onActivityResult: START_BABY_PROF_ACT and data == null");
+
+            } else {
+                baby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                userViewModel.addBaby(userID, baby);
+                setUpBabyDetails();
+            }
         }
 
+        // returning from edit an existing baby profile
         if (requestCode == START_BABY_PROF_EDIT_ACT && resultCode == RESULT_OK) {
-            baby = data.getParcelableExtra(BABY_OBJECT_TAG);
-            userViewModel.updateBaby(baby);
-            setUpBabyDetails();
+            if (data == null) {
+                Log.d(TAG, "onActivityResult: START_BABY_PROF_EDIT_ACT and data == null");
+
+            } else {
+                baby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                userViewModel.updateBaby(baby);
+                setUpBabyDetails();
+            }
         }
     }
 
