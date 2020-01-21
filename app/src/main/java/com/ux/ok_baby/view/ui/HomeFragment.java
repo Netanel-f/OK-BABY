@@ -151,25 +151,6 @@ public class HomeFragment extends FragmentActivity {
     }
 
     public String getAgeString(String dob) {
-
-//        LocalDate bday = LocalDate.parse(dob, format);
-//        LocalDate today = LocalDate.now();
-//
-//        Period age = Period.between(bday, today);
-//
-//        int months = age.getMonths();
-//        int days = age.getDays();
-//
-//        String ageString = "";
-//        if (months != 0) {
-//            ageString += months + " months old";
-//        }
-//
-//        if (days != 0) {
-//            ageString += days + " days old";
-//        }
-
-
         DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
         DateTime date = format.parseDateTime(dob);
         DateTime today = new DateTime();
