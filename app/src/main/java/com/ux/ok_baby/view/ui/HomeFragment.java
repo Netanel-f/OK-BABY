@@ -28,14 +28,9 @@ import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.LocalDate;
 import org.joda.time.Months;
-import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-//import java.time.LocalDate;
-//import java.time.Period;
-//import java.time.format.DateTimeFormatter;
 
 
 import androidx.lifecycle.Observer;
@@ -65,7 +60,7 @@ public class HomeFragment extends FragmentActivity {
 
         babyImgView = findViewById(R.id.babyImage);
 
-        userID = getIntent().getStringExtra(USER_ID_TAG); //TODO change?
+        userID = getIntent().getStringExtra(USER_ID_TAG);
         Boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
         babyID = getIntent().getStringExtra(Constants.BABY_ID);
 
