@@ -5,17 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-//import com.ux.ok_baby.BabyProfileActivity;
-//import com.ux.ok_baby.MenuFragment;
+
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.Baby;
 import com.ux.ok_baby.model.User;
@@ -24,9 +27,11 @@ import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,19 +51,22 @@ public class HomeFragment extends FragmentActivity {
     private String babyID, userID;
     private Baby baby;
 
+    private ImageView babyImgView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
 
-        userID = getIntent().getStringExtra(USER_ID_TAG); //TODO change?
+        babyImgView = findViewById(R.id.babyImage);
+
+        userID = getIntent().getStringExtra(USER_ID_TAG);
         Boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
         babyID = getIntent().getStringExtra(Constants.BABY_ID);
 
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class); //todo fix deprecated
 //        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
-//        if (babyID == null) {
         if (isNewUser) {
             addNewBaby();
 
@@ -70,10 +78,10 @@ public class HomeFragment extends FragmentActivity {
                     setUpBabyDetails();
                 }
             });
-//            setUpBabyDetails();
         }
 
         setUpMenu(savedInstanceState);
+        setupEditButton();
         setUpOtherBabies();
     }
 
@@ -87,27 +95,71 @@ public class HomeFragment extends FragmentActivity {
         }
     }
 
+    private void setupEditButton() {
+        babyImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editCurrentBaby();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // returning from edit a new baby profile
         if (requestCode == START_BABY_PROF_ACT && resultCode == RESULT_OK) {
-            baby = data.getParcelableExtra(BABY_OBJECT_TAG);
-            userViewModel.addBaby(userID, baby);
-            setUpBabyDetails();
+            if (data == null ) {
+                Log.d(TAG, "onActivityResult: START_BABY_PROF_ACT and data == null");
+
+            } else {
+                baby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                userViewModel.addBaby(userID, baby);
+                setUpBabyDetails();
+            }
+        }
+
+        // returning from edit an existing baby profile
+        if (requestCode == START_BABY_PROF_EDIT_ACT && resultCode == RESULT_OK) {
+            if (data == null) {
+                Log.d(TAG, "onActivityResult: START_BABY_PROF_EDIT_ACT and data == null");
+
+            } else {
+                baby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                userViewModel.updateBaby(baby);
+                setUpBabyDetails();
+            }
         }
     }
 
     private void setUpBabyDetails() {
         ((TextView) findViewById(R.id.babyName)).setText(baby.getBabyName());
-        ((TextView) findViewById(R.id.babyAge)).setText(getAgeByMonths(baby.getBabyDOB()) + " months old");
+        ((TextView) findViewById(R.id.babyAge)).setText(getAgeString(baby.getBabyDOB()));
+        //todo update photo
+        Glide.with(this)
+                .load(baby.getImageUrl())
+                .placeholder(R.mipmap.ic_baby)
+                .error(R.mipmap.ic_baby)
+                .apply(RequestOptions.circleCropTransform())
+                .into(babyImgView);
+
     }
 
-    public String getAgeByMonths(String dob) {
+    public String getAgeString(String dob) {
         DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
         DateTime date = format.parseDateTime(dob);
         DateTime today = new DateTime();
-        return Integer.toString(Months.monthsBetween(date, today).getMonths());
+
+        int monthsAge = Months.monthsBetween(date, today).getMonths();
+
+        if (monthsAge == 0) {
+            return Days.daysBetween(date, today).getDays() + " days old";
+        } else {
+            return monthsAge + " months old";
+        }
+
     }
+
 
     @SuppressLint("ResourceAsColor")
     private void setUpOtherBabies() {
@@ -141,5 +193,13 @@ public class HomeFragment extends FragmentActivity {
 
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_BABY_PROF_ACT);
+    }
+
+    private void editCurrentBaby() {
+        Intent intent = new Intent(this, BabyProfileActivity.class);
+        intent.putExtra(BABY_OBJECT_TAG, baby);
+
+        Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
+        startActivityForResult(intent, START_BABY_PROF_EDIT_ACT);
     }
 }
