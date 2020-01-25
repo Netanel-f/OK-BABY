@@ -23,7 +23,6 @@ import com.ux.ok_baby.viewmodel.EntriesViewModel;
  * Contains the food report.
  */
 public class FoodFragment extends Fragment {
-
     private EntriesViewModel entriesViewModel;
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;

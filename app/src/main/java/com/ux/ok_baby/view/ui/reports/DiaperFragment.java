@@ -4,6 +4,7 @@ package com.ux.ok_baby.view.ui.reports;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +16,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 import com.ux.ok_baby.view.popups.PopUpDiaper;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 
 /**
  * Contains the diaper report.
  */
 public class DiaperFragment extends Fragment {
-
-
+    private EntriesViewModel entriesViewModel;
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
     private Button graphsBtn, tableBtn;
@@ -38,6 +39,7 @@ public class DiaperFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_diaper, container, false);
+        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
@@ -82,7 +84,7 @@ public class DiaperFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpDiaper popUpClass = new PopUpDiaper(getActivity(), babyID);
+                PopUpDiaper popUpClass = new PopUpDiaper(getActivity(), babyID, entriesViewModel);
                 popUpClass.showPopupWindow(view);
             }
         });

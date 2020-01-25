@@ -55,13 +55,13 @@ import lecho.lib.hellocharts.view.LineChartView;
  */
 public class SleepFragment extends Fragment {
     private final String TAG = "SleepFragment";
+    private EntriesViewModel entriesViewModel;
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
     private LinearLayout mGraphsLayout;
-//    private HorizontalScrollView mGraphsLayout;
+    //    private HorizontalScrollView mGraphsLayout;
     private Button graphsBtn, tableBtn;
     private String babyID;
-    private EntriesViewModel entriesViewModel;
     private View view;
 
     public SleepFragment(String babyID) {
@@ -118,14 +118,14 @@ public class SleepFragment extends Fragment {
         Axis axisX;
         Axis axisY;
 //        if (hasAxes) {
-            axisX = new Axis();
-            axisY = new Axis().setHasLines(true);
-            if (hasAxesNames) {
+        axisX = new Axis();
+        axisY = new Axis().setHasLines(true);
+        if (hasAxesNames) {
 //                axisX.setName("Axis X");
-                axisY.setName("Duration in minutes");
-            }
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(axisY);
+            axisY.setName("Duration in minutes");
+        }
+        data.setAxisXBottom(null);
+        data.setAxisYLeft(axisY);
 //        } else {
 //            data.setAxisXBottom(null);
 //            data.setAxisYLeft(null);
@@ -149,7 +149,6 @@ public class SleepFragment extends Fragment {
         chart.setCurrentViewportWithAnimation(v);
         chart.setScrollEnabled(true);
         chart.setZoomEnabled(false);
-
     }
 
 
@@ -195,27 +194,27 @@ public class SleepFragment extends Fragment {
 
     private void setUpReportTable(String babyID) {
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
-                    @Override
-                    public void onChanged(List<ReportEntry> reportEntries) {
-                        if (reportEntries != null && reportEntries.size() > 0) {
-                            // todo: remove sort from here- maybe in viewmodel when getting entries
-                            reportEntries.sort(new Comparator<ReportEntry>() {
-                                @Override
-                                public int compare(ReportEntry o1, ReportEntry o2) {
-                                    SleepEntry s1 = (SleepEntry) o1;
-                                    SleepEntry s2 = (SleepEntry) o2;
-                                    return s1.getDate().compareTo(s2.getDate());
-                                }
-                            });
-                            mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
-                            mTableLayout.setAdapter(mTableAdapter);
-                            mTableLayout.setHeaderFixed(true);
-                            mTableLayout.setSolidRowHeader(false);
-                            mTableAdapter.notifyDataSetChanged();
-                            setUpGraphs(reportEntries);
+            @Override
+            public void onChanged(List<ReportEntry> reportEntries) {
+                if (reportEntries != null && reportEntries.size() > 0) {
+                    // todo: remove sort from here- maybe in viewmodel when getting entries
+                    reportEntries.sort(new Comparator<ReportEntry>() {
+                        @Override
+                        public int compare(ReportEntry o1, ReportEntry o2) {
+                            SleepEntry s1 = (SleepEntry) o1;
+                            SleepEntry s2 = (SleepEntry) o2;
+                            return s1.getDate().compareTo(s2.getDate());
                         }
-                    }
-                });
+                    });
+                    mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
+                    mTableLayout.setAdapter(mTableAdapter);
+                    mTableLayout.setHeaderFixed(true);
+                    mTableLayout.setSolidRowHeader(false);
+                    mTableAdapter.notifyDataSetChanged();
+                    setUpGraphs(reportEntries);
+                }
+            }
+        });
     }
 
     private void setUpGraphsBtn() {
@@ -243,7 +242,7 @@ public class SleepFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpSleep popUpClass = new PopUpSleep(getActivity(), babyID,entriesViewModel);
+                PopUpSleep popUpClass = new PopUpSleep(getActivity(), babyID, entriesViewModel);
                 popUpClass.showPopupWindow(view);
             }
         });

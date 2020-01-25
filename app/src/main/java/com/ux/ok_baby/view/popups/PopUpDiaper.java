@@ -18,13 +18,7 @@ import com.ux.ok_baby.model.DiaperEntry;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
-
-import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.*;
 
 public class PopUpDiaper {
     private String babyID;
@@ -35,12 +29,13 @@ public class PopUpDiaper {
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
-    private EditText dateET, timeET, endTimeET;
+    private EditText dateET, timeET;
 
 
-    public PopUpDiaper(Context context, String babyID) {
+    public PopUpDiaper(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.context = context;
         this.babyID = babyID;
+        this.entriesViewModel = entriesViewModel;
     }
 
     public void showPopupWindow(View view) {
@@ -50,6 +45,12 @@ public class PopUpDiaper {
         diaperEntry = new DiaperEntry();
         dateTimePicker = new DateTimePicker(context);
 
+        setUpEntry();
+        setUpAddButton();
+        setUpExit();
+    }
+
+    private void setUpEntry() {
         dateET = popupView.findViewById(R.id.date);
         timeET = popupView.findViewById(R.id.time);
         typeB = popupView.findViewById(R.id.type);
@@ -58,8 +59,6 @@ public class PopUpDiaper {
         setUpDate();
         setUpTime();
         onTypeClick();
-        setUpAddButton();
-        setUpExit();
     }
 
     private void setUpExit() {
@@ -78,45 +77,33 @@ public class PopUpDiaper {
         });
     }
 
+    private void updateDiaperEntryObject() {
+        diaperEntry.setDate(dateET.getText().toString());
+        diaperEntry.setTime(timeET.getText().toString());
+        diaperEntry.setType(typeB.getText().toString());
+        if (diaperEntry.getType().equals(POO)) {
+            diaperEntry.setTexture(textureB.getText().toString());
+            diaperEntry.setColor("");//TODO update color
+        } else {
+            diaperEntry.setTexture("");
+            diaperEntry.setColor("");
+        }
+    }
+
+
     private void setUpAddButton() {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isDateValid(diaperEntry.getDate()) && isTimeValid(diaperEntry.getTime())) { // TODO: 1/12/2020 check validation of other variables
+                updateDiaperEntryObject();
+                if (diaperEntry.isValidEntry()) {
                     entriesViewModel.addDiaperEntry(babyID, diaperEntry);
                 } else {
-                    Toast.makeText(context, "One or more fields are incorrect", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "One or more fields are empty", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
-
-    private boolean isDateValid(String dobString) {
-        if (dobString.isEmpty()) {
-            return false;
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
-        try {
-            sdf.parse(dobString);
-        } catch (ParseException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isTimeValid(String time) {
-        if (time.isEmpty()) {
-            return false;
-        }
-        DateTimeFormatter strictTimeFormatter = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
-        try {
-            LocalTime.parse(time, strictTimeFormatter);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
 
     private void onTypeClick() {
         typeB.setOnClickListener(new View.OnClickListener() {
@@ -129,13 +116,11 @@ public class PopUpDiaper {
                         if (item.getItemId() == R.id.poo) {
                             popupView.findViewById(R.id.textureLayout).setVisibility(View.VISIBLE);
                             popupView.findViewById(R.id.colorLayout).setVisibility(View.VISIBLE);
-                            typeB.setText("Poo");
-                            diaperEntry.setType("Poo");
+                            typeB.setText(POO);
                         } else {
                             popupView.findViewById(R.id.textureLayout).setVisibility(View.GONE);
                             popupView.findViewById(R.id.colorLayout).setVisibility(View.GONE);
-                            typeB.setText("Pee");
-                            diaperEntry.setType("Pee");
+                            typeB.setText(PEE);
                         }
                         return true;
                     }
@@ -158,7 +143,6 @@ public class PopUpDiaper {
             @Override
             public void onClick(View v) {
                 dateTimePicker.datePicker(dateET);
-                diaperEntry.setDate(dateET.getText().toString());
             }
         });
     }
@@ -168,7 +152,6 @@ public class PopUpDiaper {
             @Override
             public void onClick(View v) {
                 dateTimePicker.timePicker(timeET);
-                diaperEntry.setTime(timeET.getText().toString());
             }
         });
     }
