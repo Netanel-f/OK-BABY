@@ -44,6 +44,12 @@ public class PopUpFood {
         foodEntry = new FoodEntry();
         dateTimePicker = new DateTimePicker(context);
 
+        setUpEntry();
+        setUpAddButton();
+        setUpExit();
+    }
+
+    private void setUpEntry() {
         dateET = popupView.findViewById(R.id.date);
         startTimeET = popupView.findViewById(R.id.startTime);
         endTimeET = popupView.findViewById(R.id.endTime);
@@ -57,9 +63,6 @@ public class PopUpFood {
         onTypeClick();
         onSideClick();
         onAmountClick();
-
-        setUpAddButton();
-        setUpExit();
     }
 
     private void setUpExit() {
@@ -82,6 +85,7 @@ public class PopUpFood {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                updateFoodEntryObject();
                 if (foodEntry.isValidEntry()) {
                     entriesViewModel.addFoodEntry(babyID, foodEntry);
                 } else {
@@ -89,6 +93,20 @@ public class PopUpFood {
                 }
             }
         });
+    }
+
+    private void updateFoodEntryObject() {
+        foodEntry.setDate(dateET.getText().toString());
+        foodEntry.setEndTime(endTimeET.getText().toString());
+        foodEntry.setStartTime(startTimeET.getText().toString());
+        foodEntry.setType(typeB.getText().toString());
+        if (foodEntry.getType().equals(BOTTLE)) {
+            foodEntry.setAmount(amountB.getText().toString());
+            foodEntry.setSide("");
+        } else {
+            foodEntry.setAmount("");
+            foodEntry.setSide(sideB.getText().toString());
+        }
     }
 
 
@@ -104,14 +122,10 @@ public class PopUpFood {
                             popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
                             popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
                             typeB.setText(BOTTLE);
-                            foodEntry.setType(BOTTLE);
-                            foodEntry.setSide(null);
                         } else {
                             popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
                             popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
                             typeB.setText(BREASTFEEDING);
-                            foodEntry.setType(BREASTFEEDING);
-                            foodEntry.setAmount(null);
                         }
                         return true;
                     }
@@ -131,10 +145,8 @@ public class PopUpFood {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.right) {
                             sideB.setText(RIGHT);
-                            foodEntry.setSide(RIGHT);
                         } else {
                             sideB.setText(LEFT);
-                            foodEntry.setSide(LEFT);
                         }
                         return true;
                     }
@@ -175,21 +187,15 @@ public class PopUpFood {
             @Override
             public void onClick(View v) {
                 dateTimePicker.datePicker(dateET);
-                foodEntry.setDate(dateET.getText().toString());
             }
         });
     }
-
 
     private void setUpTime(final EditText editText) {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dateTimePicker.timePicker(editText);
-                if (v.getId() == R.id.endTime)
-                    foodEntry.setEndTime(editText.getText().toString());
-                else
-                    foodEntry.setStartTime(editText.getText().toString());
             }
         });
     }

@@ -76,7 +76,6 @@ public class SleepFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_sleep, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
-
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
         mGraphsLayout = (LinearLayout) view.findViewById(R.id.sleepGraphsLayout);
@@ -98,7 +97,6 @@ public class SleepFragment extends Fragment {
         chart.setInteractive(true);
         chart.setScrollEnabled(true);
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
-
 
         // add values to graph
         List<PointValue> values = new ArrayList<PointValue>();

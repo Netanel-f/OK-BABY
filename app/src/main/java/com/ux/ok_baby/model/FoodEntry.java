@@ -74,10 +74,9 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
     public boolean isValidEntry() {
         if (date.isEmpty() || endTime.isEmpty() || startTime.isEmpty() || type.isEmpty())
             return false;
-        if (type.equals(BOTTLE)) {
+        if (type.equals(BOTTLE))
             return !amount.isEmpty();
-        } else {
+        else
             return !side.isEmpty();
-        }
     }
 }

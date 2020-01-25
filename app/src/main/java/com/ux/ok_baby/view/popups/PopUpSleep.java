@@ -38,6 +38,13 @@ public class PopUpSleep {
         popupWindow = setupPopup(view, popupView);
         sleepEntry = new SleepEntry();
         dateTimePicker = new DateTimePicker(context);
+
+        setUpEntry();
+        setUpAddButton();
+        setUpExit();
+    }
+
+    private void setUpEntry() {
         dateET = popupView.findViewById(R.id.date);
         startTimeET = popupView.findViewById(R.id.startTime);
         endTimeET = popupView.findViewById(R.id.endTime);
@@ -45,8 +52,6 @@ public class PopUpSleep {
         setUpDate();
         setUpTime(startTimeET);
         setUpTime(endTimeET);
-        setUpAddButton();
-        setUpExit();
     }
 
     private void setUpExit() {

@@ -4,6 +4,7 @@ package com.ux.ok_baby.view.ui.reports;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 import com.ux.ok_baby.view.popups.PopUpFood;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 
 /**
@@ -22,9 +24,10 @@ import com.ux.ok_baby.view.popups.PopUpFood;
  */
 public class FoodFragment extends Fragment {
 
+    private EntriesViewModel entriesViewModel;
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn,tableBtn;
+    private Button graphsBtn, tableBtn;
     private String babyID;
 
     public FoodFragment(String babyID) {
@@ -36,18 +39,19 @@ public class FoodFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_food, container, false);
+        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
         // bind
-        mTableLayout =  view.findViewById(R.id.tableReportLayout);
-        graphsBtn =  view.findViewById(R.id.switch_to_graph_btn);
-        tableBtn =  view.findViewById(R.id.switch_to_table_btn);
+        mTableLayout = view.findViewById(R.id.tableReportLayout);
+        graphsBtn = view.findViewById(R.id.switch_to_graph_btn);
+        tableBtn = view.findViewById(R.id.switch_to_table_btn);
 
         setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
         return view;
     }
 
-    private void setUpReportTable(){
+    private void setUpReportTable() {
 //        CollectionReference dataSource = null; // todo - query from firebase
 //        mTableAdapter = new ReportTableAdapter(getContext(), dataSource);
 //        mTableLayout.setAdapter(mTableAdapter);
@@ -56,7 +60,7 @@ public class FoodFragment extends Fragment {
 //        mTableAdapter.notifyDataSetChanged();
     }
 
-    private void setUpGraphsBtn(){
+    private void setUpGraphsBtn() {
         graphsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,14 +78,14 @@ public class FoodFragment extends Fragment {
             }
         });
     }
+
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopUpFood popUpClass = new PopUpFood(getActivity(),babyID);
+                PopUpFood popUpClass = new PopUpFood(getActivity(), babyID, entriesViewModel);
                 popUpClass.showPopupWindow(view);
             }
         });
     }
-
 }
