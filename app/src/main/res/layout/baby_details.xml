@@ -83,14 +83,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/babyImage"
-            android:layout_width="76dp"
+            android:layout_width="85dp"
             android:layout_height="85dp"
             android:layout_marginLeft="20dp"
             android:src="@mipmap/ic_baby"
-            app:civ_border_color="@color/light_gray"
-            app:civ_border_width="2dp" />
+            android:padding="5dp"
+            android:background="@drawable/baby_profile_image_border"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"

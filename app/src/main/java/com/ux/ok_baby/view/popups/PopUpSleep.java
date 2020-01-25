@@ -45,8 +45,6 @@ public class PopUpSleep {
         setUpDate();
         setUpTime(startTimeET);
         setUpTime(endTimeET);
-        startTimeChangeListener();
-        endTimeChangeListener();
         setUpAddButton();
         setUpExit();
     }
@@ -67,10 +65,12 @@ public class PopUpSleep {
         });
     }
 
+
     private void setUpAddButton() {
         popupView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                updateSleepEntryObject();
                 if (sleepEntry.isValidEntry()) {
                     entriesViewModel.addSleepEntry(babyID, sleepEntry);
                     popupWindow.dismiss();
@@ -78,6 +78,12 @@ public class PopUpSleep {
                     Toast.makeText(context, "One or more fields are empty.", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void updateSleepEntryObject() {
+        sleepEntry.setDate(dateET.getText().toString());
+        sleepEntry.setEndTime(endTimeET.getText().toString());
+        sleepEntry.setStartTime(startTimeET.getText().toString());
     }
 
     private PopupWindow setupPopup(View view, View popupView) {
@@ -95,20 +101,6 @@ public class PopUpSleep {
                 dateTimePicker.datePicker(dateET);
             }
         });
-        dateET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                sleepEntry.setDate(editable.toString());
-            }
-        });
     }
 
     private void setUpTime(final EditText editText) {
@@ -116,40 +108,6 @@ public class PopUpSleep {
             @Override
             public void onClick(View v) {
                 dateTimePicker.timePicker(editText);
-            }
-        });
-    }
-
-    private void startTimeChangeListener() {
-        startTimeET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                sleepEntry.setStartTime(editable.toString());
-            }
-        });
-    }
-
-    private void endTimeChangeListener() {
-        endTimeET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                sleepEntry.setEndTime(editable.toString());
             }
         });
     }
