@@ -17,6 +17,18 @@
         android:src="@drawable/ic_default_user_profile_image"
         android:visibility="visible"/>
 
+    <ProgressBar
+        android:id="@+id/progressBarImageUpload"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="@id/profile_image"
+        app:layout_constraintEnd_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toTopOf="@id/profile_image"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        android:src="@drawable/ic_default_user_profile_image"
+        android:visibility="invisible"/>
+
+
     <LinearLayout
         android:id="@+id/linear_fields_layout"
         android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     private EditText babyName;
     private TextView babyDob;
     private Button updateProfileBtn;
+    private ProgressBar progressBar;
     public static Calendar myCalendar;
     private Context context;
 
@@ -65,7 +67,7 @@ public class BabyProfileActivity extends AppCompatActivity {
         babyName = findViewById(R.id.baby_name);
         babyDob = findViewById(R.id.dob);
         updateProfileBtn = findViewById(R.id.update_profile_btn);
-
+        progressBar = findViewById(R.id.progressBarImageUpload);
 
         // get calendar instance for date picker
         myCalendar = Calendar.getInstance();
@@ -86,6 +88,8 @@ public class BabyProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        boolean uploadFailed = false;
+
         if (requestCode == PROFILE_IMG_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
@@ -96,10 +100,24 @@ public class BabyProfileActivity extends AppCompatActivity {
                         Log.d(ACTIVITY_TAG, "onActivityResult: filepath is " + filePath);
                         Log.d(ACTIVITY_TAG, "Uri: " + uri.toString());
 
+                        // set progress bar visible
+                        progressBar.setVisibility(View.VISIBLE);
+
                         // upload image to storage
                         uploadProfileImageToStorage(uri);
+
+                    } else {
+                        uploadFailed = true;
                     }
+                } else {
+                    uploadFailed = true;
                 }
+            } else {
+                uploadFailed = true;
+            }
+
+            if (uploadFailed) {
+                Toast.makeText(getApplicationContext(), "Image profile upload failed", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -122,7 +140,7 @@ public class BabyProfileActivity extends AppCompatActivity {
                     homeIntent.putExtra(BABY_OBJECT_TAG, babyProfile);
                     setResult(RESULT_OK, homeIntent);
 
-                    Log.d(ACTIVITY_TAG, "updating profile returing to home fragment baby id: " + babyProfile.getBid() + " babyName: " + babyName + " babyDOB: " + babyDob);
+                    Log.d(ACTIVITY_TAG, "updating profile returning to home fragment baby id: " + babyProfile.getBid() + " babyName: " + babyName + " babyDOB: " + babyDob);
                     finish();
                 }
 
@@ -151,7 +169,7 @@ public class BabyProfileActivity extends AppCompatActivity {
      */
     private void loadImage(String image_uri) {
         Glide.with(this)
-                .load(image_uri).placeholder(R.drawable.ic_default_user_profile_image)
+                .load(image_uri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(profilePicture);
     }
@@ -218,7 +236,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     private void pickProfileImage() {
         Intent myIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
         myIntent.setType("image/*");
-         startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
+        startActivityForResult(myIntent, PROFILE_IMG_REQUEST_CODE);
     }
 
 
@@ -244,6 +262,10 @@ public class BabyProfileActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // update the profile to use the image
                                         String url = task.getResult().toString();
+
+
+                                        // set progress bar invisible
+                                        progressBar.setVisibility(View.INVISIBLE);
 
                                         // save it to baby object
                                         babyProfile.setImageUrl(url);
