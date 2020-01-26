@@ -1,8 +1,10 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.ux.ok_baby.R;
 
 public class MainActivity extends AppCompatActivity {
 
