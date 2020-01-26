@@ -1,7 +1,11 @@
-package com.ux.ok_baby;
+package com.ux.ok_baby.view.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +24,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.ux.ok_baby.Model.User;
+import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.Baby;
+import com.ux.ok_baby.model.User;
+import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
+
+import com.ux.ok_baby.utils.Constants;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -39,11 +46,13 @@ public class SignInActivity extends AppCompatActivity {
     private Button signInBtn;
     private ProgressBar progressBar;
     private TextView signUpLink;
+    private ConstraintLayout splashScreenLayout;
 
     private Context context;
 
     private FirebaseAuth auth;
-    private FirebaseFirestore firestoreDB;
+
+    private UserViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +66,13 @@ public class SignInActivity extends AppCompatActivity {
         signInBtn = findViewById(R.id.buttonSignIn);
         progressBar = findViewById(R.id.progressBarSignIn);
         signUpLink = findViewById(R.id.signUpLink);
+        splashScreenLayout = findViewById(R.id.splashScreen);
 
         // initialize Firebase
         auth = FirebaseAuth.getInstance();
-        firestoreDB = FirebaseFirestore.getInstance();
+        viewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        checkIfLoggedIn(auth.getCurrentUser());
 
         setUpUI();
     }
@@ -68,6 +80,15 @@ public class SignInActivity extends AppCompatActivity {
     private void setUpUI(){
         setUpSignInButton();
         setUpSignUpButton();
+    }
+
+    private void checkIfLoggedIn(FirebaseUser authCurrentUser){
+        if (authCurrentUser != null){
+            getUserFromDatabase(authCurrentUser);
+        } else {
+            // user need to register or sign in, reveal sign in activity
+            splashScreenLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -172,13 +193,8 @@ public class SignInActivity extends AppCompatActivity {
      * @param password
      */
     private void signInToFirebase(String email, String password) {
-        // todo: get if exists, create with auth user uid if doesn't
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser == null) {
+            Log.w(TAG, "signInToFirebase: Attempthing to authenticate user");
             authenticateUser(email, password);
-        } else {
-            getUserFromDatabase(currentUser);
-        }
     }
 
     private void authenticateUser(String email, String password){
@@ -189,7 +205,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
-//                            createUser(user);
+                            Log.w(TAG, "onComplete: succussfully logged in "+user.getUid());
                             getUserFromDatabase(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -209,7 +225,6 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
-//                            createUser(user);
                             getUserFromDatabase(user);
 
                         } else {
@@ -230,70 +245,69 @@ public class SignInActivity extends AppCompatActivity {
     private void getUserFromDatabase(FirebaseUser authUser) {
         final String uid = authUser.getUid();
         final String email = authUser.getEmail();
-        DocumentReference userRef = firestoreDB.collection("users").document(uid);
-
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        final LifecycleOwner lifecycleOwner = this;
+        viewModel.getUser(uid).observe(this, new Observer<User>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        // existing user
-                        User user = document.toObject(User.class);
-                        if (user.getBabies() == null || user.getBabies().isEmpty()){
-                            // baby list is empty -> treat like new user
-                            navigateToNextActivity(true);
-                        } else {
-                            navigateToNextActivity(false);
-                        }
+            public void onChanged(User user) {
+                // got user
+                if (user != null) {
+                    Log.w(TAG, "onChanged: observed user "+user.getUid());
+                    if (user.getBabies() == null || user.getBabies().isEmpty()) {
+                        // baby list is empty -> treat like new user
+                        Log.w(TAG, "user has no babies");
+                        navigateToNextActivity(uid, true);
+
+                    } else if (user.getBabies().get(0) != null) {
+                        final DocumentReference babyRef = user.getBabies().get(0);
+                        viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
+                            @Override
+                            public void onChanged(Baby baby) {
+                                if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
+                                    navigateToNextActivity(uid, true);
+
+                                } else {
+                                    navigateToNextActivity(uid, babyRef, false);
+                                }
+                            }
+                        });
+
                     } else {
-                        // user doesn't exist
-                        Log.d(TAG, "User doesn't exist in database");
-                        addNewUser(uid, email);
+                        Log.d(TAG, "user has babies");
+                        navigateToNextActivity(uid, user.getBabies().get(0), false);
                     }
-                } else {
-                    // error retrieving data
-                    Log.w(TAG, "Error retrieving data from database");
+                }
+                else {
+                    Log.w(TAG, "User doesn't exist in database. UID: " + uid + " email: " +email);
+                    addNewUser(uid, email);
                 }
             }
         });
     }
 
-    private void addNewUser(String uid, String email) {
+    private void addNewUser(final String uid, String email) {
         addUserToDatabase(uid, email);
-        navigateToNextActivity(true);
+        navigateToNextActivity(uid, true);
     }
-
 
     /**
      * Determines if the user is a new user or an existing user and navigates accordingly.
-     * @param isNewUser - true if the user is new or has no babies.
+     * @param uid - user id
+     * @param isNewUser  - true if the user is new or has no babies.
      */
-    private void navigateToNextActivity(Boolean isNewUser){
-        if (isNewUser) {
-            newUserNavigation();
-        } else {
-            existingUserNavigation();
-        }
-    }
-
-
-    /**
-     * Navigates to the screen a new user should go to: AddBabyActivity.
-     */
-    private void newUserNavigation() {
-        Intent addBabyIntent = new Intent(this, BabyProfileActivity.class);
-        // todo: firebase user? check what we want to pass on
-        startActivity(addBabyIntent);
-
-    }
-
-    /**
-     * Navigates to the screen an existing user should go to: HomeFragment.
-     */
-    private void existingUserNavigation() {
+    private void navigateToNextActivity(String uid, Boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
-        // todo: firebase user?
+
+        homeIntent.putExtra(Constants.USER_ID_TAG, uid);
+        homeIntent.putExtra(Constants.IS_NEW_USER_TAG, isNewUser);
+        startActivity(homeIntent);
+    }
+
+    private void navigateToNextActivity(String uid, DocumentReference babyRef, Boolean isNewUser) {
+        Intent homeIntent = new Intent(this, HomeFragment.class);
+
+        homeIntent.putExtra(Constants.USER_ID_TAG, uid);
+        homeIntent.putExtra(Constants.IS_NEW_USER_TAG, isNewUser);
+        homeIntent.putExtra(Constants.BABY_ID, babyRef.getId());
         startActivity(homeIntent);
     }
 
@@ -304,8 +318,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void addUserToDatabase(String uid, String email) {
         User user = new User(uid, email, new ArrayList<DocumentReference>());
-        DocumentReference userRef = firestoreDB.collection("users").document(uid);
-        userRef.set(user);
+        viewModel.addNewUser(user);
     }
 
 
