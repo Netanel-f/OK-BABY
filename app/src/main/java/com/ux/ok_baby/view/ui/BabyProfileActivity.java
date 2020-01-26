@@ -168,6 +168,7 @@ public class BabyProfileActivity extends AppCompatActivity {
      * @param image_uri
      */
     private void loadImage(String image_uri) {
+        //todo add some loading img
         Glide.with(this)
                 .load(image_uri)
                 .apply(RequestOptions.circleCropTransform())
