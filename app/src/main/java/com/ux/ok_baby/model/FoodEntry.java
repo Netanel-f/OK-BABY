@@ -1,5 +1,7 @@
 package com.ux.ok_baby.model;
 
+import static com.ux.ok_baby.utils.Constants.*;
+
 public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
     private String date, endTime, startTime, type, side, amount;
 
@@ -13,6 +15,12 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
     }
 
     public FoodEntry() {
+        this.date = "";
+        this.endTime = "";
+        this.startTime = "";
+        this.type = "";
+        this.side = "";
+        this.amount = "";
     }
 
     public String getStartTime() {
@@ -61,5 +69,14 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public boolean isValidEntry() {
+        if (date.isEmpty() || endTime.isEmpty() || startTime.isEmpty() || type.isEmpty())
+            return false;
+        if (type.equals(BOTTLE))
+            return !amount.isEmpty();
+        else
+            return !side.isEmpty();
     }
 }

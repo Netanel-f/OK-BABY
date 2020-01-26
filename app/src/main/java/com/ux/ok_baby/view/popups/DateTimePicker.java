@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -44,7 +43,11 @@ public class DateTimePicker {
         return new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                textView.setText(selectedHour + ":" + selectedMinute);
+                myCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                myCalendar.set(Calendar.MINUTE, selectedMinute);
+                myCalendar.set(Calendar.SECOND, 0);
+                SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+                textView.setText(df.format(myCalendar.getTime()));
             }
         };
     }

@@ -11,7 +11,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_border"
+        android:background="@drawable/button_border_circular"
         app:cardCornerRadius="5dp">
 
         <LinearLayout
@@ -99,12 +99,13 @@
                     android:textStyle="bold" />
 
 
-                <Button
+                <Spinner
                     android:id="@+id/type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/poo"
-                    android:textAllCaps="false" />
+                    android:layout_height="match_parent"
+                    android:contextClickable="false"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -126,10 +127,13 @@
                     android:textStyle="bold" />
 
 
-                <Button
+                <Spinner
                     android:id="@+id/texture"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:contextClickable="false"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -149,9 +153,30 @@
                     android:text="@string/color"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+<!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    android:background="@drawable/clickable">-->
 
+
+                <!--                    <ImageView-->
+                <!--                        android:id="@+id/imageView"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        app:srcCompat="@color/black" />-->
+
+                <!--                    <ImageView-->
+                <!--                        android:id="@+id/imageView1"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        app:srcCompat="@color/gray" />-->
+                <!--                </LinearLayout>-->
 
                 <!-- TODO-->
+
+
             </LinearLayout>
 
             <RelativeLayout
