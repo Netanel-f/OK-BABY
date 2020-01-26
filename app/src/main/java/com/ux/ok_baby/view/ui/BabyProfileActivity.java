@@ -150,6 +150,7 @@ public class BabyProfileActivity extends AppCompatActivity {
      * @param image_uri
      */
     private void loadImage(String image_uri) {
+        //todo add some loading img
         Glide.with(this)
                 .load(image_uri).placeholder(R.drawable.ic_default_user_profile_image)
                 .apply(RequestOptions.circleCropTransform())

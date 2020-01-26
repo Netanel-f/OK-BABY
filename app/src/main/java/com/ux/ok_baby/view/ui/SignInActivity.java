@@ -2,6 +2,7 @@ package com.ux.ok_baby.view.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,6 +46,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button signInBtn;
     private ProgressBar progressBar;
     private TextView signUpLink;
+    private ConstraintLayout splashScreenLayout;
 
     private Context context;
 
@@ -64,6 +66,7 @@ public class SignInActivity extends AppCompatActivity {
         signInBtn = findViewById(R.id.buttonSignIn);
         progressBar = findViewById(R.id.progressBarSignIn);
         signUpLink = findViewById(R.id.signUpLink);
+        splashScreenLayout = findViewById(R.id.splashScreen);
 
         // initialize Firebase
         auth = FirebaseAuth.getInstance();
@@ -82,6 +85,9 @@ public class SignInActivity extends AppCompatActivity {
     private void checkIfLoggedIn(FirebaseUser authCurrentUser){
         if (authCurrentUser != null){
             getUserFromDatabase(authCurrentUser);
+        } else {
+            // user need to register or sign in, reveal sign in activity
+            splashScreenLayout.setVisibility(View.INVISIBLE);
         }
     }
 
