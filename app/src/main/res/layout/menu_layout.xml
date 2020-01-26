@@ -15,7 +15,7 @@
             android:layout_height="110dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/button_border"
+            android:background="@drawable/button_border_circular"
             android:text="Food" />
 
         <Button
@@ -24,7 +24,7 @@
             android:layout_height="110dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/button_border"
+            android:background="@drawable/button_border_circular"
             android:text="SLeep" />
 
     </LinearLayout>
@@ -40,7 +40,7 @@
             android:layout_height="110dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
-            android:background="@drawable/button_border"
+            android:background="@drawable/button_border_circular"
             android:text="Diaper " />
 
         <Button
@@ -49,7 +49,7 @@
             android:layout_height="110dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
-            android:background="@drawable/button_border"
+            android:background="@drawable/button_border_circular"
             android:text="other" />
     </LinearLayout>
 

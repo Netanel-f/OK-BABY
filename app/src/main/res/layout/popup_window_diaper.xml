@@ -11,7 +11,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_border"
+        android:background="@drawable/button_border_circular"
         app:cardCornerRadius="5dp">
 
         <LinearLayout
@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/addButton"
-                    android:background="@drawable/button_border"
+                    android:background="@drawable/button_border_circular"
                     android:text="Cancel" />
 
 
@@ -172,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/button_border"
+                    android:background="@drawable/button_border_circular"
                     android:text="Add" />
             </RelativeLayout>
         </LinearLayout>

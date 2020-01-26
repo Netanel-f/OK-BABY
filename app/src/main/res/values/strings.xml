@@ -31,4 +31,16 @@
     <string name="diaper_entry">Diaper Entry</string>
     <string name="food_entry">Food Entry</string>
     <string name="sleep_entry">Sleep Entry</string>
+
+
+    <string-array name="food_type">
+        <item>Breastfeeding</item>
+        <item>Bottle</item>
+    </string-array>
+
+    <string-array name="food_side">
+        <item>Left</item>
+        <item>Right</item>
+    </string-array>
+
 </resources>

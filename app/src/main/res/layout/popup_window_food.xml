@@ -121,12 +121,19 @@
                     android:textStyle="bold" />
 
 
-                <Button
+<!--                <Button-->
+<!--                    android:id="@+id/type"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/breastfeeding"-->
+<!--                    android:textAllCaps="false" />-->
+                <Spinner
                     android:id="@+id/type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/breastfeeding"
-                    android:textAllCaps="false" />
+                    android:layout_height="match_parent"
+                    android:contextClickable="false"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -148,12 +155,13 @@
                     android:textStyle="bold" />
 
 
-                <Button
+                <Spinner
                     android:id="@+id/side"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Right"
-                    android:textAllCaps="false" />
+                    android:layout_height="match_parent"
+                    android:contextClickable="false"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -176,14 +184,55 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-
-                <Button
-                    android:id="@+id/amount"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="90ml"
-                    android:textAllCaps="false" />
+                    android:layout_height="match_parent">
 
+                    <ImageButton
+                        android:id="@+id/minusml"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="13dp"
+                        android:background="@color/common_google_signin_btn_text_dark_pressed"
+                        android:src="@drawable/ic_remove" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/mls"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_toRightOf="@+id/mls"
+                        android:text="ml"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/mls"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/minusml"
+                        android:text="90"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/plusml"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="28dp"
+                        android:background="@color/common_google_signin_btn_text_dark_default"
+                        android:src="@drawable/ic_add" />
+                </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
@@ -195,7 +244,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/addButton"
-                    android:background="@drawable/button_border"
+                    android:background="@drawable/button_border_circular"
                     android:text="Cancel" />
 
 
@@ -204,7 +253,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/button_border"
+                    android:background="@drawable/button_border_circular"
                     android:text="Add" />
             </RelativeLayout>
         </LinearLayout>

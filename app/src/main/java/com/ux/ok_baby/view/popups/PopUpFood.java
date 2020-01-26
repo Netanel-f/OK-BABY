@@ -3,16 +3,16 @@ package com.ux.ok_baby.view.popups;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.widget.PopupMenu;
 
 import com.ux.ok_baby.model.FoodEntry;
 import com.ux.ok_baby.R;
@@ -21,19 +21,20 @@ import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import static com.ux.ok_baby.utils.Constants.*;
 
 public class PopUpFood {
+    private TextView mls;
     private String babyID;
     private View popupView;
     private Context context;
+    private Spinner typeSpin, sideSpin;
     private FoodEntry foodEntry;
     private PopupWindow popupWindow;
-    private Button typeB, sideB, amountB;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
     private EditText dateET, startTimeET, endTimeET;
 
     public PopUpFood(Context context, String babyID, EntriesViewModel entriesViewModel) {
-        this.context = context;
         this.babyID = babyID;
+        this.context = context;
         this.entriesViewModel = entriesViewModel;
     }
 
@@ -53,16 +54,16 @@ public class PopUpFood {
         dateET = popupView.findViewById(R.id.date);
         startTimeET = popupView.findViewById(R.id.startTime);
         endTimeET = popupView.findViewById(R.id.endTime);
-        typeB = popupView.findViewById(R.id.type);
-        sideB = popupView.findViewById(R.id.side);
-        amountB = popupView.findViewById(R.id.amount);
+        typeSpin = popupView.findViewById(R.id.type);
+        sideSpin = popupView.findViewById(R.id.side);
+        mls = popupView.findViewById(R.id.mls);
 
         setUpDate();
         setUpTime(startTimeET);
         setUpTime(endTimeET);
-        onTypeClick();
-        onSideClick();
-        onAmountClick();
+        setUpType();
+        setUpSide();
+        setUpAmount();
     }
 
     private void setUpExit() {
@@ -99,77 +100,66 @@ public class PopUpFood {
         foodEntry.setDate(dateET.getText().toString());
         foodEntry.setEndTime(endTimeET.getText().toString());
         foodEntry.setStartTime(startTimeET.getText().toString());
-        foodEntry.setType(typeB.getText().toString());
+        foodEntry.setType(typeSpin.getSelectedItem().toString());
         if (foodEntry.getType().equals(BOTTLE)) {
-            foodEntry.setAmount(amountB.getText().toString());
+            foodEntry.setAmount(mls.getText().toString());
             foodEntry.setSide("");
         } else {
             foodEntry.setAmount("");
-            foodEntry.setSide(sideB.getText().toString());
+            foodEntry.setSide(sideSpin.getSelectedItem().toString());
         }
     }
 
 
-    private void onTypeClick() {
-        typeB.setOnClickListener(new View.OnClickListener() {
+    private void setUpType() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+                .createFromResource(context, R.array.food_type,
+                        android.R.layout.simple_spinner_dropdown_item);
+        typeSpin.setAdapter(adapter);
+        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(final View view) {
-                PopupMenu popup = new PopupMenu(context, view);
-                popup.getMenuInflater().inflate(R.menu.food_type_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.bottle) {
-                            popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
-                            popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
-                            typeB.setText(BOTTLE);
-                        } else {
-                            popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
-                            popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
-                            typeB.setText(BREASTFEEDING);
-                        }
-                        return true;
-                    }
-                });
-                popup.show();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String type = (String) adapterView.getItemAtPosition(i);
+                if (type.equals(BOTTLE)) {
+                    popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
+                    popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
+                } else {
+                    popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
+                    popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
+        typeSpin.setSelection(0);
     }
 
-    private void onSideClick() {
-        sideB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                PopupMenu popup = new PopupMenu(context, view);
-                popup.getMenuInflater().inflate(R.menu.food_side_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.right) {
-                            sideB.setText(RIGHT);
-                        } else {
-                            sideB.setText(LEFT);
-                        }
-                        return true;
-                    }
-                });
-                popup.show();
-            }
-        });
+    private void setUpSide() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+                .createFromResource(context, R.array.food_side,
+                        android.R.layout.simple_spinner_dropdown_item);
+        sideSpin.setAdapter(adapter);
+        sideSpin.setSelection(0);
     }
 
 
-    private void onAmountClick() {
-        amountB.setOnClickListener(new View.OnClickListener() {
+    private void setUpAmount() {
+        popupView.findViewById(R.id.plusml).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View view) {
-                PopupMenu popup = new PopupMenu(context, view);
-                popup.getMenuInflater().inflate(R.menu.food_amount_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        //TODO update amount menu.
-                        return true;
-                    }
-                });
-                popup.show();
+            public void onClick(View view) {
+                mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) + 1));
+            }
+        });
+        popupView.findViewById(R.id.minusml).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Integer.parseInt(mls.getText().toString()) > 0)
+                    mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) - 1));
+                else
+                    Toast.makeText(context, "Amount can't be lower than 0.", Toast.LENGTH_LONG).show();
             }
         });
     }
