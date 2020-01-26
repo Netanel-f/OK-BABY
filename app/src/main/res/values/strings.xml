@@ -43,4 +43,15 @@
         <item>Right</item>
     </string-array>
 
+    <string-array name="diaper_type">
+        <item>Poo</item>
+        <item>Pee</item>
+    </string-array>
+
+    <string-array name="diaper_texture">
+        <item>Runny</item>
+        <item>Very Runny</item>
+        <item>Mushy</item>
+    </string-array>
+
 </resources>

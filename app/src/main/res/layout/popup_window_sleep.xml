@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/addButton"
-                    android:background="@drawable/button_border_circular"
+                    android:background="@drawable/button_border"
                     android:text="Cancel" />
 
 
@@ -122,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/button_border_circular"
+                    android:background="@drawable/button_border"
                     android:text="Add" />
             </RelativeLayout>
         </LinearLayout>
