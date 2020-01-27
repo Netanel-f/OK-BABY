@@ -35,7 +35,6 @@ public class PopUpDiaper {
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
     private EditText dateET, timeET;
-    private Button redBtn, blackBtn, brownBtn;
     private HashMap<Button, Integer> colorBtns = new HashMap<>();
 
     public PopUpDiaper(Context context, String babyID, EntriesViewModel entriesViewModel) {
@@ -61,7 +60,7 @@ public class PopUpDiaper {
         timeET = popupView.findViewById(R.id.time);
         typeSpin = popupView.findViewById(R.id.type);
         textureSpin = popupView.findViewById(R.id.texture);
-        // TODO: 1/12/2020 update texture and red_color_circle.
+
         setUpDate();
         setUpTime();
         setUpType();
@@ -91,7 +90,7 @@ public class PopUpDiaper {
         diaperEntry.setType(typeSpin.getSelectedItem().toString());
         if (diaperEntry.getType().equals(POO)) {
             diaperEntry.setTexture(textureSpin.getSelectedItem().toString());
-            diaperEntry.setColor("");//TODO update red_color_circle
+            diaperEntry.setColor("");
         } else {
             diaperEntry.setTexture("");
             diaperEntry.setColor("");
@@ -114,9 +113,9 @@ public class PopUpDiaper {
     }
 
     private void setUpColors() {
-        redBtn = popupView.findViewById(R.id.redColor);
-        blackBtn = popupView.findViewById(R.id.blackColor);
-        brownBtn = popupView.findViewById(R.id.brownColor);
+        Button redBtn = popupView.findViewById(R.id.redColor);
+        Button blackBtn = popupView.findViewById(R.id.blackColor);
+        Button brownBtn = popupView.findViewById(R.id.brownColor);
 
         colorBtns.put(redBtn, R.color.red);
         colorBtns.put(blackBtn, R.color.black);
@@ -136,6 +135,8 @@ public class PopUpDiaper {
                     Button curBtn = (Button) entry.getKey();
                     if (curBtn.getId() != view.getId()) {
                         changeFrameColor((LayerDrawable) curBtn.getBackground(), (int) entry.getValue());
+                    } else {
+                        diaperEntry.setColor(POO_COLORS.get(entry.getValue()));
                     }
                 }
             }
