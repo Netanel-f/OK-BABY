@@ -82,9 +82,8 @@ public class SleepFragment extends Fragment {
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
         mGraphsLayout = (LinearLayout) view.findViewById(R.id.sleepGraphsLayout);
-//        graphsBtn = (Button) view.findViewById(R.id.switch_to_graph_btn);
-//        tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
 
+        // todo: move
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 view.findViewById(R.id.sleepBottomNavBar);
 
@@ -94,14 +93,10 @@ public class SleepFragment extends Fragment {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_table:
-//                                graphsBtn.setVisibility(View.VISIBLE);
-//                                tableBtn.setVisibility(View.GONE);
                                 mTableLayout.setVisibility(View.VISIBLE);
                                 mGraphsLayout.setVisibility(View.GONE);
                                 break;
                             case R.id.action_chart:
-//                                graphsBtn.setVisibility(View.GONE);
-//                                tableBtn.setVisibility(View.VISIBLE);
                                 mTableLayout.setVisibility(View.GONE);
                                 mGraphsLayout.setVisibility(View.VISIBLE);
                                 break;
@@ -114,7 +109,7 @@ public class SleepFragment extends Fragment {
         setUpReportTable(babyID);
 //        setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
-        loadFromFirebase();
+//        loadFromFirebase();
         return view;
     }
 

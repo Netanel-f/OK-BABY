@@ -37,8 +37,10 @@ public class FirestoreRepository {
     private FirebaseFirestore firestoreDB;
     private MutableLiveData<User> curUser;
     private MutableLiveData<Baby> curBaby;
-//    private MutableLiveData<List<SleepEntry>> sleepEntries;
-    private MutableLiveData<List<ReportEntry>> curEntries;
+    private MutableLiveData<List<ReportEntry>> sleepEntries;
+    private MutableLiveData<List<ReportEntry>> diaperEntries;
+    private MutableLiveData<List<ReportEntry>> foodEntries;
+//    private MutableLiveData<List<ReportEntry>> curEntries;
     private CollectionReference usersCollection;
     private CollectionReference babiesCollection;
 
@@ -50,7 +52,9 @@ public class FirestoreRepository {
         this.babiesCollection = firestoreDB.collection("babies");
         this.curUser = new MutableLiveData<>();
         this.curBaby = new MutableLiveData<>();
-        this.curEntries = new MutableLiveData<>();
+        this.sleepEntries = new MutableLiveData<>();
+        this.diaperEntries = new MutableLiveData<>();
+        this.foodEntries = new MutableLiveData<>();
     }
 
     private static Map<Constants.ReportType, String> createMap() {
@@ -286,8 +290,8 @@ public class FirestoreRepository {
         return entry;
     }
 
-    public LiveData<List<ReportEntry>> getEntries(String bid, final Constants.ReportType type){
-        String collectionName = reportToCollection.get(type);
+    public LiveData<List<ReportEntry>> getSleepEntries(String bid){
+        String collectionName = reportToCollection.get(Constants.ReportType.SLEEP);
         babiesCollection.document(bid)
                 .collection(collectionName)
                 .get()
@@ -297,18 +301,91 @@ public class FirestoreRepository {
                         List<ReportEntry> entries = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                ReportEntry entry = documentToEntry(document, type);
+                                SleepEntry entry = (SleepEntry) documentToEntry(document, Constants.ReportType.SLEEP);
                                 entries.add(entry);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
-                            curEntries.postValue(entries);
+                            sleepEntries.postValue(entries);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        return curEntries;
+        return sleepEntries;
     }
+
+    public LiveData<List<ReportEntry>> getFoodEntries(String bid){
+        String collectionName = reportToCollection.get(Constants.ReportType.FOOD);
+        babiesCollection.document(bid)
+                .collection(collectionName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<ReportEntry> entries = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                FoodEntry entry = (FoodEntry) documentToEntry(document, Constants.ReportType.FOOD);
+                                entries.add(entry);
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                            foodEntries.postValue(entries);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return foodEntries;
+    }
+
+
+    public LiveData<List<ReportEntry>> getDiaperEntries(String bid){
+        String collectionName = reportToCollection.get(Constants.ReportType.DIAPER);
+        babiesCollection.document(bid)
+                .collection(collectionName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<ReportEntry> entries = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                DiaperEntry entry = (DiaperEntry) documentToEntry(document, Constants.ReportType.DIAPER);
+                                entries.add(entry);
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                            diaperEntries.postValue(entries);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return diaperEntries;
+    }
+
+//    public LiveData<List<ReportEntry>> getEntries(String bid, final Constants.ReportType type){
+//        String collectionName = reportToCollection.get(type);
+//        babiesCollection.document(bid)
+//                .collection(collectionName)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        List<ReportEntry> entries = new ArrayList<>();
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                ReportEntry entry = documentToEntry(document, type);
+//                                entries.add(entry);
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                            }
+//                            curEntries.postValue(entries);
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+//        return curEntries;
+//    }
 
     public void addEntry(Constants.ReportType type, String bid, ReportEntry entry){
         String collectionName = reportToCollection.get(type);
