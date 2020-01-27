@@ -3,18 +3,15 @@ package com.ux.ok_baby.view.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.cleveroad.adaptivetablelayout.LinkedAdaptiveTableAdapter;
 import com.cleveroad.adaptivetablelayout.ViewHolderImpl;
-import com.google.firebase.firestore.CollectionReference;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.ReportEntry;
 import com.ux.ok_baby.model.SleepEntry;
@@ -86,102 +83,25 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
     public void onBindViewHolder(@NonNull ViewHolderImpl viewHolder, int row, int column) {
         final TestViewHolder vh = (TestViewHolder) viewHolder;
 
-        // todo: change to get it from datasource
-//        String itemData = mTableDataSource.getItemData(row, column); // skip headers
-        // extract data
-
-        SleepEntry entry = (SleepEntry) mTableDataSource.get(row);
+        ReportEntry entry = mTableDataSource.get(row);
         String itemData;
-        switch (column){
-            case 1:
-                itemData = entry.getStartTime();
-                break;
-            case 2:
-                itemData = entry.getEndTime();
-                break;
-            case 3:
-                itemData = calculateDuration(entry);
-                break;
-            default:
-                itemData = "error";
-                break;
-        }
-
-//        String itemData = entry.getStartTime();
+        itemData = entry.getDataByField(column);
         itemData = itemData.trim();
-
-//        if (TextUtils.isEmpty(itemData)) {
-//            itemData = "";
-//        }
 
         // update views
         vh.tvText.setVisibility(View.VISIBLE);
         vh.tvText.setText(itemData);
     }
 
-    public static long calculateDurationInt(SleepEntry entry){ // todo change
-        String time1 = entry.getStartTime();
-        String time2 = entry.getEndTime();
-
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        Date date1 = null;
-        Date date2 = null;
-        try {
-            date1 = format.parse(time1);
-            date2 = format.parse(time2);
-            long diff = date2.getTime() - date1.getTime();
-            return diff / (60 * 1000);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
-
-    }
-
-    public static String calculateDuration(SleepEntry entry) { // todo: move somewhere else
-        String time1 = entry.getStartTime();
-        String time2 = entry.getEndTime();
-
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        Date date1 = null;
-        Date date2 = null;
-        try {
-            date1 = format.parse(time1);
-            date2 = format.parse(time2);
-            long diff = date2.getTime() - date1.getTime();
-            long diffMinutes = diff / (60 * 1000);
-            if (diffMinutes > 60){
-                diffMinutes = diffMinutes % 60;
-                long diffHours = diff / (60 * 60 * 1000) % 24;
-                String mins;
-                if (diffMinutes < 10){
-                    mins = "0"+diffMinutes;
-                } else {
-                    mins = ""+diffMinutes;
-                }
-
-                return diffHours+":"+mins+" hrs";
-            } else {
-                return diffMinutes+" mins";
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "0";
-        }
-
-    }
 
     @Override
     public void onBindHeaderColumnViewHolder(@NonNull ViewHolderImpl viewHolder, int column) {
         TestHeaderColumnViewHolder vh = (TestHeaderColumnViewHolder) viewHolder;
-//        vh.tvText.setText(mTableDataSource.getColumnHeaderData(column));  // skip left top header
-        // todo: change
         vh.vLine.setBackgroundColor(Color.WHITE);
         if (column < NUM_OF_COLS_IN_REPORT){
+            ReportEntry titleEntry = mTableDataSource.get(0);
+            vh.tvText.setText(titleEntry.getDataByField(column));
 
-            vh.tvText.setText(vh.col_titles[column]);  // skip left top header
         } else {
             vh.tvText.setText("col head");  // skip left top header
         }
@@ -191,21 +111,17 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
     @Override
     public void onBindHeaderRowViewHolder(@NonNull ViewHolderImpl viewHolder, int row) {
         TestHeaderRowViewHolder vh = (TestHeaderRowViewHolder) viewHolder;
-//        vh.tvText.setText(mTableDataSource.getItemData(row, 0));
-        // todo: change
-//        vh.tvText.setText("row info");
-        SleepEntry entry = (SleepEntry) mTableDataSource.get(row);
-        String itemData = entry.getDate();
-        vh.tvText.setText(itemData);
+        ReportEntry entry = mTableDataSource.get(row);
+        String itemData = entry.getDataByField(0);
+        vh.tvText.setText(itemData); // todo change
 
     }
 
     @Override
     public void onBindLeftTopHeaderViewHolder(@NonNull ViewHolderImpl viewHolder) {
         TestHeaderLeftTopViewHolder vh = (TestHeaderLeftTopViewHolder) viewHolder;
-//        vh.tvText.setText(mTableDataSource.getFirstHeaderData());
-        // todo: change
-        vh.tvText.setText("date");
+        ReportEntry titleEntry = mTableDataSource.get(0);
+        vh.tvText.setText(titleEntry.getDataByField(0));
 
     }
 
@@ -246,7 +162,7 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
     private static class TestHeaderColumnViewHolder extends ViewHolderImpl {
         TextView tvText;
         View vLine;
-        String[] col_titles = {"date", "start", "end", "duration"};
+        String[] colTitles = {"date", "start", "end", "duration"};
 
         private TestHeaderColumnViewHolder(@NonNull View itemView) {
             super(itemView);
