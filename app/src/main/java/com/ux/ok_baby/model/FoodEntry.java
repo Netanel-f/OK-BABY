@@ -79,4 +79,8 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
         else
             return !side.isEmpty();
     }
+
+    public String getDataByField(int fieldNum){
+        return "";
+    }
 }
