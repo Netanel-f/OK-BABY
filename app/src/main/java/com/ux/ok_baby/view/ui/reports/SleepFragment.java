@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -79,13 +82,34 @@ public class SleepFragment extends Fragment {
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
         mGraphsLayout = (LinearLayout) view.findViewById(R.id.sleepGraphsLayout);
-        graphsBtn = (Button) view.findViewById(R.id.switch_to_graph_btn);
-        tableBtn = (Button) view.findViewById(R.id.switch_to_table_btn);
+
+        // todo: move
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                view.findViewById(R.id.sleepBottomNavBar);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_table:
+                                mTableLayout.setVisibility(View.VISIBLE);
+                                mGraphsLayout.setVisibility(View.GONE);
+                                break;
+                            case R.id.action_chart:
+                                mTableLayout.setVisibility(View.GONE);
+                                mGraphsLayout.setVisibility(View.VISIBLE);
+                                break;
+                        }
+                        return false;
+                    }
+                });
+
 
         setUpReportTable(babyID);
-        setUpGraphsBtn();
+//        setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
-        loadFromFirebase();
+//        loadFromFirebase();
         return view;
     }
 
@@ -103,7 +127,8 @@ public class SleepFragment extends Fragment {
         List<Line> lines = new ArrayList<Line>();
         for (int j = 0; j < entries.size(); ++j) {
             SleepEntry entry = (SleepEntry) entries.get(j);
-            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
+//            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
+            PointValue pointValue = new PointValue(j, entry.getDuration());
             values.add(pointValue);
             Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
             line.setHasLabels(true);
@@ -111,7 +136,6 @@ public class SleepFragment extends Fragment {
             lines.add(line);
         }
 
-        boolean hasAxes = true;
         boolean hasAxesNames = true;
         LineChartData data = new LineChartData();
 
@@ -126,41 +150,15 @@ public class SleepFragment extends Fragment {
         }
         data.setAxisXBottom(null);
         data.setAxisYLeft(axisY);
-//        } else {
-//            data.setAxisXBottom(null);
-//            data.setAxisYLeft(null);
-//        }
-
-//        data.setBaseValue(0);
         data.setLines(lines);
         chart.setLineChartData(data);
 
-//        chart.setViewportCalculationEnabled(false);
-//        resetViewport(chart, entries.size());
-
         Viewport v = new Viewport(chart.getMaximumViewport());
         v.left = 0;
-//        v.left = axisX.getValues().size() - 0.5f;
-        v.right = v.right - 3;
-//        v.top = axisY.getValues().size() - 1;
-//        v.bottom = axisY.getValues().size();
-//        chart.setCurrentViewport(v);
-//        chart.setViewportCalculationEnabled(false);
+        v.right = v.right - 0.5f;
         chart.setCurrentViewportWithAnimation(v);
         chart.setScrollEnabled(true);
         chart.setZoomEnabled(false);
-    }
-
-
-    private void resetViewport(LineChartView chart, int numberOfPoints) {
-        // Reset viewport height range to (0,100)
-        final Viewport v = new Viewport(chart.getMaximumViewport());
-        v.bottom = 0;
-        v.top = 3;
-        v.left = 0;
-        v.right = numberOfPoints - 1;
-        chart.setMaximumViewport(v);
-        chart.setCurrentViewport(v);
     }
 
     private void loadFromFirebase() {
@@ -203,9 +201,25 @@ public class SleepFragment extends Fragment {
                         public int compare(ReportEntry o1, ReportEntry o2) {
                             SleepEntry s1 = (SleepEntry) o1;
                             SleepEntry s2 = (SleepEntry) o2;
+
+                            // handle title row
+                            if (s1.getDate().equals("date")){
+                                return -1;
+                            }
+                            else if (s2.getDate().equals("date")){
+                                return 1;
+                            }
+
                             return s1.getDate().compareTo(s2.getDate());
                         }
                     });
+
+                    // todo: temp
+                    SleepEntry titleEntry = (SleepEntry) reportEntries.get(0);
+                    if (!titleEntry.getDate().equals("date")) {
+                        reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));
+                    }
+
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
                     mTableLayout.setAdapter(mTableAdapter);
                     mTableLayout.setHeaderFixed(true);

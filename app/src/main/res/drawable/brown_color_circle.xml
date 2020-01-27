@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Larger blue circle in back -->
+    <item android:id="@+id/frame">
+        <shape android:shape="ring"
+            android:innerRadius="15dp"
+            android:useLevel="false"
+            android:thickness="2dp">
+            <solid android:color="@color/brown"/>
+            <size
+                android:width="15dp"
+                android:height="15dp"/>
+        </shape>
+    </item>
+    <!-- Smaller red circle in front -->
+    <item>
+        <shape android:shape="oval">
+            <!-- transparent stroke = larger_circle_size - smaller_circle_size -->
+            <stroke android:color="@android:color/transparent"
+                android:width="10dp"/>
+            <solid android:color="@color/brown"/>
+
+        </shape>
+    </item>
+
+</layer-list>
