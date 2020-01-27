@@ -71,9 +71,9 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
             case 0:
                 return getDate();
             case 1:
-                return getTime();
-            case 2:
                 return getType();
+            case 2:
+                return getTime();
             case 3:
                 return getTexture();
             case 4:

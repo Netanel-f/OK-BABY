@@ -63,11 +63,12 @@ public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
             case 0:
                 return getDate();
             case 1:
-                return getStartTime();
-            case 2:
-                return getEndTime();
-            case 3:
                 return getDurationString();
+            case 2:
+                return getStartTime();
+            case 3:
+                return getEndTime();
+
             default:
                 return null;
         }

@@ -112,7 +112,7 @@ public class FoodFragment extends Fragment {
                     // todo: temp
                     ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
                     if (!titleEntry.getDataByField(0).equals("date")) {
-                        reportEntries.add(0, new FoodEntry("date", "startTime", "endTime", "type", "side", "amount"));
+                        reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
                     }
 
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);

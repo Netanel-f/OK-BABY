@@ -127,7 +127,12 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
 
     @Override
     public int getColumnWidth(int column) {
-        return mColumnWidth;
+        if (mTableDataSource.isEmpty() || mTableDataSource.size()<=1){
+            return mColumnWidth;
+        } else {
+            // determine col width dynamically
+            return Math.max(mTableDataSource.get(1).getDataByField(column).length() * 20 + 50, mColumnWidth);
+        }
     }
 
     @Override

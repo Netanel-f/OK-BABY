@@ -10,31 +10,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-<!--        <RelativeLayout-->
-<!--            android:id="@+id/relativeLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/sleepBottomNavBar"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
-
             <!-- report table -->
-            <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout
-                android:id="@+id/tableReportLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:visibility="visible"
-                app:cellMargin="1dp"
-                app:dragAndDropEnabled="true"
-                app:fixedHeaders="true"
-                app:solidRowHeaders="false"
-                app:layout_constraintBottom_toTopOf="@id/sleepBottomNavBar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+        <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout
+            android:id="@+id/tableReportLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:visibility="visible"
+            app:cellMargin="1dp"
+            app:dragAndDropEnabled="true"
+            app:fixedHeaders="true"
+            app:layout_constraintBottom_toTopOf="@id/sleepBottomNavBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:solidRowHeaders="false" />
 
                 <LinearLayout
                     android:layout_margin="16dp"

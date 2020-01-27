@@ -85,15 +85,15 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
             case 0:
                 return getDate();
             case 1:
-                return getStartTime();
-            case 2:
-                return getEndTime();
-            case 3:
                 return getType();
+            case 2:
+                return getStartTime();
+            case 3:
+                return getAmount();
             case 4:
                 return getSide();
             case 5:
-                return getAmount();
+                return getEndTime();
             default:
                 return null;
         }
