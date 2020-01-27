@@ -71,8 +71,6 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return new FoodFragment(babyID);
             default:
                 return new DiaperFragment(babyID);
-//            default:
-//                return new OtherFragment(babyID);
         }
     }
 
@@ -90,8 +88,6 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return FOOD;
             default:
                 return DIAPER;
-//            default:
-//                return OTHER;
         }
     }
 }
