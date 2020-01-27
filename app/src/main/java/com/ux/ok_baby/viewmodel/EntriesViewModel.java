@@ -39,15 +39,18 @@ public class EntriesViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<ReportEntry>> getSleepEntries(String bid){
-        return dbRepo.getEntries(bid, Constants.ReportType.SLEEP);
+//        return dbRepo.getEntries(bid, Constants.ReportType.SLEEP);
+        return dbRepo.getSleepEntries(bid);
     }
 
     public LiveData<List<ReportEntry>> getFoodEntries(String bid){
-        return dbRepo.getEntries(bid, Constants.ReportType.FOOD);
+//        return dbRepo.getEntries(bid, Constants.ReportType.FOOD);
+        return dbRepo.getFoodEntries(bid);
     }
 
     public LiveData<List<ReportEntry>> getDiaperEntries(String bid){
-        return dbRepo.getEntries(bid, Constants.ReportType.DIAPER);
+//        return dbRepo.getEntries(bid, Constants.ReportType.DIAPER);
+        return dbRepo.getDiaperEntries(bid);
     }
 
     // todo: query specific entries: by date or others

@@ -42,17 +42,17 @@ public class OtherFragment extends Fragment {
 
         // getting sleep entries example todo: delete
         String bid = "69kkdHZH48TOYdXWq1hP";
-        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
-        entriesViewModel.getSleepEntries(bid).observe(this, new Observer<List<ReportEntry>>() {
-            @Override
-            public void onChanged(List<ReportEntry> reportEntries) {
-                text.setText(reportEntries.toString());
-            }
-        });
+//        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
+//        entriesViewModel.getSleepEntries(bid).observe(this, new Observer<List<ReportEntry>>() {
+//            @Override
+//            public void onChanged(List<ReportEntry> reportEntries) {
+//                text.setText(reportEntries.toString());
+//            }
+//        });
 
         // adding sleep entry example todo: delete
-        SleepEntry entry = new SleepEntry("01/14/20", "21:50", "21:59");
-        entriesViewModel.addSleepEntry(bid, entry);
+//        SleepEntry entry = new SleepEntry("01/14/20", "21:50", "21:59");
+//        entriesViewModel.addSleepEntry(bid, entry);
 
         return view;
     }

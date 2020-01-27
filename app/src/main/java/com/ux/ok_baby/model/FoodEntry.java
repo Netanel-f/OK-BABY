@@ -3,9 +3,9 @@ package com.ux.ok_baby.model;
 import static com.ux.ok_baby.utils.Constants.*;
 
 public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
-    private String date, endTime, startTime, type, side, amount;
+    private String date, startTime, endTime, type, side, amount;
 
-    public FoodEntry(String date, String endTime, String startTime, String type, String side, String amount) {
+    public FoodEntry(String date, String startTime, String endTime, String type, String side, String amount) {
         this.date = date;
         this.endTime = endTime;
         this.startTime = startTime;
@@ -23,6 +23,10 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
         this.amount = "";
     }
 
+    public String getDate() {
+        return date;
+    }
+
     public String getStartTime() {
         return startTime;
     }
@@ -31,20 +35,16 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
         return endTime;
     }
 
-    public String getDate() {
-        return date;
-    }
-
     public String getType() {
         return type;
     }
 
-    public String getAmount() {
-        return amount;
-    }
-
     public String getSide() {
         return side;
+    }
+
+    public String getAmount() {
+        return amount;
     }
 
     public void setStartTime(String startTime) {
@@ -81,6 +81,21 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
     }
 
     public String getDataByField(int fieldNum){
-        return "";
+        switch (fieldNum){
+            case 0:
+                return getDate();
+            case 1:
+                return getStartTime();
+            case 2:
+                return getEndTime();
+            case 3:
+                return getType();
+            case 4:
+                return getSide();
+            case 5:
+                return getAmount();
+            default:
+                return null;
+        }
     }
 }
