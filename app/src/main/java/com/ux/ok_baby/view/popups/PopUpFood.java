@@ -89,6 +89,7 @@ public class PopUpFood {
                 updateFoodEntryObject();
                 if (foodEntry.isValidEntry()) {
                     entriesViewModel.addFoodEntry(babyID, foodEntry);
+                    popupWindow.dismiss();
                 } else {
                     Toast.makeText(context, "One or more fields are empty", Toast.LENGTH_LONG).show();
                 }

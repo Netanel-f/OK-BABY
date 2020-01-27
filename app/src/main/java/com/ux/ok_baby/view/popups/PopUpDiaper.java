@@ -105,6 +105,7 @@ public class PopUpDiaper {
                 updateDiaperEntryObject();
                 if (diaperEntry.isValidEntry()) {
                     entriesViewModel.addDiaperEntry(babyID, diaperEntry);
+                    popupWindow.dismiss();
                 } else {
                     Toast.makeText(context, "One or more fields are empty", Toast.LENGTH_LONG).show();
                 }

@@ -54,7 +54,7 @@ public class ReportsHolderFragment extends Fragment {
 }
 
 class ReportsPagerAdapter extends FragmentStatePagerAdapter {
-    private final int NUM_OF_TABS = 4;
+    private final int NUM_OF_TABS = 3;
     private String babyID;
 
     public ReportsPagerAdapter(FragmentManager fm,String babyID) {
@@ -69,10 +69,10 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return new SleepFragment(babyID);
             case FOOD_TAB:
                 return new FoodFragment(babyID);
-            case DIAPER_TAB:
-                return new DiaperFragment(babyID);
             default:
-                return new OtherFragment(babyID);
+                return new DiaperFragment(babyID);
+//            default:
+//                return new OtherFragment(babyID);
         }
     }
 
@@ -88,10 +88,10 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return SLEEP;
             case FOOD_TAB:
                 return FOOD;
-            case DIAPER_TAB:
-                return DIAPER;
             default:
-                return OTHER;
+                return DIAPER;
+//            default:
+//                return OTHER;
         }
     }
 }
