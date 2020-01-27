@@ -31,6 +31,8 @@
     <string name="diaper_entry">Diaper Entry</string>
     <string name="food_entry">Food Entry</string>
     <string name="sleep_entry">Sleep Entry</string>
+    <string name="bottom_bar_table_title">Table</string>
+    <string name="bottom_bar_chart_title">Graphs</string>
 
 
     <string-array name="food_type">
