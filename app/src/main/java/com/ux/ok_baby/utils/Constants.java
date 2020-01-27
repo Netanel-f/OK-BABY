@@ -1,5 +1,10 @@
 package com.ux.ok_baby.utils;
 
+import com.ux.ok_baby.R;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     public static final int FOOD_TAB = 1;
     public static final int OTHER_TAB = 3;
@@ -26,4 +31,9 @@ public class Constants {
 
 
     public enum ReportType {FOOD, SLEEP, DIAPER, OTHER}
+    public static Map<Integer, String> POO_COLORS = new HashMap<Integer, String>() {{
+        put(R.color.black, "Black");
+        put(R.color.red, "Red");
+        put(R.color.brown, "Brown");
+    }};
 }

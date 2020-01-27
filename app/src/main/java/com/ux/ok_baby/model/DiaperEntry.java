@@ -62,7 +62,7 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
         if (date.isEmpty() || time.isEmpty() || type.isEmpty())
             return false;
         if (type.equals(POO))
-            return !texture.isEmpty(); //TODO check color validation
+            return !texture.isEmpty(); //TODO check red_color_circle validation
         return true;
     }
 

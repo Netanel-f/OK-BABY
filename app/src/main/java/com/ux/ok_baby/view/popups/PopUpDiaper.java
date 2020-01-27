@@ -1,12 +1,15 @@
 package com.ux.ok_baby.view.popups;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -16,6 +19,9 @@ import android.widget.Toast;
 import com.ux.ok_baby.model.DiaperEntry;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
@@ -29,7 +35,7 @@ public class PopUpDiaper {
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
     private EditText dateET, timeET;
-
+    private HashMap<Button, Integer> colorBtns = new HashMap<>();
 
     public PopUpDiaper(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.context = context;
@@ -54,11 +60,12 @@ public class PopUpDiaper {
         timeET = popupView.findViewById(R.id.time);
         typeSpin = popupView.findViewById(R.id.type);
         textureSpin = popupView.findViewById(R.id.texture);
-        // TODO: 1/12/2020 update texture and color.
+
         setUpDate();
         setUpTime();
         setUpType();
         setUpTexture();
+        setUpColors();
     }
 
     private void setUpExit() {
@@ -83,7 +90,7 @@ public class PopUpDiaper {
         diaperEntry.setType(typeSpin.getSelectedItem().toString());
         if (diaperEntry.getType().equals(POO)) {
             diaperEntry.setTexture(textureSpin.getSelectedItem().toString());
-            diaperEntry.setColor("");//TODO update color
+            diaperEntry.setColor("");
         } else {
             diaperEntry.setTexture("");
             diaperEntry.setColor("");
@@ -103,6 +110,43 @@ public class PopUpDiaper {
                 }
             }
         });
+    }
+
+    private void setUpColors() {
+        Button redBtn = popupView.findViewById(R.id.redColor);
+        Button blackBtn = popupView.findViewById(R.id.blackColor);
+        Button brownBtn = popupView.findViewById(R.id.brownColor);
+
+        colorBtns.put(redBtn, R.color.red);
+        colorBtns.put(blackBtn, R.color.black);
+        colorBtns.put(brownBtn, R.color.brown);
+
+        onColorClickListener(redBtn);
+        onColorClickListener(blackBtn);
+        onColorClickListener(brownBtn);
+    }
+
+    private void onColorClickListener(Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeFrameColor((LayerDrawable) view.getBackground(), R.color.colorAccent);
+                for (Map.Entry entry : colorBtns.entrySet()) {
+                    Button curBtn = (Button) entry.getKey();
+                    if (curBtn.getId() != view.getId()) {
+                        changeFrameColor((LayerDrawable) curBtn.getBackground(), (int) entry.getValue());
+                    } else {
+                        diaperEntry.setColor(POO_COLORS.get(entry.getValue()));
+                    }
+                }
+            }
+        });
+    }
+
+    private void changeFrameColor(LayerDrawable layerDrawable, int color) {
+        GradientDrawable gradientDrawable = (GradientDrawable) layerDrawable
+                .findDrawableByLayerId(R.id.frame);
+        gradientDrawable.setColor(context.getColor(color));
     }
 
     private void setUpType() {
