@@ -2,86 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
+    android:paddingBottom="20dp"
     android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <HorizontalScrollView
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:scrollbars="none">
-
-            <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginRight="10dp"
-                android:stretchColumns="0,1,2">
-
-                <TableRow
-                    android:id="@+id/otherBabies"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <!--todo test-->
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/ic_baby"
-                        app:civ_border_color="@color/light_gray"
-                        app:civ_border_width="2dp" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/ic_baby"
-                        app:civ_border_color="@color/light_gray"
-                        app:civ_border_width="2dp" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/ic_baby"
-                        app:civ_border_color="@color/light_gray"
-                        app:civ_border_width="2dp" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/ic_baby"
-                        app:civ_border_color="@color/light_gray"
-                        app:civ_border_width="2dp" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/ic_baby"
-                        app:civ_border_color="@color/light_gray"
-                        app:civ_border_width="2dp" />
-
-                </TableRow>
-
-            </TableLayout>
-
-        </HorizontalScrollView>
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/babyImage"
