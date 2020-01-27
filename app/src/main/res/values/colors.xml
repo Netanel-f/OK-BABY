@@ -10,6 +10,8 @@
     <color name="pink">#EF9A9A</color>
     <color name="blue">#B2DFDB</color>
     <color name="light_gray">#E2E2E2</color>
+    <color name="red">#B80E06</color>
+    <color name="brown">#491D18</color>
 
     <!-- table colors override -->
     <color name="shadow_start">#00000000</color>
