@@ -193,7 +193,7 @@ public class SignInActivity extends AppCompatActivity {
      * @param password
      */
     private void signInToFirebase(String email, String password) {
-            Log.w(TAG, "signInToFirebase: Attempthing to authenticate user");
+            Log.w(TAG, "signInToFirebase: Attempting to authenticate user");
             authenticateUser(email, password);
     }
 

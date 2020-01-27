@@ -135,7 +135,6 @@ public class HomeFragment extends FragmentActivity {
     private void setUpBabyDetails() {
         ((TextView) findViewById(R.id.babyName)).setText(baby.getBabyName());
         ((TextView) findViewById(R.id.babyAge)).setText(getAgeString(baby.getBabyDOB()));
-        //todo update photo
         Glide.with(this)
                 .load(baby.getImageUrl())
                 .placeholder(R.mipmap.ic_baby)
