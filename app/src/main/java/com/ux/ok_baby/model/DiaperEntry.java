@@ -18,44 +18,44 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
     public DiaperEntry() {
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public String getType() {
+        return type;
     }
 
-    public void setTexture(String texture) {
-        this.texture = texture;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public void setTime(String time) {
         this.time = time;
     }
 
-    public String getType() {
-        return type;
+    public String getTexture() {
+        return texture;
     }
 
-    public String getDate() {
-        return date;
+    public void setTexture(String texture) {
+        this.texture = texture;
     }
 
     public String getColor() {
         return color;
     }
 
-    public String getTexture() {
-        return texture;
-    }
-
-    public String getTime() {
-        return time;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public boolean isValidEntry() {
@@ -64,5 +64,22 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
         if (type.equals(POO))
             return !texture.isEmpty(); //TODO check red_color_circle validation
         return true;
+    }
+
+    public String getDataByField(int fieldNum){
+        switch (fieldNum){
+            case 0:
+                return getDate();
+            case 1:
+                return getTime();
+            case 2:
+                return getType();
+            case 3:
+                return getTexture();
+            case 4:
+                return getColor();
+            default:
+                return null;
+        }
     }
 }
