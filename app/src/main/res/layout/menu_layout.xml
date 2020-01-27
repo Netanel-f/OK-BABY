@@ -4,53 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <Button
+        android:id="@+id/foodButton"
+        android:layout_width="337dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/button_border_circular"
+        android:text="Food" />
 
-        <Button
-            android:id="@+id/foodButton"
-            android:layout_width="150dp"
-            android:layout_height="110dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/button_border_circular"
-            android:text="Food" />
+    <Button
+        android:id="@+id/sleepButton"
+        android:layout_width="337dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_border_circular"
+        android:text="SLeep" />
 
-        <Button
-            android:id="@+id/sleepButton"
-            android:layout_width="155dp"
-            android:layout_height="110dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/button_border_circular"
-            android:text="SLeep" />
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/diaperButton"
+        android:layout_width="337dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_border_circular"
+        android:text="Diaper " />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/diaperButton"
-            android:layout_width="150dp"
-            android:layout_height="110dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/button_border_circular"
-            android:text="Diaper " />
-
-        <Button
-            android:id="@+id/otherButton"
-            android:layout_width="150dp"
-            android:layout_height="110dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/button_border_circular"
-            android:text="other" />
-    </LinearLayout>
 
 </LinearLayout>

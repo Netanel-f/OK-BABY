@@ -35,7 +35,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private void setUpOptions() {
         view.findViewById(R.id.diaperButton).setOnClickListener(this);
         view.findViewById(R.id.foodButton).setOnClickListener(this);
-        view.findViewById(R.id.otherButton).setOnClickListener(this);
         view.findViewById(R.id.sleepButton).setOnClickListener(this);
     }
 
@@ -56,9 +55,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.foodButton:
                 startNewFragment(FOOD_TAB);
-                break;
-            case R.id.otherButton:
-                startNewFragment(OTHER_TAB);
                 break;
         }
     }
