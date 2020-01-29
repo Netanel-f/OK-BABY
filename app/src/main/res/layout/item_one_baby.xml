@@ -10,8 +10,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@mipmap/ic_baby"
-        android:padding="2dp"
-        android:background="@drawable/baby_profile_image_border"
         android:contentDescription="oneBabyImage"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

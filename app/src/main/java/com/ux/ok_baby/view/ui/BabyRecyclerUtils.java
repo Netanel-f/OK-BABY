@@ -20,6 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class BabyRecyclerUtils {
 
+    interface BabyClickCallback {
+        void onBabyClick(Baby baby);
+    }
+
     static class BabyHolder extends RecyclerView.ViewHolder {
 
         public final ImageView babyImage;
@@ -50,12 +54,25 @@ public class BabyRecyclerUtils {
             super(new BabyCallback());
         }
 
+
+        public BabyClickCallback callback;
+
         @NonNull
         @Override
         public BabyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             View itemView = LayoutInflater.from(context).inflate(R.layout.item_one_baby, parent, false);
-            return new BabyHolder(itemView);
+            final BabyHolder babyHolder = new BabyHolder(itemView);
+            babyHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Baby baby = getItem(babyHolder.getAdapterPosition());
+                    if (callback != null) {
+                        callback.onBabyClick(baby);
+                    }
+                }
+            });
+            return babyHolder;
         }
 
         @Override

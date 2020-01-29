@@ -28,6 +28,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.Observer;
@@ -41,12 +42,12 @@ import static com.ux.ok_baby.utils.Constants.*;
  * First screen when loading the app (after sign in).
  * Contains buttons to navigate to other screens.
  */
-public class HomeFragment extends FragmentActivity {
+public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.BabyClickCallback {
     private CollectionReference babiesCollection = FirebaseFirestore.getInstance().collection("babies");
     private final String TAG = "HomeFragment";
     private UserViewModel userViewModel;
     private String babyID, userID;
-    private Baby baby;
+    private Baby mainBaby;
     boolean isNewUser;
 
     private TextView mainBabyName;
@@ -83,6 +84,7 @@ public class HomeFragment extends FragmentActivity {
             userViewModel.getUserBabies(userID).observe(this, new Observer<List<Baby>>() {
                 @Override
                 public void onChanged(List<Baby> babies) {
+                    mainBaby = babies.remove(0);
                     updateBabiesDetails(babies);
                 }
             });
@@ -95,7 +97,6 @@ public class HomeFragment extends FragmentActivity {
 
 
     private void updateBabiesDetails(List<Baby> babies) {
-        baby = babies.remove(0);
         setUpMainBabyDetails();
         userBabies = babies;
         otherBabiesAdapter.submitList(userBabies);
@@ -112,6 +113,7 @@ public class HomeFragment extends FragmentActivity {
     private void setUpRecycler() {
         babiesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         babiesRecyclerView.setAdapter(otherBabiesAdapter);
+        otherBabiesAdapter.callback = this;
     }
 
 
@@ -143,8 +145,8 @@ public class HomeFragment extends FragmentActivity {
                 Log.d(TAG, "onActivityResult: START_BABY_PROF_ACT and data == null");
 
             } else {
-                baby = data.getParcelableExtra(BABY_OBJECT_TAG);
-                userViewModel.addBaby(userID, baby);
+                mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                userViewModel.addBaby(userID, mainBaby);
                 setUpMainBabyDetails();
             }
         }
@@ -155,18 +157,18 @@ public class HomeFragment extends FragmentActivity {
                 Log.d(TAG, "onActivityResult: START_BABY_PROF_EDIT_ACT and data == null");
 
             } else {
-                baby = data.getParcelableExtra(BABY_OBJECT_TAG);
-                userViewModel.updateBaby(baby);
+                mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                userViewModel.updateBaby(mainBaby);
                 setUpMainBabyDetails();
             }
         }
     }
 
     private void setUpMainBabyDetails() {
-        mainBabyName.setText(baby.getBabyName());
-        mainBabyAge.setText(getAgeString(baby.getBabyDOB()));
+        mainBabyName.setText(mainBaby.getBabyName());
+        mainBabyAge.setText(getAgeString(mainBaby.getBabyDOB()));
         Glide.with(this)
-                .load(baby.getImageUrl())
+                .load(mainBaby.getImageUrl())
                 .placeholder(R.mipmap.ic_baby)
                 .error(R.mipmap.ic_baby)
                 .apply(RequestOptions.circleCropTransform())
@@ -204,9 +206,9 @@ public class HomeFragment extends FragmentActivity {
 
     private void addNewBaby() {
         babyID = babiesCollection.document().getId();
-        baby = new Baby(babyID);
+        mainBaby = new Baby(babyID);
         Intent intent = new Intent(this, BabyProfileActivity.class);
-        intent.putExtra(BABY_OBJECT_TAG, baby);
+        intent.putExtra(BABY_OBJECT_TAG, mainBaby);
 
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_BABY_PROF_ACT);
@@ -214,9 +216,19 @@ public class HomeFragment extends FragmentActivity {
 
     private void editCurrentBaby() {
         Intent intent = new Intent(this, BabyProfileActivity.class);
-        intent.putExtra(BABY_OBJECT_TAG, baby);
+        intent.putExtra(BABY_OBJECT_TAG, mainBaby);
 
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_BABY_PROF_EDIT_ACT);
+    }
+
+    @Override
+    public void onBabyClick(Baby baby) {
+        ArrayList<Baby> babiesCopy = new ArrayList<>(userBabies);
+        babiesCopy.remove(baby);
+        babiesCopy.add(mainBaby);
+        userBabies = babiesCopy;
+        mainBaby = baby;
+        updateBabiesDetails(userBabies);
     }
 }

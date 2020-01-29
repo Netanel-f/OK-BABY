@@ -12,6 +12,7 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/addBabyButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_add_baby"
@@ -39,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/babiesRecycler">
+        app:layout_constraintTop_toBottomOf="@id/addBabyButton">
 
         <ImageView
             android:id="@+id/babyImage"
