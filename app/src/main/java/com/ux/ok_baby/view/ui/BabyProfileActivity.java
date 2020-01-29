@@ -75,6 +75,9 @@ public class BabyProfileActivity extends AppCompatActivity {
         // get Baby object for editing
         babyProfile = null;
         babyProfile = getIntent().getParcelableExtra(BABY_OBJECT_TAG);
+        if (babyProfile == null) {
+            babyProfile = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
+        }
 
         // setup views + image.
         setupUpdateButton();

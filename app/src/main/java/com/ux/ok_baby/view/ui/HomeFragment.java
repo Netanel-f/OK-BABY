@@ -48,12 +48,13 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     private UserViewModel userViewModel;
     private String babyID, userID;
     private Baby mainBaby;
+    private Baby tempMainBaby;
     boolean isNewUser;
 
     private TextView mainBabyName;
     private TextView mainBabyAge;
     private ImageView babyImgView;
-
+    private ImageView addButtonImgView;
     static List<Baby> userBabies;
     private BabyRecyclerUtils.BabyAdapter otherBabiesAdapter = new BabyRecyclerUtils.BabyAdapter();
     private RecyclerView babiesRecyclerView;
@@ -64,10 +65,13 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
 
+        tempMainBaby = null;
+
         // set up views
         babyImgView = findViewById(R.id.babyImage);
         mainBabyName = findViewById(R.id.babyName);
         mainBabyAge = findViewById(R.id.babyAge);
+        addButtonImgView = findViewById(R.id.addBabyButton);
         babiesRecyclerView = findViewById(R.id.babiesRecycler);
 
         extractIntentData();
@@ -93,6 +97,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
         setUpMenu(savedInstanceState);
         setupEditButton();
+        setUpAddBabyButton();
     }
 
 
@@ -136,6 +141,15 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         });
     }
 
+    private void setUpAddBabyButton() {
+        addButtonImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewBaby();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -160,6 +174,26 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                 mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
                 userViewModel.updateBaby(mainBaby);
                 setUpMainBabyDetails();
+            }
+        }
+
+        if (requestCode == START_ADD_BABY_PROF_ACT && resultCode == RESULT_OK) {
+            if (data == null) {
+                Log.d(TAG, "onActivityResult: START_BABY_PROF_ACT and data == null");
+
+            } else {
+                if (data.getExtras() != null) {
+                    mainBaby = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
+                    tempMainBaby = getIntent().getExtras().getParcelable(OLD_MAIN_BABY_OBJECT_TAG);
+
+//                mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
+//                tempMainBaby = data.getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
+                userBabies.add(tempMainBaby);
+                tempMainBaby = null;
+                userViewModel.updateBaby(mainBaby);
+                setUpMainBabyDetails();
+                otherBabiesAdapter.submitList(userBabies);
+                }
             }
         }
     }
@@ -222,6 +256,21 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         startActivityForResult(intent, START_BABY_PROF_EDIT_ACT);
     }
 
+    private void createNewBaby() {
+        babyID = babiesCollection.document().getId();
+        tempMainBaby = mainBaby;
+        mainBaby = new Baby(babyID);
+        Intent intent = new Intent(this, BabyProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("BABY_OBJECT_TAG", mainBaby);
+        bundle.putParcelable("OLD_MAIN_BABY_OBJECT_TAG", tempMainBaby);
+        intent.putExtras(bundle);
+//        intent.putExtra(BABY_OBJECT_TAG, mainBaby);
+//        intent.putExtra(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
+
+        Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
+        startActivityForResult(intent, START_ADD_BABY_PROF_ACT);
+    }
     @Override
     public void onBabyClick(Baby baby) {
         ArrayList<Baby> babiesCopy = new ArrayList<>(userBabies);
