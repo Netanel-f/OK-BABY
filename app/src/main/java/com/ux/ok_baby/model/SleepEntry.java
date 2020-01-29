@@ -74,6 +74,11 @@ public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
         }
     }
 
+    @Override
+    public int getNumOfDisplayedFields() {
+        return 4;
+    }
+
     private long calculateDurationInt(String time1, String time2){ // todo change
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         Date date1 = null;

@@ -117,8 +117,6 @@ public class FoodFragment extends Fragment {
 
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
                     mTableLayout.setAdapter(mTableAdapter);
-                    mTableLayout.setHeaderFixed(true);
-                    mTableLayout.setSolidRowHeader(false);
                     mTableAdapter.notifyDataSetChanged();
                     setUpGraphs(reportEntries);
                 }

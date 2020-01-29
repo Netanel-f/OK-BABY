@@ -98,4 +98,10 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
                 return null;
         }
     }
+
+    @Override
+    public int getNumOfDisplayedFields() {
+        // date, type, start, info: duration/amount/side?
+        return 4;
+    }
 }

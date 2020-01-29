@@ -3,6 +3,7 @@ package com.ux.ok_baby.view.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
-    private static final int NUM_OF_COLS_IN_REPORT = 4;
+    private static final int NUM_OF_COLS_IN_REPORT = 6;
     private final LayoutInflater mLayoutInflater;
     private final List<ReportEntry> mTableDataSource;
     private final int mColumnWidth;
@@ -51,7 +52,13 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
 
     @Override
     public int getColumnCount() {
-        return NUM_OF_COLS_IN_REPORT; // todo: change
+        if (mTableDataSource.isEmpty() || mTableDataSource.size()<=1){
+            return NUM_OF_COLS_IN_REPORT;
+        } else {
+            // determine col width dynamically
+//            return NUM_OF_COLS_IN_REPORT;
+            return Math.min(NUM_OF_COLS_IN_REPORT, mTableDataSource.get(0).getNumOfDisplayedFields());
+        }
     }
 
     @NonNull
@@ -131,7 +138,7 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
             return mColumnWidth;
         } else {
             // determine col width dynamically
-            return Math.max(mTableDataSource.get(1).getDataByField(column).length() * 20 + 50, mColumnWidth);
+            return Math.max(calculateColWidth(getColumnCount()), mColumnWidth);
         }
     }
 
@@ -148,6 +155,13 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
     @Override
     public int getHeaderRowWidth() {
         return mHeaderWidth;
+    }
+
+
+    private int calculateColWidth(int numOfCols){
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int padding = 30;
+        return (width-30) / numOfCols;
     }
 
 
