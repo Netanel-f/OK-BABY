@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,8 +33,14 @@ import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 import com.ux.ok_baby.view.popups.PopUpDiaper;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.PieChartView;
 
 
 /**
@@ -46,6 +53,7 @@ public class DiaperFragment extends Fragment {
     private ReportTableAdapter mTableAdapter;
     private Button graphsBtn, tableBtn;
     private String babyID;
+    private View view;
 
     public DiaperFragment(String babyID) {
         this.babyID = babyID;
@@ -56,7 +64,7 @@ public class DiaperFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_diaper, container, false);
+        view = inflater.inflate(R.layout.fragment_diaper, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
         // bind
@@ -149,8 +157,45 @@ public class DiaperFragment extends Fragment {
     }
 
     private void setUpGraphs(List<ReportEntry> reportEntries) {
+//        PieChartView chart = new PieChartView(view.getContext());
+//        mGraphsLayout.addView(chart);
+//        PieChartData data;
+//
+//        List<SliceValue> values = generateDataForGraph(reportEntries);
+//        data = new PieChartData(values);
+//        data.setHasLabels(true);
+//        data.setHasCenterCircle(true);
+//
+//    }
 
-    }
+//    private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
+//        int numValues = 2; // bottle / breastfeeding
+//        int BOTTLE = 0;
+//        int BREASTFEEDING = 1;
+//        List<SliceValue> values = new ArrayList<SliceValue>();
+//
+//        int[] numOfEntries = new int[numValues];
+//        for (ReportEntry entry:reportEntries){
+//            DiaperEntry diaperEntry = (DiaperEntry) entry;
+//            if (diaperEntry.getType().equals("bottle")){
+//                numOfEntries[BOTTLE]++;
+//            } else {
+//                numOfEntries[BREASTFEEDING]++;
+//            }
+        }
+//
+//        int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
+//                ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
+//
+//        for (int i = 0; i < numValues; ++i) {
+//
+//            SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
+//            values.add(sliceValue);
+//        }
+//
+//        return values;
+//
+//    }
 
 //    private void setUpGraphsBtn() {
 //        graphsBtn.setOnClickListener(new View.OnClickListener() {

@@ -37,7 +37,6 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
         mLayoutInflater = LayoutInflater.from(context);
         mTableDataSource = dataSource;
 
-        // todo - change sizes? these are copied
         Resources res = context.getResources();
         mColumnWidth = res.getDimensionPixelSize(R.dimen.col_width);
         mRowHeight = res.getDimensionPixelSize(R.dimen.row_height);

@@ -137,12 +137,12 @@ public class SleepFragment extends Fragment {
         data.setLines(lines);
         chart.setLineChartData(data);
 
-        Viewport v = new Viewport(chart.getMaximumViewport());
-        v.left = 0;
-        v.right = v.right - 0.5f;
-        chart.setCurrentViewportWithAnimation(v);
-        chart.setScrollEnabled(true);
-        chart.setZoomEnabled(false);
+//        Viewport v = new Viewport(chart.getMaximumViewport());
+//        v.left = 0;
+//        v.right = v.right - 0.5f;
+//        chart.setCurrentViewportWithAnimation(v);
+        chart.setScrollEnabled(false);
+        chart.setZoomEnabled(true);
     }
 
 //    private void loadFromFirebase() {

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- report table -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -24,26 +23,80 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
 
-            <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout
-                android:id="@+id/diaperTableReportLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:foregroundGravity="center"
-                android:visibility="visible"
-                app:cellMargin="1dp"
-                app:dragAndDropEnabled="false"
-                app:fixedHeaders="false"
-                app:solidRowHeaders="false" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+                <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout
+                    android:id="@+id/diaperTableReportLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:foregroundGravity="center"
+                    android:visibility="visible"
+                    app:cellMargin="1dp"
+                    app:dragAndDropEnabled="false"
+                    app:fixedHeaders="false"
+                    app:solidRowHeaders="false" />
 
 
-        </RelativeLayout>
-    </ScrollView>
+            </RelativeLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/diaperGraphsLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="8dp"
+            android:paddingVertical="16dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        &lt;!&ndash; report table &ndash;&gt;-->
+<!--        <ScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginBottom="0dp"-->
+<!--            android:layout_marginStart="6dp"-->
+<!--            android:fillViewport="true"-->
+
+<!--            android:scrollbarTrackVertical="@color/colorPrimary"-->
+<!--            android:scrollbars="vertical"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp">-->
+
+<!--            <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout-->
+<!--                android:id="@+id/diaperTableReportLayout"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:foregroundGravity="center"-->
+<!--                android:visibility="visible"-->
+<!--                app:cellMargin="1dp"-->
+<!--                app:dragAndDropEnabled="false"-->
+<!--                app:fixedHeaders="false"-->
+<!--                app:solidRowHeaders="false" />-->
+
+
+<!--        </RelativeLayout>-->
+<!--    </ScrollView>-->
 <!--        <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout-->
 <!--            android:id="@+id/diaperTableReportLayout"-->
 <!--            android:layout_width="match_parent"-->
@@ -59,18 +112,18 @@
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent"/>-->
 
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:id="@+id/diaperGraphsLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+<!--        <LinearLayout-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:padding="16dp"-->
+<!--            android:id="@+id/diaperGraphsLayout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"/>-->
         <!--        </RelativeLayout>-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
