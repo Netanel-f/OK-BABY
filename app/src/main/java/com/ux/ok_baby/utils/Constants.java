@@ -29,6 +29,7 @@ public class Constants {
     public static final String IS_NEW_USER_TAG = "isNewUser";
     public static final String BABY_OBJECT_TAG = "BabyObject";
     public static final String BREASTFEEDING = "Breastfeeding";
+    public static final String OTHER_BABIES_TAG = "OtherBabies";
 
 
     public enum ReportType {FOOD, SLEEP, DIAPER, OTHER}
