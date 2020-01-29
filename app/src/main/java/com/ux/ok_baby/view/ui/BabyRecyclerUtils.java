@@ -61,13 +61,13 @@ public class BabyRecyclerUtils {
         @Override
         public void onBindViewHolder(@NonNull BabyHolder babyHolder, int position) {
             Baby baby = getItem(position);
+
             if (baby.getImageUrl() != null) {
-                babyHolder.babyImage.setImageURI(Uri.parse(baby.getImageUrl()));
+                Glide.with(babyHolder.itemView.getContext())
+                        .load(baby.getImageUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(babyHolder.babyImage);
             }
-//            Glide.with(this)
-//                    .load(baby.getImageUrl())
-//                    .apply(RequestOptions.circleCropTransform())
-//                    .into(babyHolder.babyImage);
         }
     }
 }
