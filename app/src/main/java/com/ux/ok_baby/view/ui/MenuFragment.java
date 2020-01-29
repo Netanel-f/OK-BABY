@@ -47,13 +47,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sleepButton:
-                startNewFragment(SLEEP_TAB);
-                break;
-            case R.id.diaperButton:
-                startNewFragment(DIAPER_TAB);
+                startNewFragment(R.id.action_sleep);
                 break;
             case R.id.foodButton:
-                startNewFragment(FOOD_TAB);
+                startNewFragment(R.id.action_food);
+                break;
+            case R.id.diaperButton:
+                startNewFragment(R.id.action_diaper);
                 break;
         }
     }

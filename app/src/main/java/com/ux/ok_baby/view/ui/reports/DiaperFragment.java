@@ -50,6 +50,7 @@ public class DiaperFragment extends Fragment {
     public DiaperFragment(String babyID) {
         this.babyID = babyID;
     }
+
     private final String TAG = "DiaperFragment";
 
     @Override
@@ -62,29 +63,6 @@ public class DiaperFragment extends Fragment {
         // bind
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.diaperTableReportLayout);
         mGraphsLayout = (LinearLayout) view.findViewById(R.id.diaperGraphsLayout);
-
-        // todo: move
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
-                view.findViewById(R.id.diaperBottomNavBar);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_table:
-                                mTableLayout.setVisibility(View.VISIBLE);
-                                mGraphsLayout.setVisibility(View.GONE);
-                                break;
-                            case R.id.action_chart:
-                                mTableLayout.setVisibility(View.GONE);
-                                mGraphsLayout.setVisibility(View.VISIBLE);
-                                break;
-                        }
-                        return false;
-                    }
-                });
-
 
 //        setUpGraphsBtn();
         setUpReportTable(babyID);
@@ -122,10 +100,9 @@ public class DiaperFragment extends Fragment {
                             DiaperEntry s2 = (DiaperEntry) o2;
 
                             // handle title row
-                            if (s1.getDate().equals("date")){
+                            if (s1.getDate().equals("date")) {
                                 return -1;
-                            }
-                            else if (s2.getDate().equals("date")){
+                            } else if (s2.getDate().equals("date")) {
                                 return 1;
                             }
 

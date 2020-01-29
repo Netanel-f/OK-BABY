@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.ui.reports.FoodFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,54 +15,43 @@
             android:id="@+id/foodTableReportLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="60dp"
             android:visibility="visible"
             app:cellMargin="1dp"
             app:dragAndDropEnabled="true"
             app:fixedHeaders="true"
-            app:solidRowHeaders="false"
-            app:layout_constraintBottom_toTopOf="@id/foodBottomNavBar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginHorizontal="16dp" />
+            app:solidRowHeaders="false" />
 
         <LinearLayout
-            android:layout_margin="16dp"
-            android:padding="16dp"
             android:id="@+id/foodGraphsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:orientation="vertical"
+            android:padding="16dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/foodBottomNavBar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
         <!--        </RelativeLayout>-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:useCompatPadding="true"
             android:backgroundTint="@color/colorPrimary"
             android:clickable="true"
             android:src="@drawable/ic_add"
-            app:layout_constraintBottom_toTopOf="@+id/foodBottomNavBar"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/foodBottomNavBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            app:menu="@menu/bottom_navigation_main"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:useCompatPadding="true" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

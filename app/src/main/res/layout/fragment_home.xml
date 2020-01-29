@@ -8,16 +8,18 @@
     <!-- baby details-->
     <RelativeLayout
         android:id="@+id/baby_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/body">
 
         <include layout="@layout/baby_details" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/baby_details" >
+        android:layout_below="@+id/baby_details">
 
         <include layout="@layout/body_layout" />
     </RelativeLayout>

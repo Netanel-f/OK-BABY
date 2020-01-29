@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:paddingBottom="20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_alignParentStart="true">
 
 
     <LinearLayout

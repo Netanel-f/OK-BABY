@@ -56,29 +56,6 @@ public class FoodFragment extends Fragment {
         mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.foodTableReportLayout);
         mGraphsLayout = (LinearLayout) view.findViewById(R.id.foodGraphsLayout);
 
-        // todo: move
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
-                view.findViewById(R.id.foodBottomNavBar);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_table:
-                                mTableLayout.setVisibility(View.VISIBLE);
-                                mGraphsLayout.setVisibility(View.GONE);
-                                break;
-                            case R.id.action_chart:
-                                mTableLayout.setVisibility(View.GONE);
-                                mGraphsLayout.setVisibility(View.VISIBLE);
-                                break;
-                        }
-                        return false;
-                    }
-                });
-
-
         setUpReportTable(babyID);
 //        setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
@@ -98,10 +75,9 @@ public class FoodFragment extends Fragment {
                             FoodEntry s2 = (FoodEntry) o2;
 
                             // handle title row
-                            if (s1.getDate().equals("date")){
+                            if (s1.getDate().equals("date")) {
                                 return -1;
-                            }
-                            else if (s2.getDate().equals("date")){
+                            } else if (s2.getDate().equals("date")) {
                                 return 1;
                             }
 
