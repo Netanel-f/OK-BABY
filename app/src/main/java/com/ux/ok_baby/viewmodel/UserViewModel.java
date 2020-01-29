@@ -10,6 +10,8 @@ import com.ux.ok_baby.model.Baby;
 import com.ux.ok_baby.model.User;
 import com.ux.ok_baby.repository.FirestoreRepository;
 
+import java.util.List;
+
 public class UserViewModel extends AndroidViewModel {
 
     private static final String TAG = "UserViewModel";
@@ -48,6 +50,10 @@ public class UserViewModel extends AndroidViewModel {
      */
     public LiveData<Baby> getBaby(String bid){
         return dbRepo.getBaby(bid);
+    }
+
+    public LiveData<List<Baby>> getUserBabies(String uid) {
+        return dbRepo.getUserBabies(uid);
     }
 
     /* USER */
