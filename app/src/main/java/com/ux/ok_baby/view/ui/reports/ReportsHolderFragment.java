@@ -39,7 +39,7 @@ public class ReportsHolderFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ViewPager viewPager = view.findViewById(R.id.reports);
+        final ViewPager viewPager = view.findViewById(R.id.reports);
         viewPager.setAdapter(new ReportsPagerAdapter(getChildFragmentManager(),babyID));
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -71,8 +71,6 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return new FoodFragment(babyID);
             default:
                 return new DiaperFragment(babyID);
-//            default:
-//                return new OtherFragment(babyID);
         }
     }
 
@@ -90,8 +88,6 @@ class ReportsPagerAdapter extends FragmentStatePagerAdapter {
                 return FOOD;
             default:
                 return DIAPER;
-//            default:
-//                return OTHER;
         }
     }
 }

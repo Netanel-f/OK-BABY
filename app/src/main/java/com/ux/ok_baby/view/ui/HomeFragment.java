@@ -82,7 +82,7 @@ public class HomeFragment extends FragmentActivity {
 
         setUpMenu(savedInstanceState);
         setupEditButton();
-        setUpOtherBabies();
+//        setUpOtherBabies();
     }
 
     private void setUpMenu(@Nullable Bundle savedInstanceState) {
@@ -160,17 +160,17 @@ public class HomeFragment extends FragmentActivity {
     }
 
 
-    @SuppressLint("ResourceAsColor")
-    private void setUpOtherBabies() {
-        TableRow tableRow = findViewById(R.id.otherBabies);
-        CircleImageView circleImageView = new CircleImageView(this);
-        circleImageView.setImageResource(getResources().getIdentifier("ic_baby", "mipmap", getBaseContext().getPackageName()));
-        tableRow.addView(circleImageView);
-        circleImageView.setBorderColor(getResources().getColor(R.color.light_gray));
-        circleImageView.setBorderWidth(valToDp(2));
-        circleImageView.getLayoutParams().height = valToDp(40);
-        circleImageView.getLayoutParams().width = valToDp(40);
-    }
+//    @SuppressLint("ResourceAsColor")
+//    private void setUpOtherBabies() {
+//        TableRow tableRow = findViewById(R.id.otherBabies);
+//        CircleImageView circleImageView = new CircleImageView(this);
+//        circleImageView.setImageResource(getResources().getIdentifier("ic_baby", "mipmap", getBaseContext().getPackageName()));
+//        tableRow.addView(circleImageView);
+//        circleImageView.setBorderColor(getResources().getColor(R.color.light_gray));
+//        circleImageView.setBorderWidth(valToDp(2));
+//        circleImageView.getLayoutParams().height = valToDp(40);
+//        circleImageView.getLayoutParams().width = valToDp(40);
+//    }
 
     private int valToDp(int value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
