@@ -1,13 +1,11 @@
 package com.ux.ok_baby.view.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,14 +14,11 @@ import androidx.fragment.app.FragmentActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.Baby;
-import com.ux.ok_baby.model.User;
 import com.ux.ok_baby.utils.Constants;
-import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import org.joda.time.DateTime;
@@ -33,11 +28,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,12 +49,12 @@ public class HomeFragment extends FragmentActivity {
     private Baby baby;
     boolean isNewUser;
 
+    private TextView mainBabyName;
+    private TextView mainBabyAge;
     private ImageView babyImgView;
 
-    ArrayList<String> otherBabiesIds;
     static List<Baby> userBabies;
     private BabyRecyclerUtils.BabyAdapter otherBabiesAdapter = new BabyRecyclerUtils.BabyAdapter();
-    private ArrayList<Baby> otherBabiesList;
     private RecyclerView babiesRecyclerView;
 
 
@@ -72,17 +65,12 @@ public class HomeFragment extends FragmentActivity {
 
         // set up views
         babyImgView = findViewById(R.id.babyImage);
+        mainBabyName = findViewById(R.id.babyName);
+        mainBabyAge = findViewById(R.id.babyAge);
         babiesRecyclerView = findViewById(R.id.babiesRecycler);
 
         extractIntentData();
         setUpRecycler();
-//        boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
-//        userID = getIntent().getStringExtra(USER_ID_TAG);
-//        babyID = getIntent().getStringExtra(Constants.BABY_ID);
-//        otherBabiesIds = getIntent().getStringArrayListExtra(Constants.OTHER_BABIES_TAG);
-
-//        babiesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-//        babiesRecyclerView.setAdapter(otherBabiesAdapter);
 
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class); //todo fix deprecated
@@ -92,31 +80,32 @@ public class HomeFragment extends FragmentActivity {
             addNewBaby();
 
         } else {
-            userViewModel.getBaby(babyID).observe(this, new Observer<Baby>() {
+            userViewModel.getUserBabies(userID).observe(this, new Observer<List<Baby>>() {
                 @Override
-                public void onChanged(Baby babyChanged) {
-                    baby = babyChanged;
-                    setUpBabyDetails();
+                public void onChanged(List<Baby> babies) {
+                    updateBabiesDetails(babies);
                 }
             });
         }
 
-        if (!otherBabiesIds.isEmpty()) {
-            setUpOtherUserBabies();
-        } else {
-            userBabies = null;
-        }
 
         setUpMenu(savedInstanceState);
         setupEditButton();
-//        setUpOtherBabies();
     }
+
+
+    private void updateBabiesDetails(List<Baby> babies) {
+        baby = babies.remove(0);
+        setUpMainBabyDetails();
+        userBabies = babies;
+        otherBabiesAdapter.submitList(userBabies);
+    }
+
 
     private void extractIntentData() {
         isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
         userID = getIntent().getStringExtra(USER_ID_TAG);
         babyID = getIntent().getStringExtra(Constants.BABY_ID);
-        otherBabiesIds = getIntent().getStringArrayListExtra(Constants.OTHER_BABIES_TAG);
 
     }
 
@@ -125,22 +114,6 @@ public class HomeFragment extends FragmentActivity {
         babiesRecyclerView.setAdapter(otherBabiesAdapter);
     }
 
-    private void setUpOtherUserBabies() {
-        userBabies = new ArrayList<>();
-        for (String id : otherBabiesIds) {
-            userViewModel.getBaby(id).observe(this, new Observer<Baby>() {
-                @Override
-                public void onChanged(Baby babyChanged) {
-                    userBabies.add(babyChanged);
-
-                    if (userBabies.size() == otherBabiesIds.size()) {
-                        otherBabiesList = new ArrayList<>(userBabies);
-                        otherBabiesAdapter.submitList(otherBabiesList);
-                    }
-                }
-            });
-        }
-    }
 
     private void setUpMenu(@Nullable Bundle savedInstanceState) {
         if (findViewById(R.id.fragment_container) != null) {
@@ -172,7 +145,7 @@ public class HomeFragment extends FragmentActivity {
             } else {
                 baby = data.getParcelableExtra(BABY_OBJECT_TAG);
                 userViewModel.addBaby(userID, baby);
-                setUpBabyDetails();
+                setUpMainBabyDetails();
             }
         }
 
@@ -184,14 +157,14 @@ public class HomeFragment extends FragmentActivity {
             } else {
                 baby = data.getParcelableExtra(BABY_OBJECT_TAG);
                 userViewModel.updateBaby(baby);
-                setUpBabyDetails();
+                setUpMainBabyDetails();
             }
         }
     }
 
-    private void setUpBabyDetails() {
-        ((TextView) findViewById(R.id.babyName)).setText(baby.getBabyName());
-        ((TextView) findViewById(R.id.babyAge)).setText(getAgeString(baby.getBabyDOB()));
+    private void setUpMainBabyDetails() {
+        mainBabyName.setText(baby.getBabyName());
+        mainBabyAge.setText(getAgeString(baby.getBabyDOB()));
         Glide.with(this)
                 .load(baby.getImageUrl())
                 .placeholder(R.mipmap.ic_baby)
@@ -216,18 +189,6 @@ public class HomeFragment extends FragmentActivity {
 
     }
 
-
-//    @SuppressLint("ResourceAsColor")
-//    private void setUpOtherBabies() {
-//        TableRow tableRow = findViewById(R.id.otherBabies);
-//        CircleImageView circleImageView = new CircleImageView(this);
-//        circleImageView.setImageResource(getResources().getIdentifier("ic_baby", "mipmap", getBaseContext().getPackageName()));
-//        tableRow.addView(circleImageView);
-//        circleImageView.setBorderColor(getResources().getColor(R.color.light_gray));
-//        circleImageView.setBorderWidth(valToDp(2));
-//        circleImageView.getLayoutParams().height = valToDp(40);
-//        circleImageView.getLayoutParams().width = valToDp(40);
-//    }
 
     private int valToDp(int value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
