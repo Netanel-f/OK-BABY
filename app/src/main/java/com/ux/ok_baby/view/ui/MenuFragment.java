@@ -41,7 +41,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //todo;  delete maybe?
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.ux.ok_baby.utils.Constants.DATE_PATTERN;
+import static com.ux.ok_baby.utils.Constants.*;
 
 public class DateTimePicker {
     private Calendar myCalendar = Calendar.getInstance();
@@ -33,7 +33,7 @@ public class DateTimePicker {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN, Locale.UK); // TODO: 1/10/2020 change US
+                SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN, Locale.UK);
                 textView.setText(sdf.format(myCalendar.getTime()));
             }
         };
@@ -46,7 +46,7 @@ public class DateTimePicker {
                 myCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                 myCalendar.set(Calendar.MINUTE, selectedMinute);
                 myCalendar.set(Calendar.SECOND, 0);
-                SimpleDateFormat df = new SimpleDateFormat("hh:mm", Locale.UK);
+                SimpleDateFormat df = new SimpleDateFormat(TIME_PATTERN, Locale.UK);
                 textView.setText(df.format(myCalendar.getTime()));
             }
         };

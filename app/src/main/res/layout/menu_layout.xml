@@ -2,34 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <Button
-        android:id="@+id/foodButton"
-        android:layout_width="337dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="30dp"
-        android:background="@drawable/button_border_circular"
-        android:text="Food" />
+    android:orientation="vertical"
+    android:gravity="center">
 
     <Button
         android:id="@+id/sleepButton"
-        android:layout_width="337dp"
+        android:layout_width="330dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_border_circular"
+        android:text="Sleep" />
+
+    <Button
+        android:id="@+id/foodButton"
+        android:layout_width="330dp"
+        android:layout_height="80dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_border_circular"
-        android:text="SLeep" />
+        android:text="Food" />
+
 
 
     <Button
         android:id="@+id/diaperButton"
-        android:layout_width="337dp"
+        android:layout_width="330dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_border_circular"
-        android:text="Diaper " />
+        android:text="Diaper" />
 
 
 </LinearLayout>
