@@ -259,43 +259,8 @@ public class SignInActivity extends AppCompatActivity {
                 if (user != null) {
                     Log.w(TAG, "onChanged: observed user "+user.getUid());
                     final List<DocumentReference> userBabies = user.getBabies();
-
                     getUserBabiesFromDatabase(uid, user, userBabies, lifecycleOwner);
-//                    if (userBabies == null || userBabies.isEmpty()) {
-//                        // baby list is empty -> treat like new user
-//                        Log.w(TAG, "user has no babies");
-//                        navigateToNextActivity(uid, true);
-//
-//                    } else if (userBabies.get(0) != null) {
-//                        final DocumentReference babyRef = user.getBabies().get(0);
-//                        viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
-//                            @Override
-//                            public void onChanged(Baby baby) {
-//                                if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
-//                                    navigateToNextActivity(uid, true);
-//
-//                                } else {
-//                                    // get other user babies
-//                                    userBabies.remove(0);
-//                                    ArrayList<String> otherUserBabies;
-//                                    if (userBabies.isEmpty()) {
-//                                        otherUserBabies = null;
-//                                    } else {
-//                                        otherUserBabies = new ArrayList<>();
-//                                        for (DocumentReference documentReference : userBabies) {
-//                                            otherUserBabies.add(documentReference.getId());
-//                                        }
-//                                    }
-//
-//                                    navigateToNextActivity(uid, babyRef, otherUserBabies, false);
-//                                }
-//                            }
-//                        });
-//
-//                    } else {
-//                        Log.d(TAG, "user has babies");
-//                        navigateToNextActivity(uid, user.getBabies().get(0), null, false);
-//                    }
+
                 } else {
                     Log.w(TAG, "User doesn't exist in database. UID: " + uid + " email: " +email);
                     addNewUser(uid, email);
@@ -320,41 +285,17 @@ public class SignInActivity extends AppCompatActivity {
 
                     } else {
                         // get other user babies
-                        userBabies.remove(0);
-                        ArrayList<String> otherUserBabies = getUserBabiesIds(userBabies);
-//                        ArrayList<String> otherUserBabies;
-//                        if (userBabies.isEmpty()) {
-//                            otherUserBabies = null;
-//                        } else {
-//                            otherUserBabies = new ArrayList<>();
-//                            for (DocumentReference documentReference : userBabies) {
-//                                otherUserBabies.add(documentReference.getId());
-//                            }
-//                        }
-
-                        navigateToNextActivity(uid, babyRef, otherUserBabies, false);
+                        navigateToNextActivity(uid, babyRef, false);
                     }
                 }
             });
 
         } else {
             Log.d(TAG, "user has babies");
-            navigateToNextActivity(uid, user.getBabies().get(0), null, false);
+            navigateToNextActivity(uid, user.getBabies().get(0), false);
         }
     }
 
-    ArrayList<String> getUserBabiesIds(final List<DocumentReference> userBabies) {
-        ArrayList<String> otherUserBabies;
-        if (userBabies.isEmpty()) {
-            otherUserBabies = null;
-        } else {
-            otherUserBabies = new ArrayList<>();
-            for (DocumentReference documentReference : userBabies) {
-                otherUserBabies.add(documentReference.getId());
-            }
-        }
-        return otherUserBabies;
-    }
 
     private void addNewUser(final String uid, String email) {
         addUserToDatabase(uid, email);
@@ -366,7 +307,7 @@ public class SignInActivity extends AppCompatActivity {
      * @param uid - user id
      * @param isNewUser  - true if the user is new or has no babies.
      */
-    private void navigateToNextActivity(String uid, Boolean isNewUser) {
+    private void navigateToNextActivity(String uid, boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
         homeIntent.putExtra(Constants.USER_ID_TAG, uid);
@@ -374,13 +315,12 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(homeIntent);
     }
 
-    private void navigateToNextActivity(String uid, DocumentReference babyRef, ArrayList<String> userOtherBabies, Boolean isNewUser) {
+    private void navigateToNextActivity(String uid, DocumentReference babyRef, boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
         homeIntent.putExtra(Constants.USER_ID_TAG, uid);
         homeIntent.putExtra(Constants.IS_NEW_USER_TAG, isNewUser);
         homeIntent.putExtra(Constants.BABY_ID, babyRef.getId());
-        homeIntent.putExtra(Constants.OTHER_BABIES_TAG, userOtherBabies);
         startActivity(homeIntent);
     }
 
