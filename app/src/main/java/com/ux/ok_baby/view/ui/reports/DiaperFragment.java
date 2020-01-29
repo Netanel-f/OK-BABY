@@ -1,6 +1,7 @@
 package com.ux.ok_baby.view.ui.reports;
 
 
+import android.app.PendingIntent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,10 +39,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import lecho.lib.hellocharts.formatter.AxisValueFormatter;
+import lecho.lib.hellocharts.formatter.ValueFormatterHelper;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PieChartView;
+
+import static com.ux.ok_baby.utils.Constants.PEE;
+import static com.ux.ok_baby.utils.Constants.POO;
 
 
 /**
@@ -157,32 +170,112 @@ public class DiaperFragment extends Fragment {
     }
 
     private void setUpGraphs(List<ReportEntry> reportEntries) {
-//        PieChartView chart = new PieChartView(view.getContext());
-//        mGraphsLayout.addView(chart);
-//        PieChartData data;
-//
-//        List<SliceValue> values = generateDataForGraph(reportEntries);
-//        data = new PieChartData(values);
-//        data.setHasLabels(true);
-//        data.setHasCenterCircle(true);
-//
-//    }
+        ColumnChartView chart = new ColumnChartView(view.getContext());
+        mGraphsLayout.addView(chart);
+        ColumnChartData data;
 
-//    private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
-//        int numValues = 2; // bottle / breastfeeding
-//        int BOTTLE = 0;
-//        int BREASTFEEDING = 1;
-//        List<SliceValue> values = new ArrayList<SliceValue>();
-//
-//        int[] numOfEntries = new int[numValues];
-//        for (ReportEntry entry:reportEntries){
-//            DiaperEntry diaperEntry = (DiaperEntry) entry;
-//            if (diaperEntry.getType().equals("bottle")){
-//                numOfEntries[BOTTLE]++;
-//            } else {
-//                numOfEntries[BREASTFEEDING]++;
-//            }
+        List<AxisValue> axisXValues = new ArrayList<>();
+        List<Column> columns = generateDataForGraph(reportEntries, axisXValues);
+        data = new ColumnChartData(columns);
+
+        boolean hasAxes = true;
+        boolean hasAxesNames = true;
+        if (hasAxes) {
+            Axis axisX = new Axis();
+            Axis axisY = new Axis().setHasLines(true);
+            if (hasAxesNames) {
+//                axisX.setName("Axis X");
+                axisY.setName("Number of diapers");
+            }
+            axisX.setValues(axisXValues);
+
+            final ValueFormatterHelper helper = new ValueFormatterHelper();
+            data.setAxisXBottom(axisX);
+            data.setAxisYLeft(axisY);
+        } else {
+            data.setAxisXBottom(null);
+            data.setAxisYLeft(null);
         }
+
+        data.setStacked(false);
+        chart.setColumnChartData(data);
+        }
+
+    private List<Column> generateDataForGraph(List<ReportEntry> reportEntries, List<AxisValue> axisValues) {
+        List<Column> columns = new ArrayList<Column>();
+        List<SubcolumnValue> values;
+
+        int i = 1;
+        DiaperEntry entry;
+        int typesOfDiaperEntries = 2;
+
+        int numOfDates = 0;
+        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<Integer> numOfPooEntriesPerDay = new ArrayList<>();
+        ArrayList<Integer> numOfPeeEntriesPerDay = new ArrayList<>();
+
+        // iterate over all entries
+        while (i < reportEntries.size()) {
+            entry = (DiaperEntry) reportEntries.get(i);
+            String currentDate = entry.getDate();
+
+            // iterate over all entries for a certain date
+            int pooEntriesPerDay = 0;
+            int peeEntriesPerDay = 0;
+            int j = i;
+            while (entry.getDate().equals(currentDate) && j < reportEntries.size()) {
+                if (entry.getType().equals(POO)) {
+                    pooEntriesPerDay++;
+                } else if (entry.getType().equals(PEE)) {
+                    peeEntriesPerDay++;
+                }
+                j++;
+                if (j < reportEntries.size()) {
+                    entry = (DiaperEntry) reportEntries.get(j);
+                }
+            }
+
+            numOfPooEntriesPerDay.add(pooEntriesPerDay);
+            numOfPeeEntriesPerDay.add(peeEntriesPerDay);
+
+            // generate lavels
+            AxisValue axisValue = new AxisValue(dates.size());
+            axisValue.setLabel(currentDate);
+            axisValues.add(axisValue);
+
+            dates.add(currentDate);
+
+            if (j != i){
+                i = j;
+            } else {
+                i++;
+            }
+        }
+
+        ArrayList<Integer>[] diaperEntries = new ArrayList[]{numOfPooEntriesPerDay, numOfPeeEntriesPerDay};
+
+        // iterate over dates (columns)
+        int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimaryDark),
+                ContextCompat.getColor(getContext(), R.color.colorPrimary)};
+        String[] labels = {POO, PEE};
+        for (int k = 0; k < dates.size(); ++k) {
+
+            values = new ArrayList<SubcolumnValue>();
+            for (int j = 0; j < typesOfDiaperEntries; ++j) {
+                SubcolumnValue value = new SubcolumnValue(diaperEntries[j].get(k), colors[j]);
+                value.setLabel((Integer) Math.round(value.getValue())+"");
+                values.add(value);
+            }
+
+            Column column = new Column(values);
+
+//            column.setHasLabels(true);
+            column.setHasLabelsOnlyForSelected(true);
+            columns.add(column);
+        }
+
+        return columns;
+    }
 //
 //        int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
 //                ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};

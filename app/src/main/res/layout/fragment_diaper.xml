@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.ui.reports.DiaperFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,8 +13,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="0dp"
             android:layout_marginStart="6dp"
+            android:layout_marginBottom="0dp"
             android:fillViewport="true"
 
             android:scrollbarTrackVertical="@color/colorPrimary"
@@ -32,8 +32,8 @@
                     android:id="@+id/diaperTableReportLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:foregroundGravity="center"
                     android:visibility="visible"
                     app:cellMargin="1dp"
@@ -49,93 +49,106 @@
             android:id="@+id/diaperGraphsLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="32dp"
             android:layout_marginTop="3dp"
-            android:layout_marginBottom="8dp"
-            android:paddingVertical="16dp"
+            android:layout_marginBottom="100dp"
             android:orientation="vertical"
+            android:paddingVertical="16dp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
 
-<!--        &lt;!&ndash; report table &ndash;&gt;-->
-<!--        <ScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_marginBottom="0dp"-->
-<!--            android:layout_marginStart="6dp"-->
-<!--            android:fillViewport="true"-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-<!--            android:scrollbarTrackVertical="@color/colorPrimary"-->
-<!--            android:scrollbars="vertical"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp">-->
+            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-<!--            <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout-->
-<!--                android:id="@+id/diaperTableReportLayout"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:foregroundGravity="center"-->
-<!--                android:visibility="visible"-->
-<!--                app:cellMargin="1dp"-->
-<!--                app:dragAndDropEnabled="false"-->
-<!--                app:fixedHeaders="false"-->
-<!--                app:solidRowHeaders="false" />-->
+            <!-- todo: create legend -->
+            <include layout="@layout/item_legend" />
+
+        </LinearLayout>
+        <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent">-->
+
+        <!--        &lt;!&ndash; report table &ndash;&gt;-->
+        <!--        <ScrollView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:layout_marginBottom="0dp"-->
+        <!--            android:layout_marginStart="6dp"-->
+        <!--            android:fillViewport="true"-->
+
+        <!--            android:scrollbarTrackVertical="@color/colorPrimary"-->
+        <!--            android:scrollbars="vertical"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent">-->
+        <!--        <RelativeLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="0dp">-->
+
+        <!--            <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout-->
+        <!--                android:id="@+id/diaperTableReportLayout"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_centerVertical="true"-->
+        <!--                android:layout_centerHorizontal="true"-->
+        <!--                android:foregroundGravity="center"-->
+        <!--                android:visibility="visible"-->
+        <!--                app:cellMargin="1dp"-->
+        <!--                app:dragAndDropEnabled="false"-->
+        <!--                app:fixedHeaders="false"-->
+        <!--                app:solidRowHeaders="false" />-->
 
 
-<!--        </RelativeLayout>-->
-<!--    </ScrollView>-->
-<!--        <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout-->
-<!--            android:id="@+id/diaperTableReportLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="60dp"-->
-<!--            android:visibility="visible"-->
-<!--            app:cellMargin="1dp"-->
-<!--            app:dragAndDropEnabled="false"-->
-<!--            app:fixedHeaders="false"-->
-<!--            app:solidRowHeaders="false"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"/>-->
+        <!--        </RelativeLayout>-->
+        <!--    </ScrollView>-->
+        <!--        <com.cleveroad.adaptivetablelayout.AdaptiveTableLayout-->
+        <!--            android:id="@+id/diaperTableReportLayout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="60dp"-->
+        <!--            android:visibility="visible"-->
+        <!--            app:cellMargin="1dp"-->
+        <!--            app:dragAndDropEnabled="false"-->
+        <!--            app:fixedHeaders="false"-->
+        <!--            app:solidRowHeaders="false"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"/>-->
 
-<!--        <LinearLayout-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:padding="16dp"-->
-<!--            android:id="@+id/diaperGraphsLayout"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"/>-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_margin="16dp"-->
+        <!--            android:padding="16dp"-->
+        <!--            android:id="@+id/diaperGraphsLayout"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="vertical"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/diaperBottomNavBar"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"/>-->
         <!--        </RelativeLayout>-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:useCompatPadding="true"
             android:backgroundTint="@color/colorPrimary"
             android:clickable="true"
             android:src="@drawable/ic_add"
             app:layout_constraintBottom_toTopOf="@+id/diaperBottomNavBar"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:useCompatPadding="true" />
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -144,10 +157,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
-            app:menu="@menu/bottom_navigation_main"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_navigation_main" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
