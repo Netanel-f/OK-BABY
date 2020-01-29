@@ -33,10 +33,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import de.hdodenhof.circleimageview.CircleImageView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
@@ -50,19 +54,36 @@ public class HomeFragment extends FragmentActivity {
     private UserViewModel userViewModel;
     private String babyID, userID;
     private Baby baby;
+    boolean isNewUser;
 
     private ImageView babyImgView;
+
+    ArrayList<String> otherBabiesIds;
+    static List<Baby> userBabies;
+    private BabyRecyclerUtils.BabyAdapter otherBabiesAdapter = new BabyRecyclerUtils.BabyAdapter();
+    private ArrayList<Baby> otherBabiesList;
+    private RecyclerView babiesRecyclerView;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_home);
 
+        // set up views
         babyImgView = findViewById(R.id.babyImage);
+        babiesRecyclerView = findViewById(R.id.babiesRecycler);
 
-        userID = getIntent().getStringExtra(USER_ID_TAG);
-        Boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
-        babyID = getIntent().getStringExtra(Constants.BABY_ID);
+        extractIntentData();
+        setUpRecycler();
+//        boolean isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
+//        userID = getIntent().getStringExtra(USER_ID_TAG);
+//        babyID = getIntent().getStringExtra(Constants.BABY_ID);
+//        otherBabiesIds = getIntent().getStringArrayListExtra(Constants.OTHER_BABIES_TAG);
+
+//        babiesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+//        babiesRecyclerView.setAdapter(otherBabiesAdapter);
+
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class); //todo fix deprecated
 //        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
@@ -80,9 +101,45 @@ public class HomeFragment extends FragmentActivity {
             });
         }
 
+        if (!otherBabiesIds.isEmpty()) {
+            setUpOtherUserBabies();
+        } else {
+            userBabies = null;
+        }
+
         setUpMenu(savedInstanceState);
         setupEditButton();
 //        setUpOtherBabies();
+    }
+
+    private void extractIntentData() {
+        isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
+        userID = getIntent().getStringExtra(USER_ID_TAG);
+        babyID = getIntent().getStringExtra(Constants.BABY_ID);
+        otherBabiesIds = getIntent().getStringArrayListExtra(Constants.OTHER_BABIES_TAG);
+
+    }
+
+    private void setUpRecycler() {
+        babiesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        babiesRecyclerView.setAdapter(otherBabiesAdapter);
+    }
+
+    private void setUpOtherUserBabies() {
+        userBabies = new ArrayList<>();
+        for (String id : otherBabiesIds) {
+            userViewModel.getBaby(id).observe(this, new Observer<Baby>() {
+                @Override
+                public void onChanged(Baby babyChanged) {
+                    userBabies.add(babyChanged);
+
+                    if (userBabies.size() == otherBabiesIds.size()) {
+                        otherBabiesList = new ArrayList<>(userBabies);
+                        otherBabiesAdapter.submitList(otherBabiesList);
+                    }
+                }
+            });
+        }
     }
 
     private void setUpMenu(@Nullable Bundle savedInstanceState) {
