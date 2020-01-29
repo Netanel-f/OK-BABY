@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
+public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
     private static final int NUM_OF_COLS_IN_REPORT = 6;
     private final LayoutInflater mLayoutInflater;
@@ -52,11 +52,10 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
 
     @Override
     public int getColumnCount() {
-        if (mTableDataSource.isEmpty() || mTableDataSource.size()<=1){
+        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
             return NUM_OF_COLS_IN_REPORT;
         } else {
             // determine col width dynamically
-//            return NUM_OF_COLS_IN_REPORT;
             return Math.min(NUM_OF_COLS_IN_REPORT, mTableDataSource.get(0).getNumOfDisplayedFields());
         }
     }
@@ -105,7 +104,7 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
     public void onBindHeaderColumnViewHolder(@NonNull ViewHolderImpl viewHolder, int column) {
         TestHeaderColumnViewHolder vh = (TestHeaderColumnViewHolder) viewHolder;
         vh.vLine.setBackgroundColor(Color.WHITE);
-        if (column < NUM_OF_COLS_IN_REPORT){
+        if (column < NUM_OF_COLS_IN_REPORT) {
             ReportEntry titleEntry = mTableDataSource.get(0);
             vh.tvText.setText(titleEntry.getDataByField(column));
 
@@ -134,7 +133,7 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
 
     @Override
     public int getColumnWidth(int column) {
-        if (mTableDataSource.isEmpty() || mTableDataSource.size()<=1){
+        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
             return mColumnWidth;
         } else {
             // determine col width dynamically
@@ -158,12 +157,11 @@ public class ReportTableAdapter  extends LinkedAdaptiveTableAdapter<ViewHolderIm
     }
 
 
-    private int calculateColWidth(int numOfCols){
+    private int calculateColWidth(int numOfCols) {
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int padding = 30;
-        return (width-30) / numOfCols;
+        int padding = 80;
+        return (int) Math.floor((width - padding) / numOfCols);
     }
-
 
 
     //------------------------------------- view holders ------------------------------------------
