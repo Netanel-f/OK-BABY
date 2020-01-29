@@ -30,6 +30,7 @@ import com.ux.ok_baby.model.User;
 import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ux.ok_baby.utils.Constants;
 
@@ -54,6 +55,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private UserViewModel viewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +79,14 @@ public class SignInActivity extends AppCompatActivity {
         setUpUI();
     }
 
+    /**
+     * Set up UI functionality
+     */
     private void setUpUI(){
         setUpSignInButton();
         setUpSignUpButton();
     }
+
 
     private void checkIfLoggedIn(FirebaseUser authCurrentUser){
         if (authCurrentUser != null){
@@ -248,40 +254,106 @@ public class SignInActivity extends AppCompatActivity {
         final LifecycleOwner lifecycleOwner = this;
         viewModel.getUser(uid).observe(this, new Observer<User>() {
             @Override
-            public void onChanged(User user) {
+            public void onChanged(final User user) {
                 // got user
                 if (user != null) {
                     Log.w(TAG, "onChanged: observed user "+user.getUid());
-                    if (user.getBabies() == null || user.getBabies().isEmpty()) {
-                        // baby list is empty -> treat like new user
-                        Log.w(TAG, "user has no babies");
-                        navigateToNextActivity(uid, true);
+                    final List<DocumentReference> userBabies = user.getBabies();
 
-                    } else if (user.getBabies().get(0) != null) {
-                        final DocumentReference babyRef = user.getBabies().get(0);
-                        viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
-                            @Override
-                            public void onChanged(Baby baby) {
-                                if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
-                                    navigateToNextActivity(uid, true);
-
-                                } else {
-                                    navigateToNextActivity(uid, babyRef, false);
-                                }
-                            }
-                        });
-
-                    } else {
-                        Log.d(TAG, "user has babies");
-                        navigateToNextActivity(uid, user.getBabies().get(0), false);
-                    }
-                }
-                else {
+                    getUserBabiesFromDatabase(uid, user, userBabies, lifecycleOwner);
+//                    if (userBabies == null || userBabies.isEmpty()) {
+//                        // baby list is empty -> treat like new user
+//                        Log.w(TAG, "user has no babies");
+//                        navigateToNextActivity(uid, true);
+//
+//                    } else if (userBabies.get(0) != null) {
+//                        final DocumentReference babyRef = user.getBabies().get(0);
+//                        viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
+//                            @Override
+//                            public void onChanged(Baby baby) {
+//                                if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
+//                                    navigateToNextActivity(uid, true);
+//
+//                                } else {
+//                                    // get other user babies
+//                                    userBabies.remove(0);
+//                                    ArrayList<String> otherUserBabies;
+//                                    if (userBabies.isEmpty()) {
+//                                        otherUserBabies = null;
+//                                    } else {
+//                                        otherUserBabies = new ArrayList<>();
+//                                        for (DocumentReference documentReference : userBabies) {
+//                                            otherUserBabies.add(documentReference.getId());
+//                                        }
+//                                    }
+//
+//                                    navigateToNextActivity(uid, babyRef, otherUserBabies, false);
+//                                }
+//                            }
+//                        });
+//
+//                    } else {
+//                        Log.d(TAG, "user has babies");
+//                        navigateToNextActivity(uid, user.getBabies().get(0), null, false);
+//                    }
+                } else {
                     Log.w(TAG, "User doesn't exist in database. UID: " + uid + " email: " +email);
                     addNewUser(uid, email);
                 }
             }
         });
+    }
+
+    private void getUserBabiesFromDatabase(final String uid, User user, final List<DocumentReference> userBabies, final LifecycleOwner lifecycleOwner) {
+        if (userBabies == null || userBabies.isEmpty()) {
+            // baby list is empty -> treat like new user
+            Log.w(TAG, "user has no babies");
+            navigateToNextActivity(uid, true);
+
+        } else if (userBabies.get(0) != null) {
+            final DocumentReference babyRef = user.getBabies().get(0);
+            viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
+                @Override
+                public void onChanged(Baby baby) {
+                    if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
+                        navigateToNextActivity(uid, true);
+
+                    } else {
+                        // get other user babies
+                        userBabies.remove(0);
+                        ArrayList<String> otherUserBabies = getUserBabiesIds(userBabies);
+//                        ArrayList<String> otherUserBabies;
+//                        if (userBabies.isEmpty()) {
+//                            otherUserBabies = null;
+//                        } else {
+//                            otherUserBabies = new ArrayList<>();
+//                            for (DocumentReference documentReference : userBabies) {
+//                                otherUserBabies.add(documentReference.getId());
+//                            }
+//                        }
+
+                        navigateToNextActivity(uid, babyRef, otherUserBabies, false);
+                    }
+                }
+            });
+
+        } else {
+            Log.d(TAG, "user has babies");
+            navigateToNextActivity(uid, user.getBabies().get(0), null, false);
+        }
+    }
+
+    ArrayList<String> getUserBabiesIds(final List<DocumentReference> userBabies) {
+        ArrayList<String> otherUserBabies;
+        if (userBabies.isEmpty()) {
+            otherUserBabies = null;
+        } else {
+            otherUserBabies = new ArrayList<>();
+            for (DocumentReference documentReference : userBabies) {
+                otherUserBabies.add(documentReference.getId());
+            }
+        }
+        return otherUserBabies;
     }
 
     private void addNewUser(final String uid, String email) {
@@ -302,12 +374,13 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(homeIntent);
     }
 
-    private void navigateToNextActivity(String uid, DocumentReference babyRef, Boolean isNewUser) {
+    private void navigateToNextActivity(String uid, DocumentReference babyRef, ArrayList<String> userOtherBabies, Boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
         homeIntent.putExtra(Constants.USER_ID_TAG, uid);
         homeIntent.putExtra(Constants.IS_NEW_USER_TAG, isNewUser);
         homeIntent.putExtra(Constants.BABY_ID, babyRef.getId());
+        homeIntent.putExtra(Constants.OTHER_BABIES_TAG, userOtherBabies);
         startActivity(homeIntent);
     }
 
