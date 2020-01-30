@@ -42,6 +42,10 @@ public class UserViewModel extends AndroidViewModel {
         dbRepo.updateBaby(baby);
     }
 
+    public void updateBabyInCareTaker(String careTakerId, String bid) {
+        dbRepo.addBabyToUser(careTakerId, bid);
+    }
+
     /**
      * Get baby from database.
      *
