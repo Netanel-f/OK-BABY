@@ -183,16 +183,13 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
             } else {
                 if (data.getExtras() != null) {
-                    mainBaby = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
-                    tempMainBaby = getIntent().getExtras().getParcelable(OLD_MAIN_BABY_OBJECT_TAG);
-
-//                mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
-//                tempMainBaby = data.getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
-                userBabies.add(tempMainBaby);
-                tempMainBaby = null;
-                userViewModel.updateBaby(mainBaby);
-                setUpMainBabyDetails();
-                otherBabiesAdapter.submitList(userBabies);
+                    mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
+                    tempMainBaby = data.getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
+                    userBabies.add(tempMainBaby);
+                    tempMainBaby = null;
+                    userViewModel.updateBaby(mainBaby);
+                    setUpMainBabyDetails();
+                    otherBabiesAdapter.submitList(userBabies);
                 }
             }
         }
@@ -262,8 +259,8 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         mainBaby = new Baby(babyID);
         Intent intent = new Intent(this, BabyProfileActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("BABY_OBJECT_TAG", mainBaby);
-        bundle.putParcelable("OLD_MAIN_BABY_OBJECT_TAG", tempMainBaby);
+        bundle.putParcelable(BABY_OBJECT_TAG, mainBaby);
+        bundle.putParcelable(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
         intent.putExtras(bundle);
 //        intent.putExtra(BABY_OBJECT_TAG, mainBaby);
 //        intent.putExtra(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
