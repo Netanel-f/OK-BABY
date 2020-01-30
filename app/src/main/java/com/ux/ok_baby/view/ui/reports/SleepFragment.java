@@ -1,35 +1,19 @@
 package com.ux.ok_baby.view.ui.reports;
 
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.ReportEntry;
 import com.ux.ok_baby.model.SleepEntry;
@@ -42,14 +26,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
-import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.Chart;
 import lecho.lib.hellocharts.view.LineChartView;
 
 
@@ -63,7 +43,6 @@ public class SleepFragment extends Fragment {
     private ReportTableAdapter mTableAdapter;
     private LinearLayout mGraphsLayout;
     //    private HorizontalScrollView mGraphsLayout;
-    private Button graphsBtn, tableBtn;
     private String babyID;
     private View view;
 
@@ -80,13 +59,12 @@ public class SleepFragment extends Fragment {
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
         // bind
-        mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.tableReportLayout);
+        mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.sleepTableReportLayout);
         mGraphsLayout = (LinearLayout) view.findViewById(R.id.sleepGraphsLayout);
 
-        setUpReportTable(babyID);
-//        setUpGraphsBtn();
         onAddClickListener(view.findViewById(R.id.addReport));
-//        loadFromFirebase();
+        setUpReportTable(babyID);
+
         return view;
     }
 
@@ -130,41 +108,12 @@ public class SleepFragment extends Fragment {
         data.setLines(lines);
         chart.setLineChartData(data);
 
-        Viewport v = new Viewport(chart.getMaximumViewport());
-        v.left = 0;
-        v.right = v.right - 0.5f;
-        chart.setCurrentViewportWithAnimation(v);
-        chart.setScrollEnabled(true);
-        chart.setZoomEnabled(false);
-    }
-
-    private void loadFromFirebase() {
-        CollectionReference sleepCollection = FirebaseFirestore.getInstance().collection("babies")
-                .document(babyID).collection("sleep_reports");
-        sleepCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "listen:error", e);
-                    return;
-                }
-
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
-                            // TODO: 1/12/2020 add row to table
-                            break;
-                        case MODIFIED:
-                            // TODO: 1/12/2020 update row in table
-                            break;
-                        case REMOVED:
-                            // TODO: 1/12/2020 remove row from table
-                            break;
-                    }
-                }
-            }
-        });
+//        Viewport v = new Viewport(chart.getMaximumViewport());
+//        v.left = 0;
+//        v.right = v.right - 0.5f;
+//        chart.setCurrentViewportWithAnimation(v);
+        chart.setScrollEnabled(false);
+        chart.setZoomEnabled(true);
     }
 
     private void setUpReportTable(String babyID) {
@@ -180,9 +129,10 @@ public class SleepFragment extends Fragment {
                             SleepEntry s2 = (SleepEntry) o2;
 
                             // handle title row
-                            if (s1.getDate().equals("date")) {
+                            if (s1.getDate().equals("date")){
                                 return -1;
-                            } else if (s2.getDate().equals("date")) {
+                            }
+                            else if (s2.getDate().equals("date")){
                                 return 1;
                             }
 
@@ -198,32 +148,9 @@ public class SleepFragment extends Fragment {
 
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
                     mTableLayout.setAdapter(mTableAdapter);
-                    mTableLayout.setHeaderFixed(true);
-                    mTableLayout.setSolidRowHeader(false);
                     mTableAdapter.notifyDataSetChanged();
                     setUpGraphs(reportEntries);
                 }
-            }
-        });
-    }
-
-    private void setUpGraphsBtn() {
-        graphsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                graphsBtn.setVisibility(View.GONE);
-                tableBtn.setVisibility(View.VISIBLE);
-                mTableLayout.setVisibility(View.GONE);
-                mGraphsLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        tableBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                graphsBtn.setVisibility(View.VISIBLE);
-                tableBtn.setVisibility(View.GONE);
-                mTableLayout.setVisibility(View.VISIBLE);
-                mGraphsLayout.setVisibility(View.GONE);
             }
         });
     }
@@ -236,5 +163,6 @@ public class SleepFragment extends Fragment {
                 popUpClass.showPopupWindow(view);
             }
         });
+
     }
 }

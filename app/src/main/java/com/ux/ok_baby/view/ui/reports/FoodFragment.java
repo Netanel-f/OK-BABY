@@ -3,21 +3,17 @@ package com.ux.ok_baby.view.ui.reports;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.CollectionReference;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.FoodEntry;
 import com.ux.ok_baby.model.ReportEntry;
@@ -25,8 +21,15 @@ import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 import com.ux.ok_baby.view.popups.PopUpFood;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
+
+import static java.lang.Math.round;
 
 
 /**
@@ -37,8 +40,8 @@ public class FoodFragment extends Fragment {
     private AdaptiveTableLayout mTableLayout;
     private LinearLayout mGraphsLayout;
     private ReportTableAdapter mTableAdapter;
-    private Button graphsBtn, tableBtn;
     private String babyID;
+    private View view;
 //    date, startTime, endTime, type, side, amount
 
     public FoodFragment(String babyID) {
@@ -49,7 +52,7 @@ public class FoodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_food, container, false);
+        view = inflater.inflate(R.layout.fragment_food, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
         // bind
@@ -88,13 +91,11 @@ public class FoodFragment extends Fragment {
                     // todo: temp
                     ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
                     if (!titleEntry.getDataByField(0).equals("date")) {
-                        reportEntries.add(0, new FoodEntry("date", "startTime", "endTime", "type", "side", "amount"));
+                        reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
                     }
 
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
                     mTableLayout.setAdapter(mTableAdapter);
-                    mTableLayout.setHeaderFixed(true);
-                    mTableLayout.setSolidRowHeader(false);
                     mTableAdapter.notifyDataSetChanged();
                     setUpGraphs(reportEntries);
                 }
@@ -104,27 +105,52 @@ public class FoodFragment extends Fragment {
 
 
     private void setUpGraphs(List<ReportEntry> reportEntries) {
+        PieChartView chart = new PieChartView(view.getContext());
+        mGraphsLayout.addView(chart);
+        PieChartData data;
+
+        List<SliceValue> values = generateDataForGraph(reportEntries);
+        data = new PieChartData(values);
+        data.setHasLabels(true);
+        data.setHasCenterCircle(true);
+        data.setCenterCircleScale(0.40f);
+        chart.setPieChartData(data);
 
     }
 
-//    private void setUpGraphsBtn() {
-//        graphsBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                graphsBtn.setVisibility(View.GONE);
-//                tableBtn.setVisibility(View.VISIBLE);
-//                mTableLayout.setVisibility(View.GONE);
-//            }
-//        });
-//        tableBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                graphsBtn.setVisibility(View.VISIBLE);
-//                tableBtn.setVisibility(View.GONE);
-//                mTableLayout.setVisibility(View.VISIBLE);
-//            }
-//        });
-//    }
+    private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
+        int numValues = 2; // bottle / breastfeeding
+        int BOTTLE = 0;
+        int BREASTFEEDING = 1;
+        List<SliceValue> values = new ArrayList<SliceValue>();
+
+        int[] numOfEntries = new int[numValues];
+        int sum;
+        for (ReportEntry entry : reportEntries) {
+            FoodEntry foodEntry = (FoodEntry) entry;
+            if (foodEntry.getType().equals("Bottle")) {
+                numOfEntries[BOTTLE]++;
+            } else if (foodEntry.getType().equals("Breastfeeding")) {
+                numOfEntries[BREASTFEEDING]++;
+            }
+        }
+        sum = numOfEntries[0] + numOfEntries[1];
+
+        int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
+                ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
+        String[] labels = {"Bottle\n", "Breastfeeding\n"};
+
+        for (int i = 0; i < numValues; ++i) {
+
+            SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
+            sliceValue.setLabel(labels[i] +
+                    round((sliceValue.getValue() / sum) * 100) + "%");
+            values.add(sliceValue);
+        }
+
+        return values;
+
+    }
 
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
