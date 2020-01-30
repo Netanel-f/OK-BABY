@@ -189,6 +189,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                     tempMainBaby = null;
                     userViewModel.updateBaby(mainBaby);
                     setUpMainBabyDetails();
+                    userViewModel.updateBabyInCareTaker(userID, mainBaby.getBid());
                     otherBabiesAdapter.submitList(userBabies);
                 }
             }
