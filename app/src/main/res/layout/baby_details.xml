@@ -18,8 +18,7 @@
         android:src="@drawable/ic_add_baby"
         android:padding="5dp"
         android:background="@drawable/baby_profile_image_border"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toTopOf="@id/babiesRecycler"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/babiesRecycler"
         >
 
@@ -30,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
