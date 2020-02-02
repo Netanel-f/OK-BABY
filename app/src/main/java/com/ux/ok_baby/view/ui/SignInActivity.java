@@ -30,6 +30,7 @@ import com.ux.ok_baby.model.User;
 import com.ux.ok_baby.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ux.ok_baby.utils.Constants;
 
@@ -54,6 +55,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private UserViewModel viewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +79,14 @@ public class SignInActivity extends AppCompatActivity {
         setUpUI();
     }
 
+    /**
+     * Set up UI functionality
+     */
     private void setUpUI(){
         setUpSignInButton();
         setUpSignUpButton();
     }
+
 
     private void checkIfLoggedIn(FirebaseUser authCurrentUser){
         if (authCurrentUser != null){
@@ -193,7 +199,7 @@ public class SignInActivity extends AppCompatActivity {
      * @param password
      */
     private void signInToFirebase(String email, String password) {
-            Log.w(TAG, "signInToFirebase: Attempthing to authenticate user");
+            Log.w(TAG, "signInToFirebase: Attempting to authenticate user");
             authenticateUser(email, password);
     }
 
@@ -248,41 +254,48 @@ public class SignInActivity extends AppCompatActivity {
         final LifecycleOwner lifecycleOwner = this;
         viewModel.getUser(uid).observe(this, new Observer<User>() {
             @Override
-            public void onChanged(User user) {
+            public void onChanged(final User user) {
                 // got user
                 if (user != null) {
                     Log.w(TAG, "onChanged: observed user "+user.getUid());
-                    if (user.getBabies() == null || user.getBabies().isEmpty()) {
-                        // baby list is empty -> treat like new user
-                        Log.w(TAG, "user has no babies");
-                        navigateToNextActivity(uid, true);
+                    final List<DocumentReference> userBabies = user.getBabies();
+                    getUserBabiesFromDatabase(uid, user, userBabies, lifecycleOwner);
 
-                    } else if (user.getBabies().get(0) != null) {
-                        final DocumentReference babyRef = user.getBabies().get(0);
-                        viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
-                            @Override
-                            public void onChanged(Baby baby) {
-                                if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
-                                    navigateToNextActivity(uid, true);
-
-                                } else {
-                                    navigateToNextActivity(uid, babyRef, false);
-                                }
-                            }
-                        });
-
-                    } else {
-                        Log.d(TAG, "user has babies");
-                        navigateToNextActivity(uid, user.getBabies().get(0), false);
-                    }
-                }
-                else {
+                } else {
                     Log.w(TAG, "User doesn't exist in database. UID: " + uid + " email: " +email);
                     addNewUser(uid, email);
                 }
             }
         });
     }
+
+    private void getUserBabiesFromDatabase(final String uid, User user, final List<DocumentReference> userBabies, final LifecycleOwner lifecycleOwner) {
+        if (userBabies == null || userBabies.isEmpty()) {
+            // baby list is empty -> treat like new user
+            Log.w(TAG, "user has no babies");
+            navigateToNextActivity(uid, true);
+
+        } else if (userBabies.get(0) != null) {
+            final DocumentReference babyRef = user.getBabies().get(0);
+            viewModel.getBaby(user.getBabies().get(0).getId()).observe(lifecycleOwner, new Observer<Baby>() {
+                @Override
+                public void onChanged(Baby baby) {
+                    if (baby.getBabyName() == null || baby.getBabyDOB() == null) {
+                        navigateToNextActivity(uid, true);
+
+                    } else {
+                        // get other user babies
+                        navigateToNextActivity(uid, babyRef, false);
+                    }
+                }
+            });
+
+        } else {
+            Log.d(TAG, "user has babies");
+            navigateToNextActivity(uid, user.getBabies().get(0), false);
+        }
+    }
+
 
     private void addNewUser(final String uid, String email) {
         addUserToDatabase(uid, email);
@@ -294,7 +307,7 @@ public class SignInActivity extends AppCompatActivity {
      * @param uid - user id
      * @param isNewUser  - true if the user is new or has no babies.
      */
-    private void navigateToNextActivity(String uid, Boolean isNewUser) {
+    private void navigateToNextActivity(String uid, boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
         homeIntent.putExtra(Constants.USER_ID_TAG, uid);
@@ -302,7 +315,7 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(homeIntent);
     }
 
-    private void navigateToNextActivity(String uid, DocumentReference babyRef, Boolean isNewUser) {
+    private void navigateToNextActivity(String uid, DocumentReference babyRef, boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
         homeIntent.putExtra(Constants.USER_ID_TAG, uid);

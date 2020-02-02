@@ -37,6 +37,7 @@ import java.util.List;
 
 import static com.ux.ok_baby.utils.Constants.BABY_ID;
 import static com.ux.ok_baby.utils.Constants.BABY_OBJECT_TAG;
+import static com.ux.ok_baby.utils.Constants.OLD_MAIN_BABY_OBJECT_TAG;
 
 public class BabyProfileActivity extends AppCompatActivity {
 
@@ -54,6 +55,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     private Context context;
 
     private Baby babyProfile;
+    private Baby tempMainBaby;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,12 @@ public class BabyProfileActivity extends AppCompatActivity {
         // get Baby object for editing
         babyProfile = null;
         babyProfile = getIntent().getParcelableExtra(BABY_OBJECT_TAG);
+
+        if (babyProfile == null) {
+            babyProfile = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
+        }
+
+        tempMainBaby = getIntent().getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
 
         // setup views + image.
         setupUpdateButton();
@@ -138,6 +146,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
                     Intent homeIntent = new Intent(context, HomeFragment.class);
                     homeIntent.putExtra(BABY_OBJECT_TAG, babyProfile);
+                    homeIntent.putExtra(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
                     setResult(RESULT_OK, homeIntent);
 
                     Log.d(ACTIVITY_TAG, "updating profile returning to home fragment baby id: " + babyProfile.getBid() + " babyName: " + babyName + " babyDOB: " + babyDob);
