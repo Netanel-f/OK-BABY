@@ -101,13 +101,19 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     }
 
 
+    /**
+     * this method will update other babies layout
+     * @param babies other babies to display on screen
+     */
     private void updateBabiesDetails(List<Baby> babies) {
         setUpMainBabyDetails();
         userBabies = babies;
         otherBabiesAdapter.submitList(userBabies);
     }
 
-
+    /**
+     * This method will extract default Intent Data
+     */
     private void extractIntentData() {
         isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
         userID = getIntent().getStringExtra(USER_ID_TAG);
@@ -115,6 +121,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
     }
 
+    /**
+     * This method set up the recycler utilities
+     */
     private void setUpRecycler() {
         babiesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         babiesRecyclerView.setAdapter(otherBabiesAdapter);
@@ -132,6 +141,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         }
     }
 
+    /**
+     * This method set up the edit button listner
+     */
     private void setupEditButton() {
         babyImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +153,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         });
     }
 
+    /**
+     * This method set up the add baby button listner
+     */
     private void setUpAddBabyButton() {
         addButtonImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,9 +181,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         }
 
         // returning from edit an existing baby profile
-        if (requestCode == START_BABY_PROF_EDIT_ACT && resultCode == RESULT_OK) {
+        if (requestCode == START_EDIT_BABY_PROF_ACT && resultCode == RESULT_OK) {
             if (data == null) {
-                Log.d(TAG, "onActivityResult: START_BABY_PROF_EDIT_ACT and data == null");
+                Log.d(TAG, "onActivityResult: START_EDIT_BABY_PROF_ACT and data == null");
 
             } else {
                 mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
@@ -199,6 +214,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         }
     }
 
+    /**
+     * This method set up the display of the current baby
+     */
     private void setUpMainBabyDetails() {
         mainBabyName.setText(mainBaby.getBabyName());
         mainBabyAge.setText(getAgeString(mainBaby.getBabyDOB()));
@@ -211,6 +229,11 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
     }
 
+    /**
+     * This method will return the textual age for a given date of birth
+     * @param dob date of birth
+     * @return age in textual view
+     */
     public String getAgeString(String dob) {
         DateTimeFormatter format = DateTimeFormat.forPattern(DATE_PATTERN);
         DateTime date = format.parseDateTime(dob);
@@ -227,11 +250,15 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     }
 
 
+    // TODO is needed?
     private int valToDp(int value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
     }
 
 
+    /**
+     * This method will be called when the user would like to create a new baby profile
+     */
     private void addNewBaby() {
         babyID = babiesCollection.document().getId();
         mainBaby = new Baby(babyID);
@@ -242,14 +269,20 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         startActivityForResult(intent, START_BABY_PROF_ACT);
     }
 
+    /**
+     * This method will be called when the user want to edit the current baby profile
+     */
     private void editCurrentBaby() {
         Intent intent = new Intent(this, BabyProfileActivity.class);
         intent.putExtra(BABY_OBJECT_TAG, mainBaby);
 
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
-        startActivityForResult(intent, START_BABY_PROF_EDIT_ACT);
+        startActivityForResult(intent, START_EDIT_BABY_PROF_ACT);
     }
 
+    /**
+     * This method handle the creation of a new baby profile
+     */
     private void createNewBaby() {
         babyID = babiesCollection.document().getId();
         tempMainBaby = mainBaby;
@@ -262,6 +295,8 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_ADD_BABY_PROF_ACT);
     }
+
+
     @Override
     public void onBabyClick(Baby baby) {
         ArrayList<Baby> babiesCopy = new ArrayList<>(userBabies);
