@@ -1,12 +1,12 @@
 package com.ux.ok_baby.view.ui.reports;
 
-
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +42,6 @@ public class SleepFragment extends Fragment {
     private AdaptiveTableLayout mTableLayout;
     private ReportTableAdapter mTableAdapter;
     private LinearLayout mGraphsLayout;
-    //    private HorizontalScrollView mGraphsLayout;
     private String babyID;
     private View view;
 
@@ -54,18 +53,24 @@ public class SleepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        setUpView(inflater, container);
+        onAddClickListener(view.findViewById(R.id.addReport));
+        setUpReportTable();
+        return view;
+    }
+
+    private void setUpView(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.fragment_sleep, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
-        // bind
-        mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.sleepTableReportLayout);
-        mGraphsLayout = (LinearLayout) view.findViewById(R.id.sleepGraphsLayout);
+        View tableView = inflater.inflate(R.layout.report_table_view, container, false);
+        View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
 
-        onAddClickListener(view.findViewById(R.id.addReport));
-        setUpReportTable(babyID);
+        mTableLayout = tableView.findViewById(R.id.tableReportLayout);
+        mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
 
-        return view;
+        ViewPager viewPager = view.findViewById(R.id.viewPager);
+        viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
     }
 
     private void setUpGraphs(List<ReportEntry> entries) {
@@ -116,7 +121,7 @@ public class SleepFragment extends Fragment {
         chart.setZoomEnabled(true);
     }
 
-    private void setUpReportTable(String babyID) {
+    private void setUpReportTable() {
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
@@ -129,10 +134,9 @@ public class SleepFragment extends Fragment {
                             SleepEntry s2 = (SleepEntry) o2;
 
                             // handle title row
-                            if (s1.getDate().equals("date")){
+                            if (s1.getDate().equals("date")) {
                                 return -1;
-                            }
-                            else if (s2.getDate().equals("date")){
+                            } else if (s2.getDate().equals("date")) {
                                 return 1;
                             }
 
@@ -163,6 +167,5 @@ public class SleepFragment extends Fragment {
                 popUpClass.showPopupWindow(view);
             }
         });
-
     }
 }

@@ -80,34 +80,33 @@ public class ReportsHolderFragment extends Fragment {
     private void startNewFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container1, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 }
 
-class ReportsPagerAdapter extends FragmentStatePagerAdapter {
-    private final int NUM_OF_TABS = 3;
-    private String babyID;
-
-    public ReportsPagerAdapter(FragmentManager fm, String babyID) {
-        super(fm);
-        this.babyID = babyID;
-    }
-
-    @Override
-    public Fragment getItem(int i) {
-        switch (i) {
-            case SLEEP_TAB:
-                return new SleepFragment(babyID);
-            case FOOD_TAB:
-                return new FoodFragment(babyID);
-            default:
-                return new DiaperFragment(babyID);
-        }
-    }
-
-    @Override
-    public int getCount() {
-        return NUM_OF_TABS;
-    }
-}
+//class ReportsPagerAdapter extends FragmentStatePagerAdapter {
+//    private final int NUM_OF_TABS = 3;
+//    private String babyID;
+//
+//    public ReportsPagerAdapter(FragmentManager fm, String babyID) {
+//        super(fm);
+//        this.babyID = babyID;
+//    }
+//
+//    @Override
+//    public Fragment getItem(int i) {
+//        switch (i) {
+//            case SLEEP_TAB:
+//                return new SleepFragment(babyID);
+//            case FOOD_TAB:
+//                return new FoodFragment(babyID);
+//            default:
+//                return new DiaperFragment(babyID);
+//        }
+//    }
+//
+//    @Override
+//    public int getCount() {
+//        return NUM_OF_TABS;
+//    }
+//}

@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,6 @@ public class FoodFragment extends Fragment {
     private ReportTableAdapter mTableAdapter;
     private String babyID;
     private View view;
-//    date, startTime, endTime, type, side, amount
 
     public FoodFragment(String babyID) {
         this.babyID = babyID;
@@ -51,21 +51,27 @@ public class FoodFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_food, container, false);
-        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
-
-        // bind
-        mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.foodTableReportLayout);
-        mGraphsLayout = (LinearLayout) view.findViewById(R.id.foodGraphsLayout);
-
-        setUpReportTable(babyID);
-//        setUpGraphsBtn();
+        setUpView(inflater, container);
+        setUpReportTable();
         onAddClickListener(view.findViewById(R.id.addReport));
         return view;
     }
 
-    private void setUpReportTable(String babyID) {
+    private void setUpView(LayoutInflater inflater, ViewGroup container) {
+        view = inflater.inflate(R.layout.fragment_food, container, false);
+        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
+
+        View tableView = inflater.inflate(R.layout.report_table_view, container, false);
+        View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
+
+        mTableLayout = tableView.findViewById(R.id.tableReportLayout);
+        mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
+
+        ViewPager viewPager = view.findViewById(R.id.viewPager);
+        viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
+    }
+
+    private void setUpReportTable() {
         entriesViewModel.getFoodEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {

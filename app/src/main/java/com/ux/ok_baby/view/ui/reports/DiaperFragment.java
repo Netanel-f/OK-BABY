@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ import static com.ux.ok_baby.utils.Constants.*;
  * Contains the diaper report.
  */
 public class DiaperFragment extends Fragment {
+    private final String TAG = "DiaperFragment";
     private EntriesViewModel entriesViewModel;
     private AdaptiveTableLayout mTableLayout;
     private LinearLayout mGraphsLayout;
@@ -47,32 +49,35 @@ public class DiaperFragment extends Fragment {
     private String babyID;
     private View view;
 
+
     public DiaperFragment(String babyID) {
         this.babyID = babyID;
     }
 
-    private final String TAG = "DiaperFragment";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_diaper, container, false);
-        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
-
-        // bind
-        mTableLayout = (AdaptiveTableLayout) view.findViewById(R.id.diaperTableReportLayout);
-        mGraphsLayout = (LinearLayout) view.findViewById(R.id.diaperGraphsLayout);
-
-//        setUpGraphsBtn();
-        setUpReportTable(babyID);
-//        loadFromFirebase();
+        setUpView(inflater, container);
+        setUpReportTable();
         onAddClickListener(view.findViewById(R.id.addReport));
-
         return view;
     }
 
-    private void setUpReportTable(String babyID) {
+    private void setUpView(LayoutInflater inflater, ViewGroup container) {
+        view = inflater.inflate(R.layout.fragment_diaper, container, false);
+        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
+
+        View tableView = inflater.inflate(R.layout.report_table_view, container, false);
+        View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
+
+        mTableLayout = tableView.findViewById(R.id.tableReportLayout);
+        mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
+
+        ViewPager viewPager = view.findViewById(R.id.viewPager);
+        viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
+    }
+
+    private void setUpReportTable() {
         entriesViewModel.getDiaperEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
@@ -140,7 +145,7 @@ public class DiaperFragment extends Fragment {
 
         data.setStacked(false);
         chart.setColumnChartData(data);
-        }
+    }
 
     private List<Column> generateDataForGraph(List<ReportEntry> reportEntries, List<AxisValue> axisValues) {
         List<Column> columns = new ArrayList<Column>();
@@ -186,7 +191,7 @@ public class DiaperFragment extends Fragment {
 
             dates.add(currentDate);
 
-            if (j != i){
+            if (j != i) {
                 i = j;
             } else {
                 i++;
@@ -204,7 +209,7 @@ public class DiaperFragment extends Fragment {
             values = new ArrayList<SubcolumnValue>();
             for (int j = 0; j < typesOfDiaperEntries; ++j) {
                 SubcolumnValue value = new SubcolumnValue(diaperEntries[j].get(k), colors[j]);
-                value.setLabel((Integer) Math.round(value.getValue())+"");
+                value.setLabel((Integer) Math.round(value.getValue()) + "");
                 values.add(value);
             }
 
@@ -217,38 +222,6 @@ public class DiaperFragment extends Fragment {
 
         return columns;
     }
-//
-//        int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
-//                ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
-//
-//        for (int i = 0; i < numValues; ++i) {
-//
-//            SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
-//            values.add(sliceValue);
-//        }
-//
-//        return values;
-//
-//    }
-
-//    private void setUpGraphsBtn() {
-//        graphsBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                graphsBtn.setVisibility(View.GONE);
-//                tableBtn.setVisibility(View.VISIBLE);
-//                mTableLayout.setVisibility(View.GONE);
-//            }
-//        });
-//        tableBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                graphsBtn.setVisibility(View.VISIBLE);
-//                tableBtn.setVisibility(View.GONE);
-//                mTableLayout.setVisibility(View.VISIBLE);
-//            }
-//        });
-//    }
 
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
