@@ -186,32 +186,47 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                 Log.d(TAG, "onActivityResult: START_EDIT_BABY_PROF_ACT and data == null");
 
             } else {
-                mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
-                userViewModel.updateBaby(mainBaby);
-                setUpMainBabyDetails();
+                activityResultEditBabyProfile(data);
             }
         }
 
         if (requestCode == START_ADD_BABY_PROF_ACT && resultCode == RESULT_OK) {
             if (data == null) {
-                Log.d(TAG, "onActivityResult: START_BABY_PROF_ACT and data == null");
+                Log.d(TAG, "onActivityResult: START_ADD_BABY_PROF_ACT and data == null");
 
-            } else {
-                if (data.getExtras() != null) {
-                    mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
-                    tempMainBaby = data.getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
+            } else if (data.getExtras() != null) {
 
-                    ArrayList<Baby> babiesCopy = new ArrayList<>(userBabies);
-                    babiesCopy.add(tempMainBaby);
-                    tempMainBaby = null;
-                    userViewModel.updateBaby(mainBaby);
-                    setUpMainBabyDetails();
-                    userViewModel.updateBabyInCareTaker(userID, mainBaby.getBid());
-                    userBabies = babiesCopy;
-                    otherBabiesAdapter.submitList(userBabies);
-                }
+                    activityResultAddBabyProfile(data);
             }
         }
+    }
+
+    /**
+     * This method is called when this activity return with result of edit baby profile
+     * @param data
+     */
+    void activityResultEditBabyProfile(Intent data) {
+        mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
+        userViewModel.updateBaby(mainBaby);
+        setUpMainBabyDetails();
+    }
+
+    /**
+     * This method is called when this activity return with result of add baby profile
+     * @param data
+     */
+    void activityResultAddBabyProfile(Intent data) {
+        mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
+        tempMainBaby = data.getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
+
+        ArrayList<Baby> babiesCopy = new ArrayList<>(userBabies);
+        babiesCopy.add(tempMainBaby);
+        tempMainBaby = null;
+        userViewModel.updateBaby(mainBaby);
+        setUpMainBabyDetails();
+        userViewModel.updateBabyInCareTaker(userID, mainBaby.getBid());
+        userBabies = babiesCopy;
+        otherBabiesAdapter.submitList(userBabies);
     }
 
     /**
