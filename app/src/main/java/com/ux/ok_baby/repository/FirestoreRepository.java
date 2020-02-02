@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +38,8 @@ public class FirestoreRepository {
     private FirebaseFirestore firestoreDB;
     private MutableLiveData<User> curUser;
     private MutableLiveData<Baby> curBaby;
+    private MutableLiveData<List<Baby>> userBabies;
+
     private MutableLiveData<List<ReportEntry>> sleepEntries;
     private MutableLiveData<List<ReportEntry>> diaperEntries;
     private MutableLiveData<List<ReportEntry>> foodEntries;
@@ -52,6 +55,7 @@ public class FirestoreRepository {
         this.babiesCollection = firestoreDB.collection("babies");
         this.curUser = new MutableLiveData<>();
         this.curBaby = new MutableLiveData<>();
+        this.userBabies =  new MutableLiveData<>();
         this.sleepEntries = new MutableLiveData<>();
         this.diaperEntries = new MutableLiveData<>();
         this.foodEntries = new MutableLiveData<>();
@@ -152,6 +156,42 @@ public class FirestoreRepository {
                     }
                 });
         return curBaby;
+    }
+
+    public LiveData<List<Baby>> getUserBabies(String uid) {
+
+        final List<Baby> listBabies = new ArrayList<>();
+        DocumentReference docRef = firestoreDB.collection("users").document(uid);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<DocumentReference> list = (List<DocumentReference>) document.get("babies");
+                        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+                        for (DocumentReference documentReference : list) {
+                            Task<DocumentSnapshot> documentSnapshotTask = documentReference.get();
+                            tasks.add(documentSnapshotTask);
+                        }
+                        Tasks.whenAllSuccess(tasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                            @Override
+                            public void onSuccess(List<Object> list) {
+                                //Do what you need to do with your list
+                                for (Object object : list) {
+                                    Baby baby = ((DocumentSnapshot) object).toObject(Baby.class);
+                                    listBabies.add(baby);
+                                    Log.d("TAG", "baby id: " + baby.getBid());
+                                }
+                                userBabies.postValue(listBabies);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        return userBabies;
     }
 
     /* USER */
