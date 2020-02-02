@@ -231,13 +231,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
     }
 
-    private void onOtherBabyImageClick() {
-        // TODO: 1/9/2020  switch all the data to be of the clicked baby.
-    }
-
-    private void loadOtherBabies() {
-        // TODO: 1/9/2020  load other babies from firebase.
-    }
 
     private void addNewBaby() {
         babyID = babiesCollection.document().getId();
@@ -266,9 +259,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         bundle.putParcelable(BABY_OBJECT_TAG, mainBaby);
         bundle.putParcelable(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
         intent.putExtras(bundle);
-//        intent.putExtra(BABY_OBJECT_TAG, mainBaby);
-//        intent.putExtra(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
-
         Log.d(TAG, "starting BabyProfileActivity for result with baby id: " + babyID + " uid: " + userID);
         startActivityForResult(intent, START_ADD_BABY_PROF_ACT);
     }
