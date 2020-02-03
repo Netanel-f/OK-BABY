@@ -28,7 +28,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public void updateBabyID(String babyID) {
         this.babyID = babyID;
         if (reportsHolderFragment != null)
-            reportsHolderFragment.setBabyID(babyID);
+            reportsHolderFragment.updateBabyID(babyID);
     }
 
     @Nullable

@@ -10,15 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
 import com.ux.ok_baby.R;
 
 
@@ -82,7 +78,7 @@ public class ReportsHolderFragment extends Fragment {
         transaction.commit();
     }
 
-    public void setBabyID(String babyID) {
+    public void updateBabyID(String babyID) {
         this.babyID = babyID;
         seClickedItem();
     }
