@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -93,8 +96,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                 }
             });
         }
-
-
+      
         setUpMenu(savedInstanceState);
         setupEditButton();
         setUpAddBabyButton();

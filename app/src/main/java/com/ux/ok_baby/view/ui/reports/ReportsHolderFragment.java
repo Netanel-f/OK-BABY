@@ -1,7 +1,9 @@
 package com.ux.ok_baby.view.ui.reports;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,10 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.ux.ok_baby.R;
 
@@ -22,6 +26,7 @@ public class ReportsHolderFragment extends Fragment {
 
     private int reportType = -1;
     private String babyID;
+    private BottomNavigationView bottomNavigationView;
 
     public ReportsHolderFragment(String babyID) {
         this.babyID = babyID;
@@ -39,55 +44,69 @@ public class ReportsHolderFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        final ViewPager viewPager = view.findViewById(R.id.reports);
-        viewPager.setAdapter(new ReportsPagerAdapter(getChildFragmentManager(),babyID));
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
-        setUpTab(tabLayout);
+        setUpNavView(view);
+        seClickedItem();
     }
 
-    private void setUpTab(TabLayout tabLayout) {
-        if (reportType != -1) {
-            tabLayout.getTabAt(reportType).select();
-        }
-    }
-}
-
-class ReportsPagerAdapter extends FragmentStatePagerAdapter {
-    private final int NUM_OF_TABS = 3;
-    private String babyID;
-
-    public ReportsPagerAdapter(FragmentManager fm,String babyID) {
-        super(fm);
-        this.babyID = babyID;
+    private void seClickedItem() {
+        if (reportType != -1)
+            bottomNavigationView.setSelectedItemId(reportType);
     }
 
-    @Override
-    public Fragment getItem(int i) {
-        switch (i) {
-            case SLEEP_TAB:
-                return new SleepFragment(babyID);
-            case FOOD_TAB:
-                return new FoodFragment(babyID);
-            default:
-                return new DiaperFragment(babyID);
-        }
+    private void setUpNavView(@NonNull View view) {
+        bottomNavigationView = view.findViewById(R.id.homeNavBar);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_sleep:
+                                startNewFragment(new SleepFragment(babyID));
+                                return true;
+                            case R.id.action_food:
+                                startNewFragment(new FoodFragment(babyID));
+                                return true;
+                            case R.id.action_diaper:
+                                startNewFragment(new DiaperFragment(babyID));
+                                return true;
+                        }
+                        return false;
+                    }
+                });
     }
 
-    @Override
-    public int getCount() {
-        return NUM_OF_TABS;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case SLEEP_TAB:
-                return SLEEP;
-            case FOOD_TAB:
-                return FOOD;
-            default:
-                return DIAPER;
-        }
+    @SuppressLint("ResourceType")
+    private void startNewFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container1, fragment);
+        transaction.commit();
     }
 }
+
+//class ReportsPagerAdapter extends FragmentStatePagerAdapter {
+//    private final int NUM_OF_TABS = 3;
+//    private String babyID;
+//
+//    public ReportsPagerAdapter(FragmentManager fm, String babyID) {
+//        super(fm);
+//        this.babyID = babyID;
+//    }
+//
+//    @Override
+//    public Fragment getItem(int i) {
+//        switch (i) {
+//            case SLEEP_TAB:
+//                return new SleepFragment(babyID);
+//            case FOOD_TAB:
+//                return new FoodFragment(babyID);
+//            default:
+//                return new DiaperFragment(babyID);
+//        }
+//    }
+//
+//    @Override
+//    public int getCount() {
+//        return NUM_OF_TABS;
+//    }
+//}
