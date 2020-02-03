@@ -144,7 +144,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     }
 
     /**
-     * This method set up the edit button listner
+     * This method set up the edit button listenr
      */
     private void setupEditButton() {
         babyImgView.setOnClickListener(new View.OnClickListener() {
@@ -322,5 +322,8 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         userBabies = babiesCopy;
         mainBaby = baby;
         updateBabiesDetails(userBabies);
+        // Todo update menu fragment
+        babyID = mainBaby.getBid();
+
     }
 }
