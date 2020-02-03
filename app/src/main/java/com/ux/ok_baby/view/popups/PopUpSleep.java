@@ -1,13 +1,11 @@
 package com.ux.ok_baby.view.popups;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -24,7 +22,7 @@ public class PopUpSleep {
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
-    private EditText dateET, startTimeET, endTimeET;
+    private TextView dateTV, startTimeTV, endTimeTV;
 
     public PopUpSleep(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.context = context;
@@ -45,13 +43,13 @@ public class PopUpSleep {
     }
 
     private void setUpEntry() {
-        dateET = popupView.findViewById(R.id.date);
-        startTimeET = popupView.findViewById(R.id.startTime);
-        endTimeET = popupView.findViewById(R.id.endTime);
+        dateTV = popupView.findViewById(R.id.date);
+        startTimeTV = popupView.findViewById(R.id.startTime);
+        endTimeTV = popupView.findViewById(R.id.endTime);
 
         setUpDate();
-        setUpTime(startTimeET);
-        setUpTime(endTimeET);
+        setUpTime(startTimeTV);
+        setUpTime(endTimeTV);
     }
 
     private void setUpExit() {
@@ -86,9 +84,9 @@ public class PopUpSleep {
     }
 
     private void updateSleepEntryObject() {
-        sleepEntry.setDate(dateET.getText().toString());
-        sleepEntry.setEndTime(endTimeET.getText().toString());
-        sleepEntry.setStartTime(startTimeET.getText().toString());
+        sleepEntry.setDate(dateTV.getText().toString());
+        sleepEntry.setEndTime(endTimeTV.getText().toString());
+        sleepEntry.setStartTime(startTimeTV.getText().toString());
     }
 
     private PopupWindow setupPopup(View view, View popupView) {
@@ -100,19 +98,19 @@ public class PopUpSleep {
     }
 
     private void setUpDate() {
-        dateET.setOnClickListener(new View.OnClickListener() {
+        dateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.datePicker(dateET);
+                dateTimePicker.datePicker(dateTV);
             }
         });
     }
 
-    private void setUpTime(final EditText editText) {
-        editText.setOnClickListener(new View.OnClickListener() {
+    private void setUpTime(final TextView textView) {
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.timePicker(editText);
+                dateTimePicker.timePicker(textView);
             }
         });
     }

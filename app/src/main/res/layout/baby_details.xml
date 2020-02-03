@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:paddingBottom="20dp"
-    android:orientation="vertical"
-    android:layout_alignParentStart="true">
+    android:layout_alignParentStart="true"
     android:paddingTop="20dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"

@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ux.ok_baby.model.DiaperEntry;
@@ -34,7 +34,7 @@ public class PopUpDiaper {
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
-    private EditText dateET, timeET;
+    private TextView dateTV, timeTV;
     private HashMap<Button, Integer> colorBtns = new HashMap<>();
 
     public PopUpDiaper(Context context, String babyID, EntriesViewModel entriesViewModel) {
@@ -56,8 +56,8 @@ public class PopUpDiaper {
     }
 
     private void setUpEntry() {
-        dateET = popupView.findViewById(R.id.date);
-        timeET = popupView.findViewById(R.id.time);
+        dateTV = popupView.findViewById(R.id.date);
+        timeTV = popupView.findViewById(R.id.time);
         typeSpin = popupView.findViewById(R.id.type);
         textureSpin = popupView.findViewById(R.id.texture);
 
@@ -85,8 +85,8 @@ public class PopUpDiaper {
     }
 
     private void updateDiaperEntryObject() {
-        diaperEntry.setDate(dateET.getText().toString());
-        diaperEntry.setTime(timeET.getText().toString());
+        diaperEntry.setDate(dateTV.getText().toString());
+        diaperEntry.setTime(timeTV.getText().toString());
         diaperEntry.setType(typeSpin.getSelectedItem().toString());
         if (diaperEntry.getType().equals(POO)) {
             diaperEntry.setTexture(textureSpin.getSelectedItem().toString());
@@ -193,19 +193,19 @@ public class PopUpDiaper {
     }
 
     private void setUpDate() {
-        dateET.setOnClickListener(new View.OnClickListener() {
+        dateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.datePicker(dateET);
+                dateTimePicker.datePicker(dateTV);
             }
         });
     }
 
     private void setUpTime() {
-        timeET.setOnClickListener(new View.OnClickListener() {
+        timeTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.timePicker(timeET);
+                dateTimePicker.timePicker(timeTV);
             }
         });
     }

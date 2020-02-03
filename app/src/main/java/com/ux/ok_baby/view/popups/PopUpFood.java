@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
@@ -30,7 +29,7 @@ public class PopUpFood {
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
-    private EditText dateET, startTimeET, endTimeET;
+    private TextView dateTV, startTimeTV, endTimeTV;
 
     public PopUpFood(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.babyID = babyID;
@@ -51,16 +50,16 @@ public class PopUpFood {
     }
 
     private void setUpEntry() {
-        dateET = popupView.findViewById(R.id.date);
-        startTimeET = popupView.findViewById(R.id.startTime);
-        endTimeET = popupView.findViewById(R.id.endTime);
+        dateTV = popupView.findViewById(R.id.date);
+        startTimeTV = popupView.findViewById(R.id.startTime);
+        endTimeTV = popupView.findViewById(R.id.endTime);
         typeSpin = popupView.findViewById(R.id.type);
         sideSpin = popupView.findViewById(R.id.side);
         mls = popupView.findViewById(R.id.mls);
 
         setUpDate();
-        setUpTime(startTimeET);
-        setUpTime(endTimeET);
+        setUpTime(startTimeTV);
+        setUpTime(endTimeTV);
         setUpType();
         setUpSide();
         setUpAmount();
@@ -98,9 +97,9 @@ public class PopUpFood {
     }
 
     private void updateFoodEntryObject() {
-        foodEntry.setDate(dateET.getText().toString());
-        foodEntry.setEndTime(endTimeET.getText().toString());
-        foodEntry.setStartTime(startTimeET.getText().toString());
+        foodEntry.setDate(dateTV.getText().toString());
+        foodEntry.setEndTime(endTimeTV.getText().toString());
+        foodEntry.setStartTime(startTimeTV.getText().toString());
         foodEntry.setType(typeSpin.getSelectedItem().toString());
         if (foodEntry.getType().equals(BOTTLE)) {
             foodEntry.setAmount(mls.getText().toString());
@@ -174,19 +173,19 @@ public class PopUpFood {
     }
 
     private void setUpDate() {
-        dateET.setOnClickListener(new View.OnClickListener() {
+        dateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.datePicker(dateET);
+                dateTimePicker.datePicker(dateTV);
             }
         });
     }
 
-    private void setUpTime(final EditText editText) {
-        editText.setOnClickListener(new View.OnClickListener() {
+    private void setUpTime(final TextView textView) {
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.timePicker(editText);
+                dateTimePicker.timePicker(textView);
             }
         });
     }

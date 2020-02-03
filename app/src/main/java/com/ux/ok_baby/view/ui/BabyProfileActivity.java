@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,7 +46,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     // Activity main variables
     private ImageView profilePicture;
-    private EditText babyName;
+    private TextView babyName;
     private TextView babyDob;
     private Button updateProfileBtn;
     private ProgressBar progressBar;
