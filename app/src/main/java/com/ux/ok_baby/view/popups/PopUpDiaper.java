@@ -125,6 +125,8 @@ public class PopUpDiaper {
         onColorClickListener(redBtn);
         onColorClickListener(blackBtn);
         onColorClickListener(brownBtn);
+
+        brownBtn.performClick();
     }
 
     private void onColorClickListener(Button button) {
@@ -193,6 +195,7 @@ public class PopUpDiaper {
     }
 
     private void setUpDate() {
+        dateTV.setText(dateTimePicker.getCurDate());
         dateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,6 +205,7 @@ public class PopUpDiaper {
     }
 
     private void setUpTime() {
+        timeTV.setText(dateTimePicker.getCurTime());
         timeTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

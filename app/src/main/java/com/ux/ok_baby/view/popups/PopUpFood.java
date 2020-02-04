@@ -1,6 +1,8 @@
 package com.ux.ok_baby.view.popups;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -58,8 +60,8 @@ public class PopUpFood {
         mls = popupView.findViewById(R.id.mls);
 
         setUpDate();
-        setUpTime(startTimeTV);
-        setUpTime(endTimeTV);
+        setUpStartTime();
+        setUpEndTime();
         setUpType();
         setUpSide();
         setUpAmount();
@@ -173,6 +175,7 @@ public class PopUpFood {
     }
 
     private void setUpDate() {
+        dateTV.setText(dateTimePicker.getCurDate());
         dateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,11 +184,42 @@ public class PopUpFood {
         });
     }
 
-    private void setUpTime(final TextView textView) {
-        textView.setOnClickListener(new View.OnClickListener() {
+    private void setUpEndTime() {
+        endTimeTV.setText(dateTimePicker.getCurTime());
+        endTimeTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateTimePicker.timePicker(textView);
+                dateTimePicker.timePicker(endTimeTV);
+            }
+        });
+    }
+
+    private void setUpStartTime() {
+        startTimeTV.setText(dateTimePicker.getCurTime());
+        startTimeTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateTimePicker.timePicker(startTimeTV);
+            }
+        });
+        onStartTimeTextChanged();
+    }
+
+    private void onStartTimeTextChanged() {
+        startTimeTV.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                endTimeTV.setText(startTimeTV.getText());
             }
         });
     }
