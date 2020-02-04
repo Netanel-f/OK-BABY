@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
 import com.ux.ok_baby.R;
+import com.ux.ok_baby.model.EntryDataComparator;
 import com.ux.ok_baby.model.FoodEntry;
 import com.ux.ok_baby.model.ReportEntry;
 import com.ux.ok_baby.view.adapter.ReportTableAdapter;
@@ -77,22 +78,23 @@ public class FoodFragment extends Fragment {
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (reportEntries != null && reportEntries.size() > 0) {
                     // todo: remove sort from here- maybe in viewmodel when getting entries
-                    reportEntries.sort(new Comparator<ReportEntry>() {
-                        @Override
-                        public int compare(ReportEntry o1, ReportEntry o2) {
-                            FoodEntry s1 = (FoodEntry) o1;
-                            FoodEntry s2 = (FoodEntry) o2;
-
-                            // handle title row
-                            if (s1.getDate().equals("date")) {
-                                return -1;
-                            } else if (s2.getDate().equals("date")) {
-                                return 1;
-                            }
-
-                            return s1.getDate().compareTo(s2.getDate());
-                        }
-                    });
+//                    reportEntries.sort(new Comparator<ReportEntry>() {
+//                        @Override
+//                        public int compare(ReportEntry o1, ReportEntry o2) {
+//                            FoodEntry s1 = (FoodEntry) o1;
+//                            FoodEntry s2 = (FoodEntry) o2;
+//
+//                            // handle title row
+//                            if (s1.getDate().equals("date")) {
+//                                return -1;
+//                            } else if (s2.getDate().equals("date")) {
+//                                return 1;
+//                            }
+//
+//                            return s1.getDate().compareTo(s2.getDate());
+//                        }
+//                    });
+                    reportEntries.sort(new EntryDataComparator());
 
                     // todo: temp
                     ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);

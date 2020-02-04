@@ -7,4 +7,8 @@ public abstract class ReportEntry {
     public abstract String getDataByField(int fieldNum);
 
     public abstract int getNumOfDisplayedFields();
+
+    public abstract String getDate();
+
+    public abstract String getStartTime();
 }
