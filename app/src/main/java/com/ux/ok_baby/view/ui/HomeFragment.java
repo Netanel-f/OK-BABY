@@ -61,6 +61,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     static List<Baby> userBabies;
     private BabyRecyclerUtils.BabyAdapter otherBabiesAdapter = new BabyRecyclerUtils.BabyAdapter();
     private RecyclerView babiesRecyclerView;
+    private MenuFragment menuFragment;
 
 
     @Override
@@ -86,7 +87,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
         if (isNewUser) {
             addNewBaby();
-
         } else {
             userViewModel.getUserBabies(userID).observe(this, new Observer<List<Baby>>() {
                 @Override
@@ -96,7 +96,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                 }
             });
         }
-      
+
         setUpMenu(savedInstanceState);
         setupEditButton();
         setUpAddBabyButton();
@@ -105,6 +105,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
     /**
      * this method will update other babies layout
+     *
      * @param babies other babies to display on screen
      */
     private void updateBabiesDetails(List<Baby> babies) {
@@ -120,7 +121,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         isNewUser = getIntent().getBooleanExtra(IS_NEW_USER_TAG, true);
         userID = getIntent().getStringExtra(USER_ID_TAG);
         babyID = getIntent().getStringExtra(Constants.BABY_ID);
-
     }
 
     /**
@@ -138,7 +138,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
             if (savedInstanceState != null) {
                 return;
             }
-            MenuFragment menuFragment = new MenuFragment(babyID);
+            menuFragment = new MenuFragment(babyID);
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, menuFragment).commit();
         }
     }
@@ -172,9 +172,8 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         super.onActivityResult(requestCode, resultCode, data);
         // returning from edit a new baby profile
         if (requestCode == START_BABY_PROF_ACT && resultCode == RESULT_OK) {
-            if (data == null ) {
+            if (data == null) {
                 Log.d(TAG, "onActivityResult: START_BABY_PROF_ACT and data == null");
-
             } else {
                 mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
                 userViewModel.addBaby(userID, mainBaby);
@@ -186,7 +185,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         if (requestCode == START_EDIT_BABY_PROF_ACT && resultCode == RESULT_OK) {
             if (data == null) {
                 Log.d(TAG, "onActivityResult: START_EDIT_BABY_PROF_ACT and data == null");
-
             } else {
                 activityResultEditBabyProfile(data);
             }
@@ -195,16 +193,16 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         if (requestCode == START_ADD_BABY_PROF_ACT && resultCode == RESULT_OK) {
             if (data == null) {
                 Log.d(TAG, "onActivityResult: START_ADD_BABY_PROF_ACT and data == null");
-
             } else if (data.getExtras() != null) {
 
-                    activityResultAddBabyProfile(data);
+                activityResultAddBabyProfile(data);
             }
         }
     }
 
     /**
      * This method is called when this activity return with result of edit baby profile
+     *
      * @param data
      */
     void activityResultEditBabyProfile(Intent data) {
@@ -215,6 +213,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
     /**
      * This method is called when this activity return with result of add baby profile
+     *
      * @param data
      */
     void activityResultAddBabyProfile(Intent data) {
@@ -243,11 +242,11 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                 .error(R.mipmap.ic_baby)
                 .apply(RequestOptions.circleCropTransform())
                 .into(babyImgView);
-
     }
 
     /**
      * This method will return the textual age for a given date of birth
+     *
      * @param dob date of birth
      * @return age in textual view
      */
@@ -263,7 +262,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         } else {
             return monthsAge + " months old";
         }
-
     }
 
 
@@ -324,6 +322,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         updateBabiesDetails(userBabies);
         // Todo update menu fragment
         babyID = mainBaby.getBid();
-
+        menuFragment.updateBabyID(babyID);
     }
 }
