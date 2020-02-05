@@ -38,6 +38,11 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
         return time;
     }
 
+    public String getStartTime(){
+        // for comparator
+        return time;
+    }
+
     public void setTime(String time) {
         this.time = time;
     }
