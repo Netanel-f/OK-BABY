@@ -4,107 +4,98 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroud_gradient"
     tools:context=".view.ui.BabyProfileActivity">
 
+
     <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="@android:dimen/app_icon_size"
+        android:id="@+id/cloud"
+        android:layout_width="0dp"
+        android:layout_height="110dp"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector_cloud_single" />
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/profile_img_details_size"
+        android:layout_height="@dimen/profile_img_details_size"
+        android:layout_marginTop="@android:dimen/app_icon_size"
+        android:layout_marginBottom="40dp"
         android:src="@drawable/ic_default_user_profile_image"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/cloud"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBarImageUpload"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:layout_constraintStart_toStartOf="@id/profile_image"
-        app:layout_constraintEnd_toEndOf="@id/profile_image"
-        app:layout_constraintTop_toTopOf="@id/profile_image"
-        app:layout_constraintBottom_toBottomOf="@id/profile_image"
         android:src="@drawable/ic_default_user_profile_image"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        app:layout_constraintEnd_toEndOf="@id/profile_image"
+        app:layout_constraintStart_toStartOf="@id/profile_image"
+        app:layout_constraintTop_toTopOf="@id/profile_image" />
 
 
     <LinearLayout
         android:id="@+id/linear_fields_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image"
-        android:orientation="vertical">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cloud">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/baby_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectangle_white"
+            android:gravity="center"
+            android:hint="Baby Name"
+            android:letterSpacing="0.1"
+            android:textColor="@color/colorPrimaryDark"
+            android:padding="10dp"
+            android:textSize="14sp"
+            android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/name_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Baby name:" />
-
-            <EditText
-                android:id="@+id/baby_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="50dp"
-                android:hint=""
-                android:gravity="center"
-                android:background="@drawable/rounded_rectangle_stroke"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/dob"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_rectangle_white"
+            android:clickable="true"
+            android:gravity="center"
+            android:hint="Date of Birth"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:onClick="showDatePickerDialog" />
 
-            <TextView
-                android:id="@+id/dob_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Date of Birth:" />
-
-
-            <TextView
-                android:id="@+id/dob"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="40dp"
-                android:clickable="true"
-                android:onClick="showDatePickerDialog"
-                android:background="@drawable/rounded_rectangle_stroke"
-                android:gravity="center" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/update_profile_btn"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/rounded_rectangle_stroke"
+            android:fontFamily="sans-serif-light"
+            android:text="Update Profile"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/update_profile_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Update Profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_fields_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/rounded_rectangle_white"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
