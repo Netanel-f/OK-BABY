@@ -1,36 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="700dp"
     android:id="@+id/menuLayout"
-    android:gravity="center">
+    android:background="@drawable/backgroud_gradient">
 
-    <Button
+
+    <ImageView
+        android:id="@+id/cloud"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/vector_cloud"
+        android:layout_marginTop="-50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/sleepButton"-->
+<!--        android:layout_width="@dimen/button_circle_size"-->
+<!--        android:layout_height="@dimen/button_circle_size"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:padding="2dp"-->
+<!--        android:background="@drawable/button_circle"-->
+<!--        app:srcCompat="@drawable/ic_sleep"-->
+
+<!--        />-->
+
+    <ImageButton
         android:id="@+id/sleepButton"
-        android:layout_width="330dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/button_border_circular"
-        android:text="Sleep" />
+        android:layout_width="@dimen/button_circle_size"
+        android:layout_height="@dimen/button_circle_size"
+        android:src="@drawable/ic_sleep_color"
+        android:layout_marginTop="40dp"
+        android:clickable="true"
+        android:background="@drawable/button_circle"
+        app:layout_constraintTop_toBottomOf="@id/cloud"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/sleep" />
 
-    <Button
+    <ImageButton
         android:id="@+id/foodButton"
-        android:layout_width="330dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/button_circle_size"
+        android:layout_height="@dimen/button_circle_size"
         android:layout_marginTop="30dp"
-        android:background="@drawable/button_border_circular"
-        android:text="Food" />
+        android:background="@drawable/button_circle"
+        android:contentDescription="@string/food"
+        android:src="@drawable/ic_food_color"
+        app:layout_constraintTop_toBottomOf="@id/sleepButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
 
-    <Button
+    <ImageButton
         android:id="@+id/diaperButton"
-        android:layout_width="330dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/button_circle_size"
+        android:layout_height="@dimen/button_circle_size"
         android:layout_marginTop="30dp"
-        android:background="@drawable/button_border_circular"
-        android:text="Diaper" />
+        android:background="@drawable/button_circle"
+        android:contentDescription="@string/diaper"
+        android:src="@drawable/ic_diaper_color"
+        android:paddingTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/foodButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
-</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
