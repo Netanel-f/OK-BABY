@@ -131,32 +131,32 @@
             </LinearLayout>
 
             <!--Side-->
-            <LinearLayout
-                android:id="@+id/sideLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/sideLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="10dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/side"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="@string/side"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold" />-->
 
 
-                <Spinner
-                    android:id="@+id/side"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contextClickable="false"
-                    android:spinnerMode="dropdown"
-                    android:textAlignment="center" />
+<!--                <Spinner-->
+<!--                    android:id="@+id/side"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:contextClickable="false"-->
+<!--                    android:spinnerMode="dropdown"-->
+<!--                    android:textAlignment="center" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
 
             <!--Amount-->

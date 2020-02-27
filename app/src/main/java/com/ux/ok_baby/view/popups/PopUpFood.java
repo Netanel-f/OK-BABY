@@ -26,7 +26,9 @@ public class PopUpFood {
     private String babyID;
     private View popupView;
     private Context context;
-    private Spinner typeSpin, sideSpin;
+//    private Spinner typeSpin, sideSpin;
+    private Spinner typeSpin;
+//    private Spinner sideSpin;
     private FoodEntry foodEntry;
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
@@ -56,14 +58,14 @@ public class PopUpFood {
         startTimeTV = popupView.findViewById(R.id.startTime);
         endTimeTV = popupView.findViewById(R.id.endTime);
         typeSpin = popupView.findViewById(R.id.type);
-        sideSpin = popupView.findViewById(R.id.side);
+//        sideSpin = popupView.findViewById(R.id.side);
         mls = popupView.findViewById(R.id.mls);
 
         setUpDate();
         setUpStartTime();
         setUpEndTime();
         setUpType();
-        setUpSide();
+//        setUpSide();
         setUpAmount();
     }
 
@@ -108,7 +110,7 @@ public class PopUpFood {
             foodEntry.setSide("");
         } else {
             foodEntry.setAmount("");
-            foodEntry.setSide(sideSpin.getSelectedItem().toString());
+//            foodEntry.setSide(sideSpin.getSelectedItem().toString());
         }
     }
 
@@ -123,10 +125,10 @@ public class PopUpFood {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String type = (String) adapterView.getItemAtPosition(i);
                 if (type.equals(BOTTLE)) {
-                    popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
+//                    popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
                     popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
                 } else {
-                    popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
+//                    popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
                     popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
                 }
             }
@@ -139,13 +141,13 @@ public class PopUpFood {
         typeSpin.setSelection(0);
     }
 
-    private void setUpSide() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-                .createFromResource(context, R.array.food_side,
-                        android.R.layout.simple_spinner_dropdown_item);
-        sideSpin.setAdapter(adapter);
-        sideSpin.setSelection(0);
-    }
+//    private void setUpSide() {
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+//                .createFromResource(context, R.array.food_side,
+//                        android.R.layout.simple_spinner_dropdown_item);
+//        sideSpin.setAdapter(adapter);
+//        sideSpin.setSelection(0);
+//    }
 
 
     private void setUpAmount() {
