@@ -51,7 +51,8 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
 
     @Override
     public int getColumnCount() {
-        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
+//        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
+        if (mTableDataSource.isEmpty()) {
             return NUM_OF_COLS_IN_REPORT;
         } else {
             // determine col width dynamically
@@ -132,7 +133,7 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
 
     @Override
     public int getColumnWidth(int column) {
-        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
+        if (mTableDataSource.isEmpty()) {
             return mColumnWidth;
         } else {
             // determine col width dynamically

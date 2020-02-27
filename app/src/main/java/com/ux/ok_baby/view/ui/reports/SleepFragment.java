@@ -1,5 +1,6 @@
 package com.ux.ok_baby.view.ui.reports;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -86,7 +87,7 @@ public class SleepFragment extends Fragment {
         // add values to graph
         List<PointValue> values = new ArrayList<PointValue>();
         List<Line> lines = new ArrayList<Line>();
-        for (int j = 0; j < entries.size(); ++j) {
+        for (int j = 1; j < entries.size(); ++j) { // todo: starting from 1 bc of title
             SleepEntry entry = (SleepEntry) entries.get(j);
 //            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
             PointValue pointValue = new PointValue(j, entry.getDuration());
@@ -114,49 +115,30 @@ public class SleepFragment extends Fragment {
         data.setLines(lines);
         chart.setLineChartData(data);
 
-//        Viewport v = new Viewport(chart.getMaximumViewport());
-//        v.left = 0;
-//        v.right = v.right - 0.5f;
-//        chart.setCurrentViewportWithAnimation(v);
         chart.setScrollEnabled(false);
         chart.setZoomEnabled(true);
     }
 
     private void setUpReportTable() {
+        final Context context = getContext();
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (reportEntries != null && reportEntries.size() > 0) {
-                    // todo: remove sort from here- maybe in viewmodel when getting entries
-//                    reportEntries.sort(new Comparator<ReportEntry>() {
-//                        @Override
-//                        public int compare(ReportEntry o1, ReportEntry o2) {
-//                            SleepEntry s1 = (SleepEntry) o1;
-//                            SleepEntry s2 = (SleepEntry) o2;
-//
-//                            // handle title row
-//                            if (s1.getDate().equals("date")) {
-//                                return -1;
-//                            } else if (s2.getDate().equals("date")) {
-//                                return 1;
-//                            }
-//
-//                            return s1.getDate().compareTo(s2.getDate());
-//                        }
-//                    });
                     reportEntries.sort(new EntryDataComparator());
-
-                    // todo: temp
                     SleepEntry titleEntry = (SleepEntry) reportEntries.get(0);
                     if (!titleEntry.getDate().equals("date")) {
                         reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));
                     }
-
-                    mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
-                    mTableLayout.setAdapter(mTableAdapter);
-                    mTableAdapter.notifyDataSetChanged();
-                    setUpGraphs(reportEntries);
+                } else {
+                    // empty table
+                    reportEntries = new ArrayList<>();
+                    reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));
                 }
+                mTableAdapter = new ReportTableAdapter(context, reportEntries);
+                mTableLayout.setAdapter(mTableAdapter);
+                mTableAdapter.notifyDataSetChanged();
+                setUpGraphs(reportEntries);
             }
         });
     }
