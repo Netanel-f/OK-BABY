@@ -28,6 +28,56 @@
                 android:textAllCaps="false"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <!--Type-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/breastBtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="Breastfeeding"
+                    android:textColor="@android:color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_left_filled_rectangle"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/bottleBtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="Bottle"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_right_rectangle"
+                    />
+
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:padding="10dp"-->
+                <!--                    android:text="@string/type"-->
+                <!--                    android:textSize="20sp"-->
+                <!--                    android:textStyle="bold" />-->
+                <!--                -->
+                <!--                <Spinner-->
+                <!--                    android:id="@+id/type"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    android:contextClickable="false"-->
+                <!--                    android:spinnerMode="dropdown"-->
+                <!--                    android:textAlignment="center" />-->
+
+            </LinearLayout>
+
             <!--Date-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,54 +155,7 @@
 
             </LinearLayout>
 
-            <!--Type-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/breastBtn"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:text="Breastfeeding"
-                    android:textColor="@android:color/white"
-                    android:textAlignment="center"
-                    android:background="@drawable/food_type_left_filled_rectangle"
-                    />
-
-
-
-                <TextView
-                    android:id="@+id/bottleBtn"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:text="Bottle"
-                    android:textAlignment="center"
-                    android:background="@drawable/food_type_right_rectangle"
-                    />
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:text="@string/type"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:textStyle="bold" />-->
-<!--                -->
-<!--                <Spinner-->
-<!--                    android:id="@+id/type"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:contextClickable="false"-->
-<!--                    android:spinnerMode="dropdown"-->
-<!--                    android:textAlignment="center" />-->
-
-            </LinearLayout>
 
             <!--Side-->
 <!--            <LinearLayout-->
