@@ -36,6 +36,7 @@
     <string name="sleep">Sleep</string>
     <string name="food">Food</string>
     <string name="diaper">Diaper</string>
+    <string name="empty_table_error_msg">No entries added yet</string>
 
 
     <string-array name="food_type">
