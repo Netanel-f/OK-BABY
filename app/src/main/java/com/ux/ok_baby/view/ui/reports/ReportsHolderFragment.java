@@ -58,12 +58,15 @@ public class ReportsHolderFragment extends Fragment {
                         switch (item.getItemId()) {
                             case R.id.action_sleep:
                                 startNewFragment(new SleepFragment(babyID));
+                                reportType = R.id.action_sleep;
                                 return true;
                             case R.id.action_food:
                                 startNewFragment(new FoodFragment(babyID));
+                                reportType = R.id.action_food;
                                 return true;
                             case R.id.action_diaper:
                                 startNewFragment(new DiaperFragment(babyID));
+                                reportType = R.id.action_diaper;
                                 return true;
                         }
                         return false;
