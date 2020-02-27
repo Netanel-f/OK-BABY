@@ -152,14 +152,14 @@ public class PopUpFood {
         popupView.findViewById(R.id.plusml).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) + 1));
+                mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) + 5));
             }
         });
         popupView.findViewById(R.id.minusml).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Integer.parseInt(mls.getText().toString()) > 0)
-                    mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) - 1));
+                    mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) - 5));
                 else
                     Toast.makeText(context, "Amount can't be lower than 0.", Toast.LENGTH_LONG).show();
             }
