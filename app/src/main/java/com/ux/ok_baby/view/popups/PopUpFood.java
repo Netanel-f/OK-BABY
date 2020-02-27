@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
@@ -27,8 +28,12 @@ public class PopUpFood {
     private View popupView;
     private Context context;
 //    private Spinner typeSpin, sideSpin;
-    private Spinner typeSpin;
+//    private Spinner typeSpin;
 //    private Spinner sideSpin;
+    private FoodType currentFoodType;
+    private TextView breastfeedingButton;
+    private TextView bottleButton;
+
     private FoodEntry foodEntry;
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
@@ -57,7 +62,8 @@ public class PopUpFood {
         dateTV = popupView.findViewById(R.id.date);
         startTimeTV = popupView.findViewById(R.id.startTime);
         endTimeTV = popupView.findViewById(R.id.endTime);
-        typeSpin = popupView.findViewById(R.id.type);
+        currentFoodType = FoodType.BOTTLE;
+//        typeSpin = popupView.findViewById(R.id.type);
 //        sideSpin = popupView.findViewById(R.id.side);
         mls = popupView.findViewById(R.id.mls);
 
@@ -104,42 +110,85 @@ public class PopUpFood {
         foodEntry.setDate(dateTV.getText().toString());
         foodEntry.setEndTime(endTimeTV.getText().toString());
         foodEntry.setStartTime(startTimeTV.getText().toString());
-        foodEntry.setType(typeSpin.getSelectedItem().toString());
-        if (foodEntry.getType().equals(BOTTLE)) {
-            foodEntry.setAmount(mls.getText().toString());
-            foodEntry.setSide("");
-        } else {
-            foodEntry.setAmount("");
-//            foodEntry.setSide(sideSpin.getSelectedItem().toString());
-        }
-    }
 
+        if (currentFoodType == FoodType.BOTTLE) {
+            foodEntry.setType(BOTTLE);
+            foodEntry.setAmount(mls.getText().toString());
+        } else {
+            foodEntry.setType(BREASTFEEDING);
+            foodEntry.setAmount("");
+        }
+
+//        foodEntry.setType(typeSpin.getSelectedItem().toString());
+//        if (foodEntry.getType().equals(BOTTLE)) {
+//            foodEntry.setAmount(mls.getText().toString());
+////            foodEntry.setSide("");
+//        } else {
+//            foodEntry.setAmount("");
+////            foodEntry.setSide(sideSpin.getSelectedItem().toString());
+//        }
+    }
 
     private void setUpType() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-                .createFromResource(context, R.array.food_type,
-                        android.R.layout.simple_spinner_dropdown_item);
-        typeSpin.setAdapter(adapter);
-        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String type = (String) adapterView.getItemAtPosition(i);
-                if (type.equals(BOTTLE)) {
-//                    popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
-                    popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
-                } else {
-//                    popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
-                    popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
-                }
-            }
+        breastfeedingButton = popupView.findViewById(R.id.breastBtn);
+        bottleButton = popupView.findViewById(R.id.bottleBtn);
+        currentFoodType = FoodType.BREASTFEED;
 
+        breastfeedingButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onClick(View v) {
+                breastfeedingButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
+                breastfeedingButton.setTextColor(context.getColor(R.color.white));
 
+                bottleButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
+                bottleButton.setTextColor(context.getColor(R.color.textColor));
+
+                popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
+                currentFoodType = FoodType.BREASTFEED;
             }
         });
-        typeSpin.setSelection(0);
+
+
+        bottleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                breastfeedingButton.setBackgroundResource(R.drawable.food_type_left_rectangle);
+                breastfeedingButton.setTextColor(context.getColor(R.color.textColor));
+
+                bottleButton.setBackgroundResource(R.drawable.food_type_right_filled_rectangle);
+                bottleButton.setTextColor(context.getColor(R.color.white));
+
+                popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
+
+                currentFoodType = FoodType.BOTTLE;
+            }
+        });
     }
+//    private void setUpType() {
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+//                .createFromResource(context, R.array.food_type,
+//                        android.R.layout.simple_spinner_dropdown_item);
+//        typeSpin.setAdapter(adapter);
+//        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                String type = (String) adapterView.getItemAtPosition(i);
+//                if (type.equals(BOTTLE)) {
+////                    popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
+//                    popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
+//                } else {
+////                    popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
+//                    popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//        typeSpin.setSelection(0);
+//    }
 
 //    private void setUpSide() {
 //        ArrayAdapter<CharSequence> adapter = ArrayAdapter

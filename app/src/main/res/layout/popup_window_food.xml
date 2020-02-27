@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -22,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:text="@string/food_entry"
                 android:textAllCaps="false"
                 android:textSize="24sp"
@@ -112,21 +113,44 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/type"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                
-                <Spinner
-                    android:id="@+id/type"
-                    android:layout_width="match_parent"
+                    android:id="@+id/breastBtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:contextClickable="false"
-                    android:spinnerMode="dropdown"
-                    android:textAlignment="center" />
+                    android:text="Breastfeeding"
+                    android:textColor="@android:color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_left_filled_rectangle"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/bottleBtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="Bottle"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_right_rectangle"
+                    />
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="@string/type"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold" />-->
+<!--                -->
+<!--                <Spinner-->
+<!--                    android:id="@+id/type"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:contextClickable="false"-->
+<!--                    android:spinnerMode="dropdown"-->
+<!--                    android:textAlignment="center" />-->
 
             </LinearLayout>
 
@@ -186,7 +210,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:layout_marginStart="13dp"
+                        android:layout_marginStart="10dp"
                         android:background="@color/common_google_signin_btn_text_dark_pressed"
                         android:src="@drawable/ic_remove" />
 
@@ -208,7 +232,7 @@
                         android:id="@+id/mls"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="22dp"
+                        android:layout_marginStart="28dp"
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@+id/minusml"
                         android:text="30"
