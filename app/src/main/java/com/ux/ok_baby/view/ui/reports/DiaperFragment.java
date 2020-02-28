@@ -24,7 +24,6 @@ import com.ux.ok_baby.view.popups.PopUpDiaper;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import lecho.lib.hellocharts.formatter.ValueFormatterHelper;
@@ -83,29 +82,11 @@ public class DiaperFragment extends Fragment {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (reportEntries != null && reportEntries.size() > 0) {
-                    // todo: remove sort from here- maybe in viewmodel when getting entries
-//                    reportEntries.sort(new Comparator<ReportEntry>() {
-//                        @Override
-//                        public int compare(ReportEntry o1, ReportEntry o2) {
-//                            DiaperEntry s1 = (DiaperEntry) o1;
-//                            DiaperEntry s2 = (DiaperEntry) o2;
-//
-//                            // handle title row
-//                            if (s1.getDate().equals("date")) {
-//                                return -1;
-//                            } else if (s2.getDate().equals("date")) {
-//                                return 1;
-//                            }
-//
-//                            return s1.getDate().compareTo(s2.getDate());
-//                        }
-//                    });
                     reportEntries.sort(new EntryDataComparator());
 
-                    // todo: temp
                     ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
                     if (!titleEntry.getDataByField(0).equals("date")) {
-                        reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture", "color"));
+                        reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
                     }
 
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);

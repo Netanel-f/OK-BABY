@@ -90,7 +90,6 @@ public class PopUpDiaper {
         diaperEntry.setType(typeSpin.getSelectedItem().toString());
         if (diaperEntry.getType().equals(POO)) {
             diaperEntry.setTexture(textureSpin.getSelectedItem().toString());
-            diaperEntry.setColor("");
         } else {
             diaperEntry.setTexture("");
             diaperEntry.setColor("");

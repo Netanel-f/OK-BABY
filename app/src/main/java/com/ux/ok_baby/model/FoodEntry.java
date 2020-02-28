@@ -80,8 +80,12 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
             return !side.isEmpty();
     }
 
-    public String getDataByField(int fieldNum){
-        switch (fieldNum){
+    private String getAmountString() {
+        return amount + " ml";
+    }
+
+    public String getDataByField(int fieldNum) {
+        switch (fieldNum) {
             case 0:
                 return getDate();
             case 1:
@@ -89,7 +93,7 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
             case 2:
                 return getStartTime();
             case 3:
-                return getAmount();
+                return getAmountString();
             case 4:
                 return getSide();
             case 5:
@@ -101,7 +105,6 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
 
     @Override
     public int getNumOfDisplayedFields() {
-        // date, type, start, info: duration/amount/side?
         return 4;
     }
 }

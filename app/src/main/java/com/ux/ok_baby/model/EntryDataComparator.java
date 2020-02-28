@@ -58,6 +58,5 @@ public class EntryDataComparator implements Comparator<ReportEntry> {
         } else { // same time
             return 0;
         }
-
     }
 }
