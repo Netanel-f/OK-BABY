@@ -127,7 +127,7 @@ public class FoodFragment extends Fragment {
         int sum, numValues = 2, BOTTLE = 0, BREASTFEEDING = 1;
         List<SliceValue> values = new ArrayList<SliceValue>();
         int[] numOfEntries = new int[numValues];
-        int sum;
+
         for (int j = 1; j < reportEntries.size(); ++j){
 //        for (ReportEntry entry : reportEntries) {
 
@@ -144,7 +144,9 @@ public class FoodFragment extends Fragment {
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
 
-        for (int i = 1; i < numValues; ++i) 
+        String[] labels = {"Bottle\n", "Breastfeeding\n"};
+
+        for (int i = 1; i < numValues; ++i) {
             SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
             sliceValue.setLabel(labels[i] + round((sliceValue.getValue() / sum) * 100) + "%");
             values.add(sliceValue);
