@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -14,186 +13,157 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="5dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginStart="10dp">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/food_entry"
                 android:textAllCaps="false"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textColor="@color/colorPrimaryDark"
+                android:paddingBottom="15dp"
+                android:layout_marginVertical="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <!--Type-->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/breastBtn"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:text="Breastfeeding"
-                    android:textColor="@android:color/white"
-                    android:textAlignment="center"
-                    android:background="@drawable/food_type_left_filled_rectangle"
-                    />
-
-
-
-                <TextView
-                    android:id="@+id/bottleBtn"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:text="Bottle"
-                    android:textAlignment="center"
-                    android:background="@drawable/food_type_right_rectangle"
-                    />
-
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_gravity="center"-->
-                <!--                    android:padding="10dp"-->
-                <!--                    android:text="@string/type"-->
-                <!--                    android:textSize="20sp"-->
-                <!--                    android:textStyle="bold" />-->
-                <!--                -->
-                <!--                <Spinner-->
-                <!--                    android:id="@+id/type"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="match_parent"-->
-                <!--                    android:contextClickable="false"-->
-                <!--                    android:spinnerMode="dropdown"-->
-                <!--                    android:textAlignment="center" />-->
-
-            </LinearLayout>
-
-            <!--Date-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/date"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_rectangle_stroke" />
-
-            </LinearLayout>
-            <!--start time-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/start_time"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/startTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_rectangle_stroke"/>
-
-            </LinearLayout>
-
-            <!--End time-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/end_time"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/endTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_rectangle_stroke"/>
-
-            </LinearLayout>
-
-
-
-            <!--Side-->
-<!--            <LinearLayout-->
-<!--                android:id="@+id/sideLayout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:padding="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:text="@string/side"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:textStyle="bold" />-->
-
-
-<!--                <Spinner-->
-<!--                    android:id="@+id/side"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:contextClickable="false"-->
-<!--                    android:spinnerMode="dropdown"-->
-<!--                    android:textAlignment="center" />-->
-
-<!--            </LinearLayout>-->
-
-
-            <!--Amount-->
-            <LinearLayout
-                android:id="@+id/amountLayout"
+                android:id="@+id/food_type_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:padding="10dp"
-                android:visibility="gone">
+                app:layout_constraintTop_toBottomOf="@+id/title">
+
+                <TextView
+                    android:id="@+id/breast_btn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@string/breastfeeding"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_left_filled_rectangle"/>
+
+                <TextView
+                    android:id="@+id/bottle_btn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@string/bottle"
+                    android:fontFamily="sans-serif-light"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_right_rectangle"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:text="@string/date"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/date"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="70dp"
+                android:background="@drawable/rounded_rectangle_stroke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/food_type_bar"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/start_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:text="@string/start_time"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/startTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/startTime" />
+
+            <TextView
+                android:id="@+id/end_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:text="@string/end_time"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/endTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/endTime" />
+
+            <TextView
+                android:id="@+id/startTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="70dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_rectangle_stroke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/endTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="70dp"
+                android:background="@drawable/rounded_rectangle_stroke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/startTime"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <!--Amount-->
+            <LinearLayout
+                android:id="@+id/amount_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/endTime">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -201,15 +171,15 @@
                     android:layout_gravity="center"
                     android:padding="10dp"
                     android:text="@string/amount"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <ImageButton
-                        android:id="@+id/minusml"
+                        android:id="@+id/amount_minus"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
@@ -220,52 +190,60 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/mls"
+                        android:layout_alignBottom="@+id/amount_mls"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="1dp"
-                        android:layout_toEndOf="@+id/mls"
-                        android:text="ml"
+                        android:layout_toEndOf="@+id/amount_mls"
+                        android:text="@string/ml"
+                        android:fontFamily="sans-serif-light"
                         android:textAlignment="center"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/mls"
+                        android:id="@+id/amount_mls"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="28dp"
                         android:layout_marginTop="10dp"
-                        android:layout_toEndOf="@+id/minusml"
-                        android:text="30"
+                        android:layout_toEndOf="@+id/amount_minus"
+                        android:text="@string/default_bottle_amount"
+                        android:fontFamily="sans-serif-medium"
                         android:textAlignment="center"
                         android:textAllCaps="true"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textSize="24sp" />
 
                     <ImageButton
-                        android:id="@+id/plusml"
+                        android:id="@+id/amount_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="28dp"
                         android:background="@color/common_google_signin_btn_text_dark_default"
                         android:src="@drawable/ic_add" />
+
                 </RelativeLayout>
             </LinearLayout>
 
+
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:layout_constraintTop_toBottomOf="@id/amount_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/addButton"
-                    android:background="@drawable/button_border"
-                    android:text="Cancel" />
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:alpha="0.5"
+                    android:text="@string/cancel" />
 
 
                 <Button
@@ -273,10 +251,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/button_border"
-                    android:text="Add" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:background="@android:color/transparent"
+                    android:text="@string/add" />
             </RelativeLayout>
-        </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.cardview.widget.CardView>
