@@ -29,7 +29,11 @@ public class PopUpDiaper {
     private String babyID;
     private View popupView;
     private Context context;
-    private Spinner typeSpin, textureSpin;
+    private DiaperType currentDiaperType;
+    private TextView pooButton;
+    private TextView peeButton;
+//    private Spinner typeSpin;
+    private Spinner textureSpin;
     private DiaperEntry diaperEntry;
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
@@ -57,8 +61,9 @@ public class PopUpDiaper {
 
     private void setUpEntry() {
         dateTV = popupView.findViewById(R.id.date);
-        timeTV = popupView.findViewById(R.id.time);
-        typeSpin = popupView.findViewById(R.id.type);
+        timeTV = popupView.findViewById(R.id.diaper_time);
+//        typeSpin = popupView.findViewById(R.id.type);
+        currentDiaperType = DiaperType.PEE;
         textureSpin = popupView.findViewById(R.id.texture);
 
         setUpDate();
@@ -87,10 +92,16 @@ public class PopUpDiaper {
     private void updateDiaperEntryObject() {
         diaperEntry.setDate(dateTV.getText().toString());
         diaperEntry.setTime(timeTV.getText().toString());
-        diaperEntry.setType(typeSpin.getSelectedItem().toString());
+//        diaperEntry.setType(typeSpin.getSelectedItem().toString());
+
+        if (currentDiaperType == DiaperType.POO) {
+            diaperEntry.setType(POO);
+        } else if (currentDiaperType == DiaperType.PEE) {
+            diaperEntry.setType(PEE);
+        }
+
         if (diaperEntry.getType().equals(POO)) {
             diaperEntry.setTexture(textureSpin.getSelectedItem().toString());
-            diaperEntry.setColor("");
         } else {
             diaperEntry.setTexture("");
             diaperEntry.setColor("");
@@ -137,7 +148,7 @@ public class PopUpDiaper {
                 for (Map.Entry entry : colorBtns.entrySet()) {
                     Button curBtn = (Button) entry.getKey();
                     if (curBtn.getId() != view.getId()) {
-                        changeFrameColor((LayerDrawable) curBtn.getBackground(), (int) entry.getValue());
+                        changeFrameColor((LayerDrawable) curBtn.getBackground(), R.color.white);
                     } else {
                         diaperEntry.setColor(POO_COLORS.get(entry.getValue()));
                     }
@@ -153,29 +164,60 @@ public class PopUpDiaper {
     }
 
     private void setUpType() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-                .createFromResource(context, R.array.diaper_type,
-                        android.R.layout.simple_spinner_dropdown_item);
-        typeSpin.setAdapter(adapter);
-        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String type = (String) adapterView.getItemAtPosition(i);
-                if (type.equals(POO)) {
-                    popupView.findViewById(R.id.textureLayout).setVisibility(View.VISIBLE);
-                    popupView.findViewById(R.id.colorLayout).setVisibility(View.VISIBLE);
-                } else {
-                    popupView.findViewById(R.id.textureLayout).setVisibility(View.GONE);
-                    popupView.findViewById(R.id.colorLayout).setVisibility(View.GONE);
-                }
-            }
+        peeButton = popupView.findViewById(R.id.pee_btn);
+        pooButton = popupView.findViewById(R.id.poo_btn);
 
+        peeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onClick(View view) {
+                peeButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
+                peeButton.setTextColor(context.getColor(R.color.white));
 
+                pooButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
+                pooButton.setTextColor(context.getColor(R.color.textColor));
+
+                popupView.findViewById(R.id.poo_layout).setVisibility(View.GONE);
+                currentDiaperType = DiaperType.PEE;
             }
         });
-        typeSpin.setSelection(0);
+
+        pooButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pooButton.setBackgroundResource(R.drawable.food_type_right_filled_rectangle);
+                pooButton.setTextColor(context.getColor(R.color.white));
+
+                peeButton.setBackgroundResource(R.drawable.food_type_left_rectangle);
+                peeButton.setTextColor(context.getColor(R.color.textColor));
+
+                popupView.findViewById(R.id.poo_layout).setVisibility(View.VISIBLE);
+                currentDiaperType = DiaperType.POO;
+            }
+        });
+
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+//                .createFromResource(context, R.array.diaper_type,
+//                        android.R.layout.simple_spinner_dropdown_item);
+//        typeSpin.setAdapter(adapter);
+//        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                String type = (String) adapterView.getItemAtPosition(i);
+//                if (type.equals(POO)) {
+//                    popupView.findViewById(R.id.texture_layout).setVisibility(View.VISIBLE);
+//                    popupView.findViewById(R.id.color_layout).setVisibility(View.VISIBLE);
+//                } else {
+//                    popupView.findViewById(R.id.texture_layout).setVisibility(View.GONE);
+//                    popupView.findViewById(R.id.color_layout).setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//        typeSpin.setSelection(0);
     }
 
     private void setUpTexture() {

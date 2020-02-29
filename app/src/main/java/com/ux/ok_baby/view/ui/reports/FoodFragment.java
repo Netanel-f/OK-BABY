@@ -27,7 +27,6 @@ import com.ux.ok_baby.view.popups.PopUpFood;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import lecho.lib.hellocharts.model.PieChartData;
@@ -122,17 +121,13 @@ public class FoodFragment extends Fragment {
         data.setHasCenterCircle(true);
         data.setCenterCircleScale(0.40f);
         chart.setPieChartData(data);
-
     }
 
     private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
-        int numValues = 2; // bottle / breastfeeding
-        int BOTTLE = 0;
-        int BREASTFEEDING = 1;
+        int sum, numValues = 2, BOTTLE = 0, BREASTFEEDING = 1;
         List<SliceValue> values = new ArrayList<SliceValue>();
-
         int[] numOfEntries = new int[numValues];
-        int sum;
+
         for (int j = 1; j < reportEntries.size(); ++j){
 //        for (ReportEntry entry : reportEntries) {
 
@@ -148,18 +143,16 @@ public class FoodFragment extends Fragment {
 
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
+
         String[] labels = {"Bottle\n", "Breastfeeding\n"};
 
         for (int i = 1; i < numValues; ++i) {
-
             SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
-            sliceValue.setLabel(labels[i] +
-                    round((sliceValue.getValue() / sum) * 100) + "%");
+            sliceValue.setLabel(labels[i] + round((sliceValue.getValue() / sum) * 100) + "%");
             values.add(sliceValue);
         }
 
         return values;
-
     }
 
     private void onAddClickListener(View view) {

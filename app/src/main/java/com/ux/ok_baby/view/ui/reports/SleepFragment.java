@@ -25,7 +25,6 @@ import com.ux.ok_baby.view.popups.PopUpSleep;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
@@ -103,25 +102,29 @@ public class SleepFragment extends Fragment {
             lines.add(line);
         }
 
-        boolean hasAxesNames = true;
         LineChartData data = new LineChartData();
-
-        Axis axisX;
-        Axis axisY;
-//        if (hasAxes) {
-        axisX = new Axis();
-        axisY = new Axis().setHasLines(true);
-        if (hasAxesNames) {
-//                axisX.setName("Axis X");
-            axisY.setName("Duration in minutes");
-        }
+        Axis axisY = new Axis().setHasLines(true);
+        axisY.setName("Duration in minutes");
         data.setAxisXBottom(null);
         data.setAxisYLeft(axisY);
         data.setLines(lines);
         chart.setLineChartData(data);
-
         chart.setScrollEnabled(false);
         chart.setZoomEnabled(true);
+    }
+
+    private List<Line> generateDataForGraph(List<ReportEntry> reportEntries) {
+        List<PointValue> values = new ArrayList<PointValue>();
+        List<Line> lines = new ArrayList<Line>();
+        for (int j = 0; j < reportEntries.size(); ++j) {
+            SleepEntry entry = (SleepEntry) reportEntries.get(j);
+            PointValue pointValue = new PointValue(j, entry.getDuration());
+            values.add(pointValue);
+            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
+            line.setHasLabels(true);
+            lines.add(line);
+        }
+        return lines;
     }
 
     private void setUpReportTable() {

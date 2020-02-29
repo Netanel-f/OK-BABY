@@ -3,9 +3,6 @@ package com.ux.ok_baby.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 
 public class Baby implements Parcelable {
@@ -16,8 +13,6 @@ public class Baby implements Parcelable {
     private String imageUrl;
 
     public Baby() {
-//        this.babyName = "";
-//        this.babyDOB = "";
     }
 
     public Baby(String bid) {
@@ -104,6 +99,6 @@ public class Baby implements Parcelable {
 
         Baby baby = (Baby) o;
 
-        return baby.bid.equals( this.bid);
+        return baby.bid.equals(this.bid);
     }
 }

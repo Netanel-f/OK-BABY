@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.ux.ok_baby.utils.Constants.TIME_PATTERN;
+
 public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
     private String date, startTime, endTime;
     private String strDuration;
@@ -59,7 +61,7 @@ public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
 
     @Override
     public String getDataByField(int fieldNum) {
-        switch (fieldNum){
+        switch (fieldNum) {
             case 0:
                 return getDate();
             case 1:
@@ -79,8 +81,8 @@ public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
         return 4;
     }
 
-    private long calculateDurationInt(String time1, String time2){ // todo change
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    private long calculateDurationInt(String time1, String time2) {
+        SimpleDateFormat format = new SimpleDateFormat(TIME_PATTERN);
         Date date1 = null;
         Date date2 = null;
         try {
@@ -88,40 +90,38 @@ public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
             date2 = format.parse(time2);
             long diff = date2.getTime() - date1.getTime();
             return diff / (60 * 1000);
-
         } catch (ParseException e) {
             e.printStackTrace();
             return 0;
         }
-
     }
 
-    private String duartionToString(long duration){
+    private String duartionToString(long duration) {
         long diffMinutes = duration;
-        if (diffMinutes > 60){
+        if (diffMinutes > 60) {
             diffMinutes = diffMinutes % 60;
             long diffHours = duration / (60) % 24;
             String mins;
-            if (diffMinutes < 10){
-                mins = "0"+diffMinutes;
+            if (diffMinutes < 10) {
+                mins = "0" + diffMinutes;
             } else {
-                mins = ""+diffMinutes;
+                mins = "" + diffMinutes;
             }
 
-            return diffHours+":"+mins+" hrs";
+            return diffHours + ":" + mins + " hrs";
         } else {
-            return diffMinutes+" mins";
+            return diffMinutes + " mins";
         }
     }
 
     public long getDuration() {
-        if (duration == 0){
+        if (duration == 0) {
             duration = calculateDurationInt(getStartTime(), getEndTime());
         }
         return duration;
     }
 
-    public String getDurationString(){
+    private String getDurationString() {
         if (strDuration == null || strDuration.isEmpty()) {
             strDuration = duartionToString(getDuration());
         }

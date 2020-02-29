@@ -42,6 +42,7 @@
             android:background="@drawable/rounded_rectangle_stroke"
             android:ems="10"
             android:hint="@string/email_label"
+            android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:paddingStart="22dp"
@@ -58,6 +59,7 @@
             android:background="@drawable/rounded_rectangle_stroke"
             android:ems="10"
             android:hint="@string/password_label"
+            android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:padding="10dp"
             android:paddingStart="22dp"
@@ -84,12 +86,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="40dp"
             android:paddingTop="20dp"
+            android:paddingBottom="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSignIn"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/buttonSignIn">
 
             <TextView
                 android:id="@+id/signUpPreText"
