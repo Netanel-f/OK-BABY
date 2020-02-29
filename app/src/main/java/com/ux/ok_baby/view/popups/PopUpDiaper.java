@@ -90,7 +90,6 @@ public class PopUpDiaper {
         diaperEntry.setType(typeSpin.getSelectedItem().toString());
         if (diaperEntry.getType().equals(POO)) {
             diaperEntry.setTexture(textureSpin.getSelectedItem().toString());
-            diaperEntry.setColor("");
         } else {
             diaperEntry.setTexture("");
             diaperEntry.setColor("");
@@ -137,7 +136,7 @@ public class PopUpDiaper {
                 for (Map.Entry entry : colorBtns.entrySet()) {
                     Button curBtn = (Button) entry.getKey();
                     if (curBtn.getId() != view.getId()) {
-                        changeFrameColor((LayerDrawable) curBtn.getBackground(), (int) entry.getValue());
+                        changeFrameColor((LayerDrawable) curBtn.getBackground(), R.color.white);
                     } else {
                         diaperEntry.setColor(POO_COLORS.get(entry.getValue()));
                     }

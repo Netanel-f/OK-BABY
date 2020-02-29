@@ -1,6 +1,5 @@
 package com.ux.ok_baby.model;
 
-import static com.ux.ok_baby.utils.Constants.BOTTLE;
 import static com.ux.ok_baby.utils.Constants.POO;
 
 public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
@@ -13,6 +12,13 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
         this.type = type;
         this.texture = texture;
         this.color = color;
+    }
+
+    public DiaperEntry(String date, String time, String type, String texture) {
+        this.date = date;
+        this.time = time;
+        this.type = type;
+        this.texture = texture;
     }
 
     public DiaperEntry() {
@@ -38,7 +44,7 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
         return time;
     }
 
-    public String getStartTime(){
+    public String getStartTime() {
         // for comparator
         return time;
     }
@@ -67,12 +73,12 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
         if (date.isEmpty() || time.isEmpty() || type.isEmpty())
             return false;
         if (type.equals(POO))
-            return !texture.isEmpty(); //TODO check red_color_circle validation
+            return !texture.isEmpty();
         return true;
     }
 
-    public String getDataByField(int fieldNum){
-        switch (fieldNum){
+    public String getDataByField(int fieldNum) {
+        switch (fieldNum) {
             case 0:
                 return getDate();
             case 1:
@@ -90,6 +96,6 @@ public class DiaperEntry extends com.ux.ok_baby.model.ReportEntry {
 
     @Override
     public int getNumOfDisplayedFields() {
-        return 5;
+        return 4;
     }
 }

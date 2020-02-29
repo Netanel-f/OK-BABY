@@ -5,6 +5,9 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +19,9 @@ import com.cleveroad.adaptivetablelayout.LinkedAdaptiveTableAdapter;
 import com.cleveroad.adaptivetablelayout.ViewHolderImpl;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.ReportEntry;
-import com.ux.ok_baby.model.SleepEntry;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+
+import static com.ux.ok_baby.utils.Constants.POO_COLORS1;
 
 public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
@@ -72,7 +72,6 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
     @Override
     public ViewHolderImpl onCreateColumnHeaderViewHolder(@NonNull ViewGroup parent) {
         return new TestHeaderColumnViewHolder(mLayoutInflater.inflate(R.layout.item_header_column, parent, false));
-
     }
 
     @NonNull
@@ -100,9 +99,17 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
             Log.d(TAG, "onBindViewHolder: table data not updated.");
         }
 
-        // update views
-        vh.tvText.setVisibility(View.VISIBLE);
-        vh.tvText.setText(itemData);
+        if (column == 3 && mTableDataSource.get(0).getDataByField(3).equals("texture") && !itemData.isEmpty()) {
+            SpannableString spannable2 = new SpannableString(itemData);
+            spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
+                    0, itemData.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            vh.tvText.setVisibility(View.VISIBLE);
+            vh.tvText.setText(spannable2);
+        } else {
+            // update views
+            vh.tvText.setVisibility(View.VISIBLE);
+            vh.tvText.setText(itemData);
+        }
     }
 
 
@@ -113,11 +120,9 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
         if (column < NUM_OF_COLS_IN_REPORT) {
             ReportEntry titleEntry = mTableDataSource.get(0);
             vh.tvText.setText(titleEntry.getDataByField(column));
-
         } else {
             vh.tvText.setText("col head");  // skip left top header
         }
-
     }
 
     @Override
@@ -125,8 +130,7 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
         TestHeaderRowViewHolder vh = (TestHeaderRowViewHolder) viewHolder;
         ReportEntry entry = mTableDataSource.get(row);
         String itemData = entry.getDataByField(0);
-        vh.tvText.setText(itemData); // todo change
-
+        vh.tvText.setText(itemData);
     }
 
     @Override
@@ -134,7 +138,6 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
         TestHeaderLeftTopViewHolder vh = (TestHeaderLeftTopViewHolder) viewHolder;
         ReportEntry titleEntry = mTableDataSource.get(0);
         vh.tvText.setText(titleEntry.getDataByField(0));
-
     }
 
     @Override
@@ -185,7 +188,6 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
     private static class TestHeaderColumnViewHolder extends ViewHolderImpl {
         TextView tvText;
         View vLine;
-        String[] colTitles = {"date", "start", "end", "duration"};
 
         private TestHeaderColumnViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -211,5 +213,4 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
             tvText = itemView.findViewById(R.id.tvText);
         }
     }
-
 }
