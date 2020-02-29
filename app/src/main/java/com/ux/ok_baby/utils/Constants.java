@@ -28,6 +28,7 @@ public class Constants {
     public enum ReportType {FOOD, SLEEP, DIAPER, OTHER}
 
     public enum FoodType {BREASTFEED, BOTTLE}
+    public enum DiaperType {POO, PEE}
 
     public static Map<Integer, String> POO_COLORS = new HashMap<Integer, String>() {{
         put(R.color.black, "Black");

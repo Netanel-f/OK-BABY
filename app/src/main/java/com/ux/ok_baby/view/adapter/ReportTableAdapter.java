@@ -95,21 +95,24 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
             ReportEntry entry = mTableDataSource.get(row);
             itemData = entry.getDataByField(column);
             itemData = itemData.trim();
+
+
+            if (column == 3 && mTableDataSource.get(0).getDataByField(3).equals("texture") && !itemData.isEmpty()) {
+                SpannableString spannable2 = new SpannableString(itemData);
+                spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
+                        0, itemData.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                vh.tvText.setVisibility(View.VISIBLE);
+                vh.tvText.setText(spannable2);
+            } else {
+                // update views
+                vh.tvText.setVisibility(View.VISIBLE);
+                vh.tvText.setText(itemData);
+            }
         } catch (IndexOutOfBoundsException e){
             Log.d(TAG, "onBindViewHolder: table data not updated.");
         }
 
-        if (column == 3 && mTableDataSource.get(0).getDataByField(3).equals("texture") && !itemData.isEmpty()) {
-            SpannableString spannable2 = new SpannableString(itemData);
-            spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
-                    0, itemData.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            vh.tvText.setVisibility(View.VISIBLE);
-            vh.tvText.setText(spannable2);
-        } else {
-            // update views
-            vh.tvText.setVisibility(View.VISIBLE);
-            vh.tvText.setText(itemData);
-        }
+
     }
 
 

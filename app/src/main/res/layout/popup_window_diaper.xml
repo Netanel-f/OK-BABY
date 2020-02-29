@@ -14,193 +14,231 @@
         android:background="@drawable/button_border_circular"
         app:cardCornerRadius="5dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginStart="10dp">
+
+
 
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/diaper_entry"
                 android:textAllCaps="false"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textColor="@color/colorPrimaryDark"
+                android:paddingBottom="15dp"
+                android:layout_marginVertical="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <!--Date-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/date"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_rectangle_stroke"/>
-
-            </LinearLayout>
-
-            <!--Time-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/time"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_rectangle_stroke"/>
-
-            </LinearLayout>
 
             <!--Type-->
             <LinearLayout
+                android:id="@+id/diaper_type_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/title">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/type"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <Spinner
-                    android:id="@+id/type"
-                    android:layout_width="match_parent"
+                    android:id="@+id/pee_btn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:contextClickable="false"
-                    android:spinnerMode="dropdown"
-                    android:textAlignment="center" />
+                    android:text="@string/pee"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/white"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_left_filled_rectangle"/>
+
+                <TextView
+                    android:id="@+id/poo_btn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@string/poo"
+                    android:fontFamily="sans-serif-light"
+                    android:textAlignment="center"
+                    android:background="@drawable/food_type_right_rectangle"/>
 
             </LinearLayout>
 
-            <!--Texture-->
+
+            <!--date-->
+            <TextView
+                android:id="@+id/date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:text="@string/date"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/date"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="70dp"
+                android:background="@drawable/rounded_rectangle_stroke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/diaper_type_bar"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <!--time-->
+            <TextView
+                android:id="@+id/time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                android:text="@string/time"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/diaper_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/diaper_time" />
+
+
+            <TextView
+                android:id="@+id/diaper_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="70dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_rectangle_stroke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
             <LinearLayout
-                android:id="@+id/textureLayout"
+                android:id="@+id/poo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/time_title">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/texture"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <Spinner
-                    android:id="@+id/texture"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contextClickable="false"
-                    android:spinnerMode="dropdown"
-                    android:textAlignment="center" />
-
-            </LinearLayout>
-
-            <!--Color-->
-            <LinearLayout
-                android:id="@+id/colorLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/color"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
+                <!--Texture-->
                 <LinearLayout
+                    android:id="@+id/texture_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:gravity="center">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/texture"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="20sp"/>
 
 
-                    <Button
-                        android:id="@+id/redColor"
-                        android:layout_width="34dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/red_color_circle" />
-
-                    <Button
-                        android:id="@+id/blackColor"
-                        android:layout_width="34dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/black_color_circle" />
-
-                    <Button
-                        android:id="@+id/brownColor"
-                        android:layout_width="34dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/brown_color_circle" />
-
+                    <Spinner
+                        android:id="@+id/texture"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contextClickable="false"
+                        android:spinnerMode="dropdown"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:fontFamily="sans-serif-light"
+                        android:textAlignment="center" />
 
                 </LinearLayout>
 
-                <!-- TODO-->
+                <!--Color-->
+                <LinearLayout
+                    android:id="@+id/color_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/color"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="20sp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:gravity="center">
 
 
+                        <Button
+                            android:id="@+id/redColor"
+                            android:layout_width="34dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/red_color_circle" />
+
+                        <Button
+                            android:id="@+id/blackColor"
+                            android:layout_width="34dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/black_color_circle" />
+
+                        <Button
+                            android:id="@+id/brownColor"
+                            android:layout_width="34dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/brown_color_circle" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:layout_constraintTop_toBottomOf="@id/poo_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/addButton"
-                    android:background="@drawable/button_border"
-                    android:text="Cancel" />
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:alpha="0.5"
+                    android:text="@string/cancel" />
 
 
                 <Button
@@ -208,11 +246,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/button_border"
-                    android:text="Add" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:background="@android:color/transparent"
+                    android:text="@string/add" />
             </RelativeLayout>
-        </LinearLayout>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
