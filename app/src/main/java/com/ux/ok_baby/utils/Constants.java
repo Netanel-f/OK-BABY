@@ -9,6 +9,7 @@ public class Constants {
     public static final String POO = "Poo";
     public static final String PEE = "Pee";
     public static final String BOTTLE = "Bottle";
+    public static final String BREASTFEEDING = "Breastfeeding";
     public static final String BABY_ID = "baby id";
     public static final int START_BABY_PROF_ACT = 1;
     public static final String TIME_PATTERN = "HH:mm";
@@ -23,6 +24,8 @@ public class Constants {
 
 
     public enum ReportType {FOOD, SLEEP, DIAPER, OTHER}
+
+    public enum FoodType {BREASTFEED, BOTTLE}
 
     public static Map<Integer, String> POO_COLORS = new HashMap<Integer, String>() {{
         put(R.color.black, "Black");

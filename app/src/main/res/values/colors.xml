@@ -14,6 +14,7 @@
     <color name="colorPrimary">#B2DFDB</color>
     <color name="colorPrimaryLight">#D4F5EF</color>
     <color name="colorPrimaryDark">#80CBC4</color>
+    <color name="textColor">#808080</color>
 
     <!-- table colors override -->
     <color name="shadow_end">#00000000</color>
