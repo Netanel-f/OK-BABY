@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.util.List;
 public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
     private static final int NUM_OF_COLS_IN_REPORT = 6;
+    private static final String TAG = "ReportTableAdapter";
     private final LayoutInflater mLayoutInflater;
     private final List<ReportEntry> mTableDataSource;
     private final int mColumnWidth;
@@ -89,10 +91,14 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
     public void onBindViewHolder(@NonNull ViewHolderImpl viewHolder, int row, int column) {
         final TestViewHolder vh = (TestViewHolder) viewHolder;
 
-        ReportEntry entry = mTableDataSource.get(row);
-        String itemData;
-        itemData = entry.getDataByField(column);
-        itemData = itemData.trim();
+        String itemData = "";
+        try {
+            ReportEntry entry = mTableDataSource.get(row);
+            itemData = entry.getDataByField(column);
+            itemData = itemData.trim();
+        } catch (IndexOutOfBoundsException e){
+            Log.d(TAG, "onBindViewHolder: table data not updated.");
+        }
 
         // update views
         vh.tvText.setVisibility(View.VISIBLE);
