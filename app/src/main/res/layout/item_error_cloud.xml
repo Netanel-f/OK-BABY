@@ -13,6 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:alpha="0.5"
         android:src="@drawable/ic_sad_cloud"/>
 
     <TextView
@@ -26,7 +27,7 @@
         android:fontFamily="sans-serif-medium"
         android:textSize="16sp"
         android:textColor="@color/gray"
-        android:alpha="0.4"
+        android:alpha="0.2"
         android:paddingBottom="15dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
