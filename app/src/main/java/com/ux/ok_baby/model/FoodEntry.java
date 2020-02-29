@@ -77,7 +77,9 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
         if (type.equals(BOTTLE))
             return !amount.isEmpty();
         else
-            return !side.isEmpty();
+            return true;
+//            return !side.isEmpty();
+
     }
 
     public String getDataByField(int fieldNum){

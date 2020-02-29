@@ -7,11 +7,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,11 +19,14 @@ import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import static com.ux.ok_baby.utils.Constants.*;
 
 public class PopUpFood {
-    private TextView mls;
+    private TextView amountMl;
     private String babyID;
     private View popupView;
     private Context context;
-    private Spinner typeSpin, sideSpin;
+    private FoodType currentFoodType;
+    private TextView breastfeedingButton;
+    private TextView bottleButton;
+
     private FoodEntry foodEntry;
     private PopupWindow popupWindow;
     private DateTimePicker dateTimePicker;
@@ -55,15 +55,13 @@ public class PopUpFood {
         dateTV = popupView.findViewById(R.id.date);
         startTimeTV = popupView.findViewById(R.id.startTime);
         endTimeTV = popupView.findViewById(R.id.endTime);
-        typeSpin = popupView.findViewById(R.id.type);
-        sideSpin = popupView.findViewById(R.id.side);
-        mls = popupView.findViewById(R.id.mls);
+        currentFoodType = FoodType.BOTTLE;
+        amountMl = popupView.findViewById(R.id.amount_mls);
 
         setUpDate();
         setUpStartTime();
         setUpEndTime();
         setUpType();
-        setUpSide();
         setUpAmount();
     }
 
@@ -102,64 +100,64 @@ public class PopUpFood {
         foodEntry.setDate(dateTV.getText().toString());
         foodEntry.setEndTime(endTimeTV.getText().toString());
         foodEntry.setStartTime(startTimeTV.getText().toString());
-        foodEntry.setType(typeSpin.getSelectedItem().toString());
-        if (foodEntry.getType().equals(BOTTLE)) {
-            foodEntry.setAmount(mls.getText().toString());
-            foodEntry.setSide("");
+
+        if (currentFoodType == FoodType.BOTTLE) {
+            foodEntry.setType(BOTTLE);
+            foodEntry.setAmount(amountMl.getText().toString());
         } else {
+            foodEntry.setType(BREASTFEEDING);
             foodEntry.setAmount("");
-            foodEntry.setSide(sideSpin.getSelectedItem().toString());
         }
     }
 
-
     private void setUpType() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-                .createFromResource(context, R.array.food_type,
-                        android.R.layout.simple_spinner_dropdown_item);
-        typeSpin.setAdapter(adapter);
-        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String type = (String) adapterView.getItemAtPosition(i);
-                if (type.equals(BOTTLE)) {
-                    popupView.findViewById(R.id.sideLayout).setVisibility(View.GONE);
-                    popupView.findViewById(R.id.amountLayout).setVisibility(View.VISIBLE);
-                } else {
-                    popupView.findViewById(R.id.sideLayout).setVisibility(View.VISIBLE);
-                    popupView.findViewById(R.id.amountLayout).setVisibility(View.GONE);
-                }
-            }
+        breastfeedingButton = popupView.findViewById(R.id.breast_btn);
+        bottleButton = popupView.findViewById(R.id.bottle_btn);
+        currentFoodType = FoodType.BREASTFEED;
 
+        breastfeedingButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onClick(View v) {
+                breastfeedingButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
+                breastfeedingButton.setTextColor(context.getColor(R.color.white));
 
+                bottleButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
+                bottleButton.setTextColor(context.getColor(R.color.textColor));
+
+                popupView.findViewById(R.id.amount_layout).setVisibility(View.GONE);
+                currentFoodType = FoodType.BREASTFEED;
             }
         });
-        typeSpin.setSelection(0);
-    }
 
-    private void setUpSide() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-                .createFromResource(context, R.array.food_side,
-                        android.R.layout.simple_spinner_dropdown_item);
-        sideSpin.setAdapter(adapter);
-        sideSpin.setSelection(0);
-    }
 
+        bottleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                breastfeedingButton.setBackgroundResource(R.drawable.food_type_left_rectangle);
+                breastfeedingButton.setTextColor(context.getColor(R.color.textColor));
+
+                bottleButton.setBackgroundResource(R.drawable.food_type_right_filled_rectangle);
+                bottleButton.setTextColor(context.getColor(R.color.white));
+
+                popupView.findViewById(R.id.amount_layout).setVisibility(View.VISIBLE);
+
+                currentFoodType = FoodType.BOTTLE;
+            }
+        });
+    }
 
     private void setUpAmount() {
-        popupView.findViewById(R.id.plusml).setOnClickListener(new View.OnClickListener() {
+        popupView.findViewById(R.id.amount_plus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) + 1));
+                amountMl.setText(String.valueOf(Integer.parseInt(amountMl.getText().toString()) + 5));
             }
         });
-        popupView.findViewById(R.id.minusml).setOnClickListener(new View.OnClickListener() {
+        popupView.findViewById(R.id.amount_minus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Integer.parseInt(mls.getText().toString()) > 0)
-                    mls.setText(String.valueOf(Integer.parseInt(mls.getText().toString()) - 1));
+                if (Integer.parseInt(amountMl.getText().toString()) > 0)
+                    amountMl.setText(String.valueOf(Integer.parseInt(amountMl.getText().toString()) - 5));
                 else
                     Toast.makeText(context, "Amount can't be lower than 0.", Toast.LENGTH_LONG).show();
             }
