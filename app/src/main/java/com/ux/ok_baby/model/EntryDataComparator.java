@@ -18,12 +18,6 @@ public class EntryDataComparator implements Comparator<ReportEntry> {
 
         Date date1, date2;
 
-        if (o1.getDate().equals("date")){
-            return -1;
-        } else if (o1.getDate().equals("date")){
-            return 1;
-        }
-
         SimpleDateFormat format = new SimpleDateFormat(DATE_PATTERN);
         try {
             date1 = format.parse(o1.getDate());

@@ -1,10 +1,8 @@
 package com.ux.ok_baby.view.ui.reports;
 
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -47,7 +45,6 @@ public class DiaperFragment extends Fragment {
     private AdaptiveTableLayout mTableLayout;
     private LinearLayout mGraphsLayout;
     private ReportTableAdapter mTableAdapter;
-    private ConstraintLayout mEmptyTableError;
     private String babyID;
     private View view;
 
@@ -74,35 +71,28 @@ public class DiaperFragment extends Fragment {
 
         mTableLayout = tableView.findViewById(R.id.tableReportLayout);
         mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
-        mEmptyTableError = tableView.findViewById(R.id.empty_table_error);
 
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
     }
 
     private void setUpReportTable() {
-        final Context context = getContext();
         entriesViewModel.getDiaperEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (reportEntries != null && reportEntries.size() > 0) {
-
-                    mEmptyTableError.setVisibility(View.GONE);
                     reportEntries.sort(new EntryDataComparator());
+
                     ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
                     if (!titleEntry.getDataByField(0).equals("date")) {
                         reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
                     }
-                } else {
-                    mEmptyTableError.setVisibility(View.VISIBLE);
-                    reportEntries = new ArrayList<>();
-                    reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture", "color"));
 
+                    mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
+                    mTableLayout.setAdapter(mTableAdapter);
+                    mTableAdapter.notifyDataSetChanged();
+                    setUpGraphs(reportEntries);
                 }
-                mTableAdapter = new ReportTableAdapter(context, reportEntries);
-                mTableLayout.setAdapter(mTableAdapter);
-                mTableAdapter.notifyDataSetChanged();
-                setUpGraphs(reportEntries);
             }
         });
     }

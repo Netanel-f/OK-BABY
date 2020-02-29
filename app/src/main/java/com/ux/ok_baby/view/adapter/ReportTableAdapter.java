@@ -3,8 +3,6 @@ package com.ux.ok_baby.view.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -26,7 +24,6 @@ import static com.ux.ok_baby.utils.Constants.POO_COLORS1;
 public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
     private static final int NUM_OF_COLS_IN_REPORT = 6;
-    private static final String TAG = "ReportTableAdapter";
     private final LayoutInflater mLayoutInflater;
     private final List<ReportEntry> mTableDataSource;
     private final int mColumnWidth;
@@ -53,8 +50,7 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
 
     @Override
     public int getColumnCount() {
-//        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
-        if (mTableDataSource.isEmpty()) {
+        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
             return NUM_OF_COLS_IN_REPORT;
         } else {
             // determine col width dynamically
@@ -90,14 +86,10 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
     public void onBindViewHolder(@NonNull ViewHolderImpl viewHolder, int row, int column) {
         final TestViewHolder vh = (TestViewHolder) viewHolder;
 
-        String itemData = "";
-        try {
-            ReportEntry entry = mTableDataSource.get(row);
-            itemData = entry.getDataByField(column);
-            itemData = itemData.trim();
-        } catch (IndexOutOfBoundsException e){
-            Log.d(TAG, "onBindViewHolder: table data not updated.");
-        }
+        ReportEntry entry = mTableDataSource.get(row);
+
+        String itemData = entry.getDataByField(column);
+        itemData = itemData.trim();
 
         if (column == 3 && mTableDataSource.get(0).getDataByField(3).equals("texture") && !itemData.isEmpty()) {
             SpannableString spannable2 = new SpannableString(itemData);
@@ -142,7 +134,7 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
 
     @Override
     public int getColumnWidth(int column) {
-        if (mTableDataSource.isEmpty()) {
+        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
             return mColumnWidth;
         } else {
             // determine col width dynamically

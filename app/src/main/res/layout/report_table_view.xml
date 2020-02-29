@@ -30,14 +30,6 @@
             app:fixedHeaders="false"
             app:solidRowHeaders="false" />
 
-        <include layout="@layout/item_error_cloud"
-            android:id="@+id/empty_table_error"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginHorizontal="100dp"
-            android:layout_centerVertical="true"/>
-
 
     </RelativeLayout>
 </ScrollView>
