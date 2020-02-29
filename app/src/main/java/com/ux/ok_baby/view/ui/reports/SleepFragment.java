@@ -23,7 +23,6 @@ import com.ux.ok_baby.view.popups.PopUpSleep;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
@@ -84,42 +83,31 @@ public class SleepFragment extends Fragment {
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
 
         // add values to graph
-        List<PointValue> values = new ArrayList<PointValue>();
-        List<Line> lines = new ArrayList<Line>();
-        for (int j = 0; j < entries.size(); ++j) {
-            SleepEntry entry = (SleepEntry) entries.get(j);
-//            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
-            PointValue pointValue = new PointValue(j, entry.getDuration());
-            values.add(pointValue);
-            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
-            line.setHasLabels(true);
-//            line.setPointColor(ChartUtils.COLORS[j % ChartUtils.COLORS.length]);
-            lines.add(line);
-        }
+        List<Line> lines = generateDataForGraph(entries);
 
-        boolean hasAxesNames = true;
         LineChartData data = new LineChartData();
-
-        Axis axisX;
-        Axis axisY;
-//        if (hasAxes) {
-        axisX = new Axis();
-        axisY = new Axis().setHasLines(true);
-        if (hasAxesNames) {
-//                axisX.setName("Axis X");
-            axisY.setName("Duration in minutes");
-        }
+        Axis axisY = new Axis().setHasLines(true);
+        axisY.setName("Duration in minutes");
         data.setAxisXBottom(null);
         data.setAxisYLeft(axisY);
         data.setLines(lines);
         chart.setLineChartData(data);
-
-//        Viewport v = new Viewport(chart.getMaximumViewport());
-//        v.left = 0;
-//        v.right = v.right - 0.5f;
-//        chart.setCurrentViewportWithAnimation(v);
         chart.setScrollEnabled(false);
         chart.setZoomEnabled(true);
+    }
+
+    private List<Line> generateDataForGraph(List<ReportEntry> reportEntries) {
+        List<PointValue> values = new ArrayList<PointValue>();
+        List<Line> lines = new ArrayList<Line>();
+        for (int j = 0; j < reportEntries.size(); ++j) {
+            SleepEntry entry = (SleepEntry) reportEntries.get(j);
+            PointValue pointValue = new PointValue(j, entry.getDuration());
+            values.add(pointValue);
+            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
+            line.setHasLabels(true);
+            lines.add(line);
+        }
+        return lines;
     }
 
     private void setUpReportTable() {
@@ -127,26 +115,8 @@ public class SleepFragment extends Fragment {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (reportEntries != null && reportEntries.size() > 0) {
-                    // todo: remove sort from here- maybe in viewmodel when getting entries
-//                    reportEntries.sort(new Comparator<ReportEntry>() {
-//                        @Override
-//                        public int compare(ReportEntry o1, ReportEntry o2) {
-//                            SleepEntry s1 = (SleepEntry) o1;
-//                            SleepEntry s2 = (SleepEntry) o2;
-//
-//                            // handle title row
-//                            if (s1.getDate().equals("date")) {
-//                                return -1;
-//                            } else if (s2.getDate().equals("date")) {
-//                                return 1;
-//                            }
-//
-//                            return s1.getDate().compareTo(s2.getDate());
-//                        }
-//                    });
                     reportEntries.sort(new EntryDataComparator());
 
-                    // todo: temp
                     SleepEntry titleEntry = (SleepEntry) reportEntries.get(0);
                     if (!titleEntry.getDate().equals("date")) {
                         reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));

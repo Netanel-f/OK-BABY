@@ -24,10 +24,8 @@ import com.ux.ok_baby.view.popups.PopUpDiaper;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import lecho.lib.hellocharts.formatter.ValueFormatterHelper;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
@@ -83,29 +81,11 @@ public class DiaperFragment extends Fragment {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (reportEntries != null && reportEntries.size() > 0) {
-                    // todo: remove sort from here- maybe in viewmodel when getting entries
-//                    reportEntries.sort(new Comparator<ReportEntry>() {
-//                        @Override
-//                        public int compare(ReportEntry o1, ReportEntry o2) {
-//                            DiaperEntry s1 = (DiaperEntry) o1;
-//                            DiaperEntry s2 = (DiaperEntry) o2;
-//
-//                            // handle title row
-//                            if (s1.getDate().equals("date")) {
-//                                return -1;
-//                            } else if (s2.getDate().equals("date")) {
-//                                return 1;
-//                            }
-//
-//                            return s1.getDate().compareTo(s2.getDate());
-//                        }
-//                    });
                     reportEntries.sort(new EntryDataComparator());
 
-                    // todo: temp
                     ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
                     if (!titleEntry.getDataByField(0).equals("date")) {
-                        reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture", "color"));
+                        reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
                     }
 
                     mTableAdapter = new ReportTableAdapter(getContext(), reportEntries);
@@ -124,105 +104,95 @@ public class DiaperFragment extends Fragment {
 
         List<AxisValue> axisXValues = new ArrayList<>();
         List<Column> columns = generateDataForGraph(reportEntries, axisXValues);
+
         data = new ColumnChartData(columns);
 
-        boolean hasAxes = true;
-        boolean hasAxesNames = true;
-        if (hasAxes) {
-            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
-            if (hasAxesNames) {
-//                axisX.setName("Axis X");
-                axisY.setName("Number of diapers");
-            }
-            axisX.setValues(axisXValues);
+        Axis axisX = new Axis();
+        Axis axisY = new Axis().setHasLines(true);
+        axisY.setName("Number of diapers");
+        axisX.setValues(axisXValues);
 
-            final ValueFormatterHelper helper = new ValueFormatterHelper();
-            data.setAxisXBottom(axisX);
-            data.setAxisYLeft(axisY);
-        } else {
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(null);
-        }
-
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
         data.setStacked(false);
         chart.setColumnChartData(data);
     }
 
     private List<Column> generateDataForGraph(List<ReportEntry> reportEntries, List<AxisValue> axisValues) {
-        List<Column> columns = new ArrayList<Column>();
-        List<SubcolumnValue> values;
-
-        int i = 1;
-        DiaperEntry entry;
-        int typesOfDiaperEntries = 2;
-
-        int numOfDates = 0;
         ArrayList<String> dates = new ArrayList<>();
-        ArrayList<Integer> numOfPooEntriesPerDay = new ArrayList<>();
-        ArrayList<Integer> numOfPeeEntriesPerDay = new ArrayList<>();
+        ArrayList<Integer>[] diaperEntries = getTypePerDay(reportEntries, axisValues, dates);
+        return getColumns(diaperEntries, dates);
+    }
 
-        // iterate over all entries
-        while (i < reportEntries.size()) {
-            entry = (DiaperEntry) reportEntries.get(i);
-            String currentDate = entry.getDate();
-
-            // iterate over all entries for a certain date
-            int pooEntriesPerDay = 0;
-            int peeEntriesPerDay = 0;
-            int j = i;
-            while (entry.getDate().equals(currentDate) && j < reportEntries.size()) {
-                if (entry.getType().equals(POO)) {
-                    pooEntriesPerDay++;
-                } else if (entry.getType().equals(PEE)) {
-                    peeEntriesPerDay++;
-                }
-                j++;
-                if (j < reportEntries.size()) {
-                    entry = (DiaperEntry) reportEntries.get(j);
-                }
-            }
-
-            numOfPooEntriesPerDay.add(pooEntriesPerDay);
-            numOfPeeEntriesPerDay.add(peeEntriesPerDay);
-
-            // generate lavels
-            AxisValue axisValue = new AxisValue(dates.size());
-            axisValue.setLabel(currentDate);
-            axisValues.add(axisValue);
-
-            dates.add(currentDate);
-
-            if (j != i) {
-                i = j;
-            } else {
-                i++;
-            }
-        }
-
-        ArrayList<Integer>[] diaperEntries = new ArrayList[]{numOfPooEntriesPerDay, numOfPeeEntriesPerDay};
-
-        // iterate over dates (columns)
+    private List<Column> getColumns(ArrayList<Integer>[] diaperEntries, ArrayList<String> dates) {
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimaryDark),
                 ContextCompat.getColor(getContext(), R.color.colorPrimary)};
-        String[] labels = {POO, PEE};
-        for (int k = 0; k < dates.size(); ++k) {
+        List<Column> columns = new ArrayList<Column>();
+        int typesOfDiaperEntries = 2;
 
-            values = new ArrayList<SubcolumnValue>();
+        for (int k = 0; k < dates.size(); ++k) {
+            List<SubcolumnValue> values = new ArrayList<SubcolumnValue>();
             for (int j = 0; j < typesOfDiaperEntries; ++j) {
                 SubcolumnValue value = new SubcolumnValue(diaperEntries[j].get(k), colors[j]);
                 value.setLabel((Integer) Math.round(value.getValue()) + "");
                 values.add(value);
             }
-
             Column column = new Column(values);
-
-//            column.setHasLabels(true);
             column.setHasLabelsOnlyForSelected(true);
             columns.add(column);
         }
-
         return columns;
+    }
+
+
+    private int getNumOfTypeByDate(ArrayList<Integer> numOfPooEntriesPerDay, ArrayList<Integer> numOfPeeEntriesPerDay,
+                                   List<ReportEntry> reportEntries, int i) {
+        DiaperEntry entry = (DiaperEntry) reportEntries.get(i);
+        String currentDate = entry.getDate();
+
+        int pooEntriesPerDay = 0, peeEntriesPerDay = 0, j = i;
+        while (entry.getDate().equals(currentDate) && j < reportEntries.size()) {
+
+            if (entry.getType().equals(POO))
+                pooEntriesPerDay++;
+            else if (entry.getType().equals(PEE))
+                peeEntriesPerDay++;
+
+            j++;
+
+            if (j < reportEntries.size())
+                entry = (DiaperEntry) reportEntries.get(j);
+        }
+
+        numOfPooEntriesPerDay.add(pooEntriesPerDay);
+        numOfPeeEntriesPerDay.add(peeEntriesPerDay);
+
+        return j;
+    }
+
+    private ArrayList<Integer>[] getTypePerDay(List<ReportEntry> reportEntries, List<AxisValue> axisValues, ArrayList<String> dates) {
+        ArrayList<Integer> numOfPooEntriesPerDay = new ArrayList<>();
+        ArrayList<Integer> numOfPeeEntriesPerDay = new ArrayList<>();
+
+        int i = 1;
+        while (i < reportEntries.size()) {
+            DiaperEntry entry = (DiaperEntry) reportEntries.get(i);
+            String currentDate = entry.getDate();
+
+            int j = getNumOfTypeByDate(numOfPooEntriesPerDay, numOfPeeEntriesPerDay, reportEntries, i);
+
+            // generate lavels
+            AxisValue axisValue = new AxisValue(dates.size());
+            axisValue.setLabel(currentDate);
+            axisValues.add(axisValue);
+            dates.add(currentDate);
+
+            if (j != i)
+                i = j;
+            else
+                i++;
+        }
+        return new ArrayList[]{numOfPooEntriesPerDay, numOfPeeEntriesPerDay};
     }
 
     private void onAddClickListener(View view) {
