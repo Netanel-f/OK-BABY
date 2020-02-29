@@ -40,6 +40,7 @@
     <string name="ml">ml</string>
     <string name="default_bottle_amount">30</string>
     <string name="add">Add</string>
+    <string name="empty_table_error_msg">No entries added yet</string>
 
 
     <string-array name="food_type">
