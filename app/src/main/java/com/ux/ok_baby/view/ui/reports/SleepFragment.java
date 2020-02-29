@@ -83,42 +83,31 @@ public class SleepFragment extends Fragment {
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
 
         // add values to graph
-        List<PointValue> values = new ArrayList<PointValue>();
-        List<Line> lines = new ArrayList<Line>();
-        for (int j = 0; j < entries.size(); ++j) {
-            SleepEntry entry = (SleepEntry) entries.get(j);
-//            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
-            PointValue pointValue = new PointValue(j, entry.getDuration());
-            values.add(pointValue);
-            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
-            line.setHasLabels(true);
-//            line.setPointColor(ChartUtils.COLORS[j % ChartUtils.COLORS.length]);
-            lines.add(line);
-        }
+        List<Line> lines = generateDataForGraph(entries);
 
-        boolean hasAxesNames = true;
         LineChartData data = new LineChartData();
-
-        Axis axisX;
-        Axis axisY;
-//        if (hasAxes) {
-        axisX = new Axis();
-        axisY = new Axis().setHasLines(true);
-        if (hasAxesNames) {
-//                axisX.setName("Axis X");
-            axisY.setName("Duration in minutes");
-        }
+        Axis axisY = new Axis().setHasLines(true);
+        axisY.setName("Duration in minutes");
         data.setAxisXBottom(null);
         data.setAxisYLeft(axisY);
         data.setLines(lines);
         chart.setLineChartData(data);
-
-//        Viewport v = new Viewport(chart.getMaximumViewport());
-//        v.left = 0;
-//        v.right = v.right - 0.5f;
-//        chart.setCurrentViewportWithAnimation(v);
         chart.setScrollEnabled(false);
         chart.setZoomEnabled(true);
+    }
+
+    private List<Line> generateDataForGraph(List<ReportEntry> reportEntries) {
+        List<PointValue> values = new ArrayList<PointValue>();
+        List<Line> lines = new ArrayList<Line>();
+        for (int j = 0; j < reportEntries.size(); ++j) {
+            SleepEntry entry = (SleepEntry) reportEntries.get(j);
+            PointValue pointValue = new PointValue(j, entry.getDuration());
+            values.add(pointValue);
+            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
+            line.setHasLabels(true);
+            lines.add(line);
+        }
+        return lines;
     }
 
     private void setUpReportTable() {

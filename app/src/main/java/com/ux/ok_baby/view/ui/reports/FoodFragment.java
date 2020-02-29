@@ -104,17 +104,13 @@ public class FoodFragment extends Fragment {
         data.setHasCenterCircle(true);
         data.setCenterCircleScale(0.40f);
         chart.setPieChartData(data);
-
     }
 
     private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
-        int numValues = 2; // bottle / breastfeeding
-        int BOTTLE = 0;
-        int BREASTFEEDING = 1;
+        int sum, numValues = 2, BOTTLE = 0, BREASTFEEDING = 1;
         List<SliceValue> values = new ArrayList<SliceValue>();
-
         int[] numOfEntries = new int[numValues];
-        int sum;
+
         for (ReportEntry entry : reportEntries) {
             FoodEntry foodEntry = (FoodEntry) entry;
             if (foodEntry.getType().equals("Bottle")) {
@@ -127,18 +123,15 @@ public class FoodFragment extends Fragment {
 
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
+
         String[] labels = {"Bottle\n", "Breastfeeding\n"};
-
         for (int i = 0; i < numValues; ++i) {
-
             SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
-            sliceValue.setLabel(labels[i] +
-                    round((sliceValue.getValue() / sum) * 100) + "%");
+            sliceValue.setLabel(labels[i] + round((sliceValue.getValue() / sum) * 100) + "%");
             values.add(sliceValue);
         }
 
         return values;
-
     }
 
     private void onAddClickListener(View view) {
