@@ -86,7 +86,6 @@ public class ReportsHolderFragment extends Fragment {
     }
 
     public void updateBabyID(String babyID) {
-//        entriesViewModel.getDiaperEntries(this.babyID).removeObservers(diaperFragment);
         this.babyID = babyID;
         seClickedItem();
     }

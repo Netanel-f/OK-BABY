@@ -1,8 +1,6 @@
 package com.ux.ok_baby.view.ui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +30,6 @@ public class BabyRecyclerUtils {
             super(itemView);
             babyImage = itemView.findViewById(R.id.oneBabyImg);
         }
-
     }
 
     static class BabyCallback extends DiffUtil.ItemCallback<Baby> {

@@ -19,19 +19,15 @@ import com.ux.ok_baby.viewmodel.EntriesViewModel;
 import static com.ux.ok_baby.utils.Constants.*;
 
 public class PopUpFood {
-    private TextView amountMl;
     private String babyID;
     private View popupView;
     private Context context;
-    private FoodType currentFoodType;
-    private TextView breastfeedingButton;
-    private TextView bottleButton;
-
     private FoodEntry foodEntry;
     private PopupWindow popupWindow;
+    private FoodType currentFoodType;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
-    private TextView dateTV, startTimeTV, endTimeTV;
+    private TextView amountMl, breastfeedingButton, bottleButton, dateTV, startTimeTV, endTimeTV;
 
     public PopUpFood(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.babyID = babyID;
@@ -115,21 +111,11 @@ public class PopUpFood {
         bottleButton = popupView.findViewById(R.id.bottle_btn);
         currentFoodType = FoodType.BREASTFEED;
 
-        breastfeedingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                breastfeedingButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
-                breastfeedingButton.setTextColor(context.getColor(R.color.white));
+        setUpBreastfeedButton();
+        setUpBottleButton();
+    }
 
-                bottleButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
-                bottleButton.setTextColor(context.getColor(R.color.textColor));
-
-                popupView.findViewById(R.id.amount_layout).setVisibility(View.GONE);
-                currentFoodType = FoodType.BREASTFEED;
-            }
-        });
-
-
+    private void setUpBottleButton() {
         bottleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +128,22 @@ public class PopUpFood {
                 popupView.findViewById(R.id.amount_layout).setVisibility(View.VISIBLE);
 
                 currentFoodType = FoodType.BOTTLE;
+            }
+        });
+    }
+
+    private void setUpBreastfeedButton() {
+        breastfeedingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                breastfeedingButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
+                breastfeedingButton.setTextColor(context.getColor(R.color.white));
+
+                bottleButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
+                bottleButton.setTextColor(context.getColor(R.color.textColor));
+
+                popupView.findViewById(R.id.amount_layout).setVisibility(View.GONE);
+                currentFoodType = FoodType.BREASTFEED;
             }
         });
     }
