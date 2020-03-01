@@ -99,8 +99,14 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
 
             if (column == 3 && mTableDataSource.get(0).getDataByField(3).equals("texture") && !itemData.isEmpty()) {
                 SpannableString spannable2 = new SpannableString(itemData);
-                spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
-                        0, itemData.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                try {
+                    spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
+                            0, itemData.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } catch (NullPointerException e){
+                    Log.d(TAG, "onBindViewHolder: Poo color not set.");
+                    spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get("Brown")),
+                            0, itemData.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
                 vh.tvText.setVisibility(View.VISIBLE);
                 vh.tvText.setText(spannable2);
             } else {
