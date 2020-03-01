@@ -59,14 +59,14 @@ public class FirestoreRepository {
         this.babiesCollection = firestoreDB.collection("babies");
         this.curUser = new MutableLiveData<>();
         this.curBaby = new MutableLiveData<>();
-        this.userBabies =  new MutableLiveData<>();
+        this.userBabies = new MutableLiveData<>();
         this.sleepEntries = new MutableLiveData<>();
         this.diaperEntries = new MutableLiveData<>();
         this.foodEntries = new MutableLiveData<>();
     }
 
     private static Map<Constants.ReportType, String> createMap() {
-        Map<Constants.ReportType,String> myMap = new HashMap<>();
+        Map<Constants.ReportType, String> myMap = new HashMap<>();
         myMap.put(Constants.ReportType.SLEEP, "sleep_reports");
         myMap.put(Constants.ReportType.FOOD, "food_reports");
         myMap.put(Constants.ReportType.DIAPER, "diaper_reports");
@@ -78,6 +78,7 @@ public class FirestoreRepository {
 
     /**
      * Add baby to database and to update its caretaker user in the database.
+     *
      * @param caretakerUid - UID of the user the baby is added to.
      * @param baby         - baby to add.
      */
@@ -101,12 +102,12 @@ public class FirestoreRepository {
 
         // update caretaker
         addBabyToUser(caretakerUid, baby.getBid());
-
     }
 
 
     /**
      * Update the baby in the database by the baby's bid.
+     *
      * @param baby - baby to update.
      */
     public void updateBaby(Baby baby) {
@@ -116,7 +117,8 @@ public class FirestoreRepository {
 
     /**
      * Update specific field of the baby.
-     * @param bid - id of the baby to update.
+     *
+     * @param bid   - id of the baby to update.
      * @param field - field to update.
      * @param value - value to update.
      */
@@ -202,6 +204,7 @@ public class FirestoreRepository {
 
     /**
      * Update user in db by uid.
+     *
      * @param user - user to update.
      */
     public void updateUser(User user) {
@@ -211,7 +214,8 @@ public class FirestoreRepository {
 
     /**
      * Update specific field of user in db by uid.
-     * @param uid - id of the user to update.
+     *
+     * @param uid   - id of the user to update.
      * @param field - field of the user to update.
      * @param value - value to update.
      */
@@ -235,6 +239,7 @@ public class FirestoreRepository {
 
     /**
      * Get user from database.
+     *
      * @param uid - id of the user to update.
      * @return observable LiveData user object from db.
      */
@@ -262,8 +267,9 @@ public class FirestoreRepository {
 
     /**
      * Add baby (by bid) to user in the database.
+     *
      * @param caretakerUID - uid of the user.
-     * @param bid - uid of the baby.
+     * @param bid          - uid of the baby.
      */
     public void addBabyToUser(String caretakerUID, String bid) {
         // create references
@@ -274,9 +280,9 @@ public class FirestoreRepository {
         userRef.update("babies", FieldValue.arrayUnion(babyRef));
     }
 
-    private static ReportEntry documentToEntry(QueryDocumentSnapshot document, Constants.ReportType type){
+    private static ReportEntry documentToEntry(QueryDocumentSnapshot document, Constants.ReportType type) {
         ReportEntry entry;
-        switch (type){
+        switch (type) {
             case SLEEP:
                 entry = document.toObject(SleepEntry.class);
                 break;
@@ -293,7 +299,7 @@ public class FirestoreRepository {
         return entry;
     }
 
-    public LiveData<List<ReportEntry>> getSleepEntries(String bid){
+    public LiveData<List<ReportEntry>> getSleepEntries(String bid) {
         String collectionName = reportToCollection.get(Constants.ReportType.SLEEP);
         final CollectionReference collectionRef = babiesCollection.document(bid).collection(collectionName);
         collectionRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -306,7 +312,7 @@ public class FirestoreRepository {
 
                 List<ReportEntry> entries = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    if (doc.exists()){
+                    if (doc.exists()) {
                         SleepEntry entry = (SleepEntry) documentToEntry(doc, Constants.ReportType.SLEEP);
                         entries.add(entry);
                     }
@@ -318,7 +324,7 @@ public class FirestoreRepository {
         return sleepEntries;
     }
 
-    public LiveData<List<ReportEntry>> getFoodEntries(String bid){
+    public LiveData<List<ReportEntry>> getFoodEntries(String bid) {
         String collectionName = reportToCollection.get(Constants.ReportType.FOOD);
         final CollectionReference collectionRef = babiesCollection.document(bid).collection(collectionName);
         collectionRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -331,7 +337,7 @@ public class FirestoreRepository {
 
                 List<ReportEntry> entries = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    if (doc.exists()){
+                    if (doc.exists()) {
                         FoodEntry entry = (FoodEntry) documentToEntry(doc, Constants.ReportType.FOOD);
                         entries.add(entry);
                     }
@@ -343,8 +349,7 @@ public class FirestoreRepository {
         return foodEntries;
     }
 
-
-    public LiveData<List<ReportEntry>> getDiaperEntries(String bid){
+    public LiveData<List<ReportEntry>> getDiaperEntries(String bid) {
         String collectionName = reportToCollection.get(Constants.ReportType.DIAPER);
 
         final CollectionReference collectionRef = babiesCollection.document(bid).collection(collectionName);
@@ -358,7 +363,7 @@ public class FirestoreRepository {
 
                 List<ReportEntry> entries = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    if (doc.exists()){
+                    if (doc.exists()) {
                         DiaperEntry entry = (DiaperEntry) documentToEntry(doc, Constants.ReportType.DIAPER);
                         entries.add(entry);
                     }
@@ -367,12 +372,11 @@ public class FirestoreRepository {
                 diaperEntries.postValue(entries);
             }
         });
-
         return diaperEntries;
     }
 
 
-    public void addEntry(Constants.ReportType type, String bid, ReportEntry entry){
+    public void addEntry(Constants.ReportType type, String bid, ReportEntry entry) {
         String collectionName = reportToCollection.get(type);
         CollectionReference reportsRef = babiesCollection.document(bid).collection(collectionName);
         reportsRef.add(entry)
@@ -388,5 +392,4 @@ public class FirestoreRepository {
             }
         });
     }
-
 }

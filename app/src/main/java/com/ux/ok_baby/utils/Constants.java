@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
+    public static final int NUM_OF_TYPES = 2;
     public static final String POO = "Poo";
     public static final String PEE = "Pee";
     public static final String BOTTLE = "Bottle";
-    public static final String BREASTFEEDING = "Breastfeeding";
     public static final String BABY_ID = "baby id";
     public static final int START_BABY_PROF_ACT = 1;
     public static final String USER_ID_TAG = "userID";
@@ -22,6 +22,7 @@ public class Constants {
     public static final String REPORT_TYPE = "report type";
     public static final String IS_NEW_USER_TAG = "isNewUser";
     public static final String BABY_OBJECT_TAG = "BabyObject";
+    public static final String BREASTFEEDING = "Breastfeeding";
     public static final String OLD_MAIN_BABY_OBJECT_TAG = "OldMainBabyObject";
 
 

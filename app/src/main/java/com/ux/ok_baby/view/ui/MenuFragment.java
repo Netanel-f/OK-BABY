@@ -71,9 +71,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         Bundle bundle = new Bundle();
         bundle.putInt(REPORT_TYPE, reportType);
         reportsHolderFragment.setArguments(bundle);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, reportsHolderFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, reportsHolderFragment)
+                .addToBackStack(null).commit();
     }
 }

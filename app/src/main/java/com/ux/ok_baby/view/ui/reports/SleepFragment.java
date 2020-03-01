@@ -22,6 +22,7 @@ import com.ux.ok_baby.model.ReportEntry;
 import com.ux.ok_baby.model.SleepEntry;
 import com.ux.ok_baby.view.adapter.ReportTableAdapter;
 import com.ux.ok_baby.view.popups.PopUpSleep;
+import com.ux.ok_baby.view.ui.HomeFragment;
 import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 import java.util.ArrayList;
@@ -33,9 +34,6 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
-
-import static android.view.View.GONE;
-
 
 /**
  * Contains the sleep report.
@@ -88,19 +86,7 @@ public class SleepFragment extends Fragment {
         chart.setScrollEnabled(true);
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
 
-        // add values to graph
-        List<PointValue> values = new ArrayList<PointValue>();
-        List<Line> lines = new ArrayList<Line>();
-        for (int j = 1; j < entries.size(); ++j) { // todo: starting from 1 bc of title
-            SleepEntry entry = (SleepEntry) entries.get(j);
-//            PointValue pointValue = new PointValue(j, ReportTableAdapter.calculateDurationInt(entry));
-            PointValue pointValue = new PointValue(j, entry.getDuration());
-            values.add(pointValue);
-            Line line = new Line(values).setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).setCubic(true);
-            line.setHasLabels(true);
-//            line.setPointColor(ChartUtils.COLORS[j % ChartUtils.COLORS.length]);
-            lines.add(line);
-        }
+        List<Line> lines = generateDataForGraph(entries);
 
         LineChartData data = new LineChartData();
         Axis axisY = new Axis().setHasLines(true);
@@ -132,23 +118,28 @@ public class SleepFragment extends Fragment {
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
-                if (reportEntries != null && reportEntries.size() > 0) {
-                    mEmptyTableError.setVisibility(View.GONE);
-                    reportEntries.sort(new EntryDataComparator());
-                    SleepEntry titleEntry = (SleepEntry) reportEntries.get(0);
-                    if (!titleEntry.getDate().equals("date")) {
+                if (entriesViewModel.isFirstTimeSleep()) {
+                    if (reportEntries != null && reportEntries.size() > 0) {
+                        mEmptyTableError.setVisibility(View.GONE);
+                        reportEntries.sort(new EntryDataComparator());
+                        SleepEntry titleEntry = (SleepEntry) reportEntries.get(0);
+                        if (!titleEntry.getDate().equals("date")) {
+                            reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));
+                        }
+                    } else {
+                        // empty table
+                        mEmptyTableError.setVisibility(View.VISIBLE);
+                        reportEntries = new ArrayList<>();
                         reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));
                     }
+                    mTableAdapter = new ReportTableAdapter(context, reportEntries);
+                    mTableLayout.setAdapter(mTableAdapter);
+                    mTableAdapter.notifyDataSetChanged();
+                    setUpGraphs(reportEntries);
+                    entriesViewModel.setIsFirstTimeSleep(false);
                 } else {
-                    // empty table
-                    mEmptyTableError.setVisibility(View.VISIBLE);
-                    reportEntries = new ArrayList<>();
-                    reportEntries.add(0, new SleepEntry("date", "start", "end", "duration"));
+                    entriesViewModel.setIsFirstTimeSleep(true);
                 }
-                mTableAdapter = new ReportTableAdapter(context, reportEntries);
-                mTableLayout.setAdapter(mTableAdapter);
-                mTableAdapter.notifyDataSetChanged();
-                setUpGraphs(reportEntries);
             }
         });
     }

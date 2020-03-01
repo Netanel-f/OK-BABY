@@ -51,7 +51,6 @@ public class DiaperFragment extends Fragment {
     private String babyID;
     private View view;
 
-
     public DiaperFragment(String babyID) {
         this.babyID = babyID;
     }
@@ -85,24 +84,28 @@ public class DiaperFragment extends Fragment {
         entriesViewModel.getDiaperEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
-                if (reportEntries != null && reportEntries.size() > 0) {
-
-                    mEmptyTableError.setVisibility(View.GONE);
-                    reportEntries.sort(new EntryDataComparator());
-                    ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
-                    if (!titleEntry.getDataByField(0).equals("date")) {
+                if (entriesViewModel.isFirstTimeDiaper()) {
+                    if (reportEntries != null && reportEntries.size() > 0) {
+                        mEmptyTableError.setVisibility(View.GONE);
+                        reportEntries.sort(new EntryDataComparator());
+                        ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
+                        if (!titleEntry.getDataByField(0).equals("date")) {
+                            reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
+                        }
+                    } else {
+                        mEmptyTableError.setVisibility(View.VISIBLE);
+                        reportEntries = new ArrayList<>();
                         reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
                     }
-                } else {
-                    mEmptyTableError.setVisibility(View.VISIBLE);
-                    reportEntries = new ArrayList<>();
-                    reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture", "color"));
 
+                    mTableAdapter = new ReportTableAdapter(context, reportEntries);
+                    mTableLayout.setAdapter(mTableAdapter);
+                    mTableAdapter.notifyDataSetChanged();
+                    setUpGraphs(reportEntries);
+                    entriesViewModel.setIsFirstTimeDiaper(false);
+                } else {
+                    entriesViewModel.setIsFirstTimeDiaper(true);
                 }
-                mTableAdapter = new ReportTableAdapter(context, reportEntries);
-                mTableLayout.setAdapter(mTableAdapter);
-                mTableAdapter.notifyDataSetChanged();
-                setUpGraphs(reportEntries);
             }
         });
     }
@@ -138,11 +141,10 @@ public class DiaperFragment extends Fragment {
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimaryDark),
                 ContextCompat.getColor(getContext(), R.color.colorPrimary)};
         List<Column> columns = new ArrayList<Column>();
-        int typesOfDiaperEntries = 2;
 
         for (int k = 0; k < dates.size(); ++k) {
             List<SubcolumnValue> values = new ArrayList<SubcolumnValue>();
-            for (int j = 0; j < typesOfDiaperEntries; ++j) {
+            for (int j = 0; j < NUM_OF_TYPES; ++j) {
                 SubcolumnValue value = new SubcolumnValue(diaperEntries[j].get(k), colors[j]);
                 value.setLabel((Integer) Math.round(value.getValue()) + "");
                 values.add(value);
