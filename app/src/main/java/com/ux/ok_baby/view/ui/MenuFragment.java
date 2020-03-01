@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private String babyID;
     private ReportsHolderFragment reportsHolderFragment;
 
+
     public MenuFragment(String babyID) {
         this.babyID = babyID;
     }
@@ -36,6 +38,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.menu_layout, container, false);
         setUpOptions();
+
         return view;
     }
 
