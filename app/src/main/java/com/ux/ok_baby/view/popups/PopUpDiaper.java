@@ -7,7 +7,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,16 +28,13 @@ public class PopUpDiaper {
     private String babyID;
     private View popupView;
     private Context context;
-    private DiaperType currentDiaperType;
-    private TextView pooButton;
-    private TextView peeButton;
-//    private Spinner typeSpin;
     private Spinner textureSpin;
     private DiaperEntry diaperEntry;
     private PopupWindow popupWindow;
+    private DiaperType currentDiaperType;
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
-    private TextView dateTV, timeTV;
+    private TextView pooButton, peeButton, dateTV, timeTV;
     private HashMap<Button, Integer> colorBtns = new HashMap<>();
 
     public PopUpDiaper(Context context, String babyID, EntriesViewModel entriesViewModel) {
@@ -62,7 +58,6 @@ public class PopUpDiaper {
     private void setUpEntry() {
         dateTV = popupView.findViewById(R.id.date);
         timeTV = popupView.findViewById(R.id.diaper_time);
-//        typeSpin = popupView.findViewById(R.id.type);
         currentDiaperType = DiaperType.PEE;
         textureSpin = popupView.findViewById(R.id.texture);
 
@@ -92,7 +87,6 @@ public class PopUpDiaper {
     private void updateDiaperEntryObject() {
         diaperEntry.setDate(dateTV.getText().toString());
         diaperEntry.setTime(timeTV.getText().toString());
-//        diaperEntry.setType(typeSpin.getSelectedItem().toString());
 
         if (currentDiaperType == DiaperType.POO) {
             diaperEntry.setType(POO);
@@ -167,20 +161,11 @@ public class PopUpDiaper {
         peeButton = popupView.findViewById(R.id.pee_btn);
         pooButton = popupView.findViewById(R.id.poo_btn);
 
-        peeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                peeButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
-                peeButton.setTextColor(context.getColor(R.color.white));
+        setUpPeeButton();
+        setUpPooButton();
+    }
 
-                pooButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
-                pooButton.setTextColor(context.getColor(R.color.textColor));
-
-                popupView.findViewById(R.id.poo_layout).setVisibility(View.GONE);
-                currentDiaperType = DiaperType.PEE;
-            }
-        });
-
+    private void setUpPooButton() {
         pooButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,30 +179,22 @@ public class PopUpDiaper {
                 currentDiaperType = DiaperType.POO;
             }
         });
+    }
 
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-//                .createFromResource(context, R.array.diaper_type,
-//                        android.R.layout.simple_spinner_dropdown_item);
-//        typeSpin.setAdapter(adapter);
-//        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                String type = (String) adapterView.getItemAtPosition(i);
-//                if (type.equals(POO)) {
-//                    popupView.findViewById(R.id.texture_layout).setVisibility(View.VISIBLE);
-//                    popupView.findViewById(R.id.color_layout).setVisibility(View.VISIBLE);
-//                } else {
-//                    popupView.findViewById(R.id.texture_layout).setVisibility(View.GONE);
-//                    popupView.findViewById(R.id.color_layout).setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//        typeSpin.setSelection(0);
+    private void setUpPeeButton() {
+        peeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                peeButton.setBackgroundResource(R.drawable.food_type_left_filled_rectangle);
+                peeButton.setTextColor(context.getColor(R.color.white));
+
+                pooButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
+                pooButton.setTextColor(context.getColor(R.color.textColor));
+
+                popupView.findViewById(R.id.poo_layout).setVisibility(View.GONE);
+                currentDiaperType = DiaperType.PEE;
+            }
+        });
     }
 
     private void setUpTexture() {

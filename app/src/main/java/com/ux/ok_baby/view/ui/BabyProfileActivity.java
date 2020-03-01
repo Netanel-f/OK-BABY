@@ -28,15 +28,8 @@ import com.google.firebase.storage.UploadTask;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.Baby;
 import com.ux.ok_baby.view.popups.DateTimePicker;
-import com.ux.ok_baby.view.ui.HomeFragment;
-import com.ux.ok_baby.utils.Constants;
 
-import java.util.Calendar;
-import java.util.List;
-
-import static com.ux.ok_baby.utils.Constants.BABY_ID;
-import static com.ux.ok_baby.utils.Constants.BABY_OBJECT_TAG;
-import static com.ux.ok_baby.utils.Constants.OLD_MAIN_BABY_OBJECT_TAG;
+import static com.ux.ok_baby.utils.Constants.*;
 
 public class BabyProfileActivity extends AppCompatActivity {
 
@@ -44,25 +37,19 @@ public class BabyProfileActivity extends AppCompatActivity {
     private final int PROFILE_IMG_REQUEST_CODE = 9239;
     private final String ACTIVITY_TAG = "BabyProfileActivity";
 
-    // Activity main variables
     private ImageView profilePicture;
-    private TextView babyName;
-    private TextView babyDob;
+    private TextView babyName, babyDob;
     private Button updateProfileBtn;
     private ProgressBar progressBar;
-    public static Calendar myCalendar;
     private Context context;
 
-    private Baby babyProfile;
-    private Baby tempMainBaby;
+    private Baby babyProfile, tempMainBaby;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_profile);
 
-
-        // set views
         context = this;
         profilePicture = findViewById(R.id.profile_image);
         babyName = findViewById(R.id.baby_name);
@@ -70,24 +57,15 @@ public class BabyProfileActivity extends AppCompatActivity {
         updateProfileBtn = findViewById(R.id.update_profile_btn);
         progressBar = findViewById(R.id.progressBarImageUpload);
 
-        // get calendar instance for date picker
-        myCalendar = Calendar.getInstance();
-
-        // get Baby object for editing
-        babyProfile = null;
         babyProfile = getIntent().getParcelableExtra(BABY_OBJECT_TAG);
-
-        if (babyProfile == null) {
-            babyProfile = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
-        }
-
         tempMainBaby = getIntent().getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
 
-        // setup views + image.
+        if (babyProfile == null)
+            babyProfile = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
+
         setupUpdateButton();
         setupProfileImage();
         loadFromBabyObject();
-
     }
 
 
@@ -97,37 +75,24 @@ public class BabyProfileActivity extends AppCompatActivity {
 
         boolean uploadFailed = false;
 
-        if (requestCode == PROFILE_IMG_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    final Uri uri = data.getData();
-                    if (uri != null) {
-                        String filePath = uri.getPath();
+        if (requestCode == PROFILE_IMG_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            final Uri uri = data.getData();
+            String filePath = uri.getPath();
 
-                        Log.d(ACTIVITY_TAG, "onActivityResult: filepath is " + filePath);
-                        Log.d(ACTIVITY_TAG, "Uri: " + uri.toString());
+            Log.d(ACTIVITY_TAG, "onActivityResult: filepath is " + filePath);
+            Log.d(ACTIVITY_TAG, "Uri: " + uri.toString());
 
-                        // set progress bar visible
-                        progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            uploadProfileImageToStorage(uri);
+        } else {
+            uploadFailed = true;
+        }
 
-                        // upload image to storage
-                        uploadProfileImageToStorage(uri);
-
-                    } else {
-                        uploadFailed = true;
-                    }
-                } else {
-                    uploadFailed = true;
-                }
-            } else {
-                uploadFailed = true;
-            }
-
-            if (uploadFailed) {
-                Toast.makeText(getApplicationContext(), "Image profile upload failed", Toast.LENGTH_LONG).show();
-            }
+        if (uploadFailed) {
+            Toast.makeText(getApplicationContext(), "Image profile upload failed", Toast.LENGTH_LONG).show();
         }
     }
+
 
     /**
      * This method will setup the functionality of the update profile button
@@ -137,24 +102,20 @@ public class BabyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkBabyName() && checkBabyDob()) {
-                    // checking a baby name and dob are valid
                     babyProfile.setBabyName(babyName.getText().toString());
                     babyProfile.setBabyDOB(babyDob.getText().toString());
-
-                    // TODO return to last activity ?
 
                     Intent homeIntent = new Intent(context, HomeFragment.class);
                     homeIntent.putExtra(BABY_OBJECT_TAG, babyProfile);
                     homeIntent.putExtra(OLD_MAIN_BABY_OBJECT_TAG, tempMainBaby);
                     setResult(RESULT_OK, homeIntent);
 
-                    Log.d(ACTIVITY_TAG, "updating profile returning to home fragment baby id: " + babyProfile.getBid() + " babyName: " + babyName + " babyDOB: " + babyDob);
+                    Log.d(ACTIVITY_TAG, "updating profile returning to home fragment baby id: " +
+                            babyProfile.getBid() + " babyName: " + babyName + " babyDOB: " + babyDob);
                     finish();
                 }
-
             }
         });
-
     }
 
 
@@ -173,6 +134,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * This method will load image from storage to the place hodler
+     *
      * @param image_uri
      */
     private void loadImage(String image_uri) {
@@ -209,13 +171,14 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * check that the user has typed a name for the baby
+     *
      * @return True iff babyName is not null && not empty, false otherwise.
      */
     private boolean checkBabyName() {
         String babyNameString = babyName.getText().toString();
-        // Check whether the entered text is not null and not empty
+
         if (babyNameString != null && !babyNameString.isEmpty()) {
-            //display the text that you entered in edit text
+            //display the text that you entered in edit text  todo does this comment adds something?
             return true;
         } else {
             Toast.makeText(getApplicationContext(), "Enter a baby name", Toast.LENGTH_LONG).show();
@@ -226,11 +189,11 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * check that the user has typed a dob for the baby
+     *
      * @return True iff baby dob is not empty, false otherwise.
      */
     private boolean checkBabyDob() {
         String babyDobString = babyDob.getText().toString();
-        // Check whether the entered text is not null and not empty
         if (babyDobString != null && !babyDobString.isEmpty()) {
             return true;
         } else {
@@ -251,6 +214,7 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * This method will upload a select profile image to Storage
+     *
      * @param localUri
      */
     private void uploadProfileImageToStorage(final Uri localUri) {
@@ -259,7 +223,6 @@ public class BabyProfileActivity extends AppCompatActivity {
                 .child("profile-image");
 
         UploadTask uploadTask = storageReference.putFile(localUri);
-
         uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -269,14 +232,8 @@ public class BabyProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
-                                        // update the profile to use the image
                                         String url = task.getResult().toString();
-
-
-                                        // set progress bar invisible
                                         progressBar.setVisibility(View.INVISIBLE);
-
-                                        // save it to baby object
                                         babyProfile.setImageUrl(url);
                                         loadImage(url);
                                     }
@@ -289,22 +246,13 @@ public class BabyProfileActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * This method will initiate a date Picker Dialog fragment
+     *
      * @param view current view.
      */
     public void showDatePickerDialog(View view) {
         DateTimePicker dateTimePicker = new DateTimePicker(context);
         dateTimePicker.datePicker(babyDob);
-    }
-
-    /**
-     * This method will save the date that has been picked into the profile.
-     * This method will be called only from the DialogFragment class.
-     * @param dateString D.O.B string to save
-     */
-    public void processDatePickerResult(String dateString) {
-        babyDob.setText(dateString);
     }
 }

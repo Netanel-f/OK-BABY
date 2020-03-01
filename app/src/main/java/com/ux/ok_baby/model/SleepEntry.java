@@ -70,7 +70,6 @@ public class SleepEntry extends com.ux.ok_baby.model.ReportEntry {
                 return getStartTime();
             case 3:
                 return getEndTime();
-
             default:
                 return null;
         }

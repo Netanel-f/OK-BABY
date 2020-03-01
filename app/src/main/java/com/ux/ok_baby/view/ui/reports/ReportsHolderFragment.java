@@ -11,12 +11,13 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ux.ok_baby.R;
+import com.ux.ok_baby.viewmodel.EntriesViewModel;
 
 
 public class ReportsHolderFragment extends Fragment {
@@ -24,6 +25,8 @@ public class ReportsHolderFragment extends Fragment {
     private int reportType = -1;
     private String babyID;
     private BottomNavigationView bottomNavigationView;
+    private EntriesViewModel entriesViewModel;
+    DiaperFragment diaperFragment;
     private ImageView graphsBtn;
 
     public ReportsHolderFragment(String babyID) {
@@ -37,6 +40,7 @@ public class ReportsHolderFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.report_layout, container, false);
         reportType = getArguments().getInt(REPORT_TYPE);
+        entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
         return view;
     }
 
@@ -67,7 +71,8 @@ public class ReportsHolderFragment extends Fragment {
                                 reportType = R.id.action_food;
                                 return true;
                             case R.id.action_diaper:
-                                startNewFragment(new DiaperFragment(babyID));
+                                diaperFragment = new DiaperFragment(babyID);
+                                startNewFragment(diaperFragment);
                                 reportType = R.id.action_diaper;
                                 return true;
                         }
@@ -78,9 +83,8 @@ public class ReportsHolderFragment extends Fragment {
 
     @SuppressLint("ResourceType")
     private void startNewFragment(Fragment fragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container1, fragment);
-        transaction.commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container1, fragment).commit();
+
     }
 
     public void updateBabyID(String babyID) {

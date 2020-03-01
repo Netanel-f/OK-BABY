@@ -19,6 +19,7 @@ public class EntriesViewModel extends AndroidViewModel {
 
     private static final String TAG = "EntriesViewModel";
     private FirestoreRepository dbRepo;
+    private boolean isFirstTimeDiaper = true, isFirstTimeFood = true, isFirstTimeSleep = true;
 
 
     public EntriesViewModel(@NonNull Application application) {
@@ -26,32 +27,51 @@ public class EntriesViewModel extends AndroidViewModel {
         this.dbRepo = new FirestoreRepository();
     }
 
-    public void addSleepEntry(String bid, SleepEntry entry){
+    public void addSleepEntry(String bid, SleepEntry entry) {
         dbRepo.addEntry(Constants.ReportType.SLEEP, bid, entry);
     }
 
-    public void addFoodEntry(String bid, FoodEntry entry){
+    public void addFoodEntry(String bid, FoodEntry entry) {
         dbRepo.addEntry(Constants.ReportType.FOOD, bid, entry);
     }
 
-    public void addDiaperEntry(String bid, DiaperEntry entry){
+    public void addDiaperEntry(String bid, DiaperEntry entry) {
         dbRepo.addEntry(Constants.ReportType.DIAPER, bid, entry);
     }
 
-    public LiveData<List<ReportEntry>> getSleepEntries(String bid){
-//        return dbRepo.getEntries(bid, Constants.ReportType.SLEEP);
+    public boolean isFirstTimeSleep() {
+        return isFirstTimeSleep;
+    }
+
+    public void setIsFirstTimeSleep(boolean isFirstTimeSleep) {
+        this.isFirstTimeSleep = isFirstTimeSleep;
+    }
+
+    public LiveData<List<ReportEntry>> getSleepEntries(String bid) {
         return dbRepo.getSleepEntries(bid);
     }
 
-    public LiveData<List<ReportEntry>> getFoodEntries(String bid){
-//        return dbRepo.getEntries(bid, Constants.ReportType.FOOD);
+    public boolean isFirstTimeFood() {
+        return isFirstTimeFood;
+    }
+
+    public void setIsFirstTimeFood(boolean isFirstTimeFood) {
+        this.isFirstTimeFood = isFirstTimeFood;
+    }
+
+    public LiveData<List<ReportEntry>> getFoodEntries(String bid) {
         return dbRepo.getFoodEntries(bid);
     }
 
-    public LiveData<List<ReportEntry>> getDiaperEntries(String bid){
-//        return dbRepo.getEntries(bid, Constants.ReportType.DIAPER);
-        return dbRepo.getDiaperEntries(bid);
+    public boolean isFirstTimeDiaper() {
+        return isFirstTimeDiaper;
     }
 
-    // todo: query specific entries: by date or others
+    public void setIsFirstTimeDiaper(boolean isFirstTimeDiaper) {
+        this.isFirstTimeDiaper = isFirstTimeDiaper;
+    }
+
+    public LiveData<List<ReportEntry>> getDiaperEntries(String bid) {
+        return dbRepo.getDiaperEntries(bid);
+    }
 }

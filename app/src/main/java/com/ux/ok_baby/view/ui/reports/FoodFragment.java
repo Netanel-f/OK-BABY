@@ -35,6 +35,7 @@ import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
 
 import static java.lang.Math.round;
+import static com.ux.ok_baby.utils.Constants.*;
 
 
 /**
@@ -116,28 +117,32 @@ public class FoodFragment extends Fragment {
         entriesViewModel.getFoodEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
-                if (reportEntries != null && reportEntries.size() > 0) {
-                    mEmptyTableError.setVisibility(View.GONE);
-                    reportEntries.sort(new EntryDataComparator());
-                    ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
-                    if (!titleEntry.getDataByField(0).equals("date")) {
+                if (entriesViewModel.isFirstTimeFood()) {
+                    if (reportEntries != null && reportEntries.size() > 0) {
+                        mEmptyTableError.setVisibility(View.GONE);
+                        reportEntries.sort(new EntryDataComparator());
+                        ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
+                        if (!titleEntry.getDataByField(0).equals("date")) {
+                            reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
+                        }
+                    } else {
+                        // empty table
+                        mEmptyTableError.setVisibility(View.VISIBLE);
+                        reportEntries = new ArrayList<>();
                         reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
                     }
+
+                    if (!reportEntries.isEmpty()) {
+                        mTableAdapter = new ReportTableAdapter(context, reportEntries);
+                        mTableLayout.setAdapter(mTableAdapter);
+                        mTableAdapter.notifyDataSetChanged();
+                        setUpGraphs(reportEntries);
+                    } else {
+                        Log.d(TAG, "onChanged: empty entries, no title.");
+                    }
+                    entriesViewModel.setIsFirstTimeFood(false);
                 } else {
-                    // empty table
-                    mEmptyTableError.setVisibility(View.VISIBLE);
-                    reportEntries = new ArrayList<>();
-                    reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
-
-                }
-
-                if (!reportEntries.isEmpty()) {
-                    mTableAdapter = new ReportTableAdapter(context, reportEntries);
-                    mTableLayout.setAdapter(mTableAdapter);
-                    mTableAdapter.notifyDataSetChanged();
-                    setUpGraphs(reportEntries);
-                } else{
-                    Log.d(TAG, "onChanged: empty entries, no title.");
+                    entriesViewModel.setIsFirstTimeFood(true);
                 }
             }
         });
@@ -158,35 +163,38 @@ public class FoodFragment extends Fragment {
     }
 
     private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
-        int sum, numValues = 2, BOTTLE = 0, BREASTFEEDING = 1;
+        int[] numOfEntries = getNumOfEntries(reportEntries);
+        return getSlices(numOfEntries);
+    }
+
+    private List<SliceValue> getSlices(int[] numOfEntries) {
         List<SliceValue> values = new ArrayList<SliceValue>();
-        int[] numOfEntries = new int[numValues];
-
-        for (int j = 1; j < reportEntries.size(); ++j){
-//        for (ReportEntry entry : reportEntries) {
-
-//            FoodEntry foodEntry = (FoodEntry) entry;
-            FoodEntry foodEntry = (FoodEntry) reportEntries.get(j);
-            if (foodEntry.getType().equals("Bottle")) {
-                numOfEntries[BOTTLE]++;
-            } else if (foodEntry.getType().equals("Breastfeeding")) {
-                numOfEntries[BREASTFEEDING]++;
-            }
-        }
-        sum = numOfEntries[0] + numOfEntries[1];
+        int sum = numOfEntries[0] + numOfEntries[1];
 
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getContext(), R.color.colorPrimaryDark)};
 
         String[] labels = {"Bottle\n", "Breastfeeding\n"};
 
-        for (int i = 1; i < numValues; ++i) {
-            SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % numValues]);
+        for (int i = 0; i < NUM_OF_TYPES; ++i) {
+            SliceValue sliceValue = new SliceValue((float) numOfEntries[i], colors[i % NUM_OF_TYPES]);
             sliceValue.setLabel(labels[i] + round((sliceValue.getValue() / sum) * 100) + "%");
             values.add(sliceValue);
         }
-
         return values;
+    }
+
+    private int[] getNumOfEntries(List<ReportEntry> reportEntries) {
+        int BOTTLE = 0, BREASTFEEDING = 1;
+        int[] numOfEntries = new int[NUM_OF_TYPES];
+        for (int j = 1; j < reportEntries.size(); ++j) {
+            FoodEntry foodEntry = (FoodEntry) reportEntries.get(j);
+            if (foodEntry.getType().equals("Bottle"))
+                numOfEntries[BOTTLE]++;
+            else if (foodEntry.getType().equals("Breastfeeding"))
+                numOfEntries[BREASTFEEDING]++;
+        }
+        return numOfEntries;
     }
 
     private void onAddClickListener(View view) {
