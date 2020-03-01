@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.cleveroad.adaptivetablelayout.AdaptiveTableLayout;
@@ -69,6 +70,8 @@ public class FoodFragment extends Fragment {
 
         View tableView = inflater.inflate(R.layout.report_table_view, container, false);
         View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
+        final ImageView graphsBtn = view.findViewById(R.id.graphs_button);
+        final ImageView tableBtn = view.findViewById(R.id.table_button);
 
         mTableLayout = tableView.findViewById(R.id.tableReportLayout);
         mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
@@ -76,7 +79,38 @@ public class FoodFragment extends Fragment {
 
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
+        setUpButtons(viewPager, graphsBtn, tableBtn);
     }
+
+    private void setUpButtons(final ViewPager viewPager, final ImageView graphsBtn, final ImageView tableBtn) {
+        graphsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleGraphAndTable(1, viewPager, graphsBtn, tableBtn);
+            }
+        });
+        tableBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleGraphAndTable(0, viewPager, graphsBtn, tableBtn);
+            }
+        });
+    }
+
+    private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn){
+        viewPager.setCurrentItem(destination, true);
+        toggleButtonVisibility(graphsBtn);
+        toggleButtonVisibility(tableBtn);
+    }
+
+    private void toggleButtonVisibility(ImageView button){
+        if (button.getVisibility() == View.VISIBLE){
+            button.setVisibility(View.INVISIBLE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     private void setUpReportTable() {
         final Context context = getContext();

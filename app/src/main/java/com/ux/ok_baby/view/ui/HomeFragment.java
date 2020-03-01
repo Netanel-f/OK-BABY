@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -51,10 +52,13 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     private Baby tempMainBaby;
     boolean isNewUser;
 
+    public ImageView graphsBtn;
+
     private TextView mainBabyName;
     private TextView mainBabyAge;
     private ImageView babyImgView;
     private ImageView addButtonImgView;
+    private ImageView logOutBtn;
     static List<Baby> userBabies;
     private BabyRecyclerUtils.BabyAdapter otherBabiesAdapter = new BabyRecyclerUtils.BabyAdapter();
     private RecyclerView babiesRecyclerView;
@@ -74,6 +78,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         mainBabyAge = findViewById(R.id.babyAge);
         addButtonImgView = findViewById(R.id.addBabyButton);
         babiesRecyclerView = findViewById(R.id.babiesRecycler);
+        logOutBtn = findViewById(R.id.logOutBtn);
 
         extractIntentData();
         setUpRecycler();
@@ -97,6 +102,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         setUpMenu(savedInstanceState);
         setupEditButton();
         setUpAddBabyButton();
+        setUpLogOutButton();
     }
 
 
@@ -160,6 +166,15 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
             @Override
             public void onClick(View view) {
                 createNewBaby();
+            }
+        });
+    }
+
+    private void setUpLogOutButton() {
+        logOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logOut();
             }
         });
     }
@@ -319,5 +334,11 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         updateBabiesDetails(userBabies);
         babyID = mainBaby.getBid();
         menuFragment.updateBabyID(babyID);
+    }
+
+    public void logOut(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
     }
 }
