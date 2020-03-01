@@ -123,13 +123,13 @@ public class FoodFragment extends Fragment {
                         reportEntries.sort(new EntryDataComparator());
                         ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
                         if (!titleEntry.getDataByField(0).equals("date")) {
-                            reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
+                            reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "amount"));
                         }
                     } else {
                         // empty table
                         mEmptyTableError.setVisibility(View.VISIBLE);
                         reportEntries = new ArrayList<>();
-                        reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "side", "amount"));
+                        reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "amount"));
                     }
 
                     if (!reportEntries.isEmpty()) {
