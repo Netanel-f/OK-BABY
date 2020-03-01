@@ -52,6 +52,8 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     private Baby tempMainBaby;
     boolean isNewUser;
 
+    public ImageView graphsBtn;
+
     private TextView mainBabyName;
     private TextView mainBabyAge;
     private ImageView babyImgView;

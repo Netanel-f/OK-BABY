@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
-    android:paddingBottom="20dp"
     android:layout_alignParentStart="true"
+    android:paddingBottom="10dp"
     android:paddingTop="20dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
     android:orientation="vertical">
+
 
 
     <ImageView
@@ -22,6 +23,7 @@
         android:background="@drawable/baby_profile_image_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/babiesRecycler"
+
         >
 
     </ImageView>
