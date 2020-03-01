@@ -15,8 +15,8 @@ import java.util.Locale;
 import static com.ux.ok_baby.utils.Constants.*;
 
 public class DateTimePicker {
-    private Calendar myCalendar = Calendar.getInstance();
     private Context context;
+    private Calendar myCalendar = Calendar.getInstance();
 
     public DateTimePicker(Context context) {
         this.context = context;

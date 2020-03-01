@@ -127,7 +127,6 @@ public class PopUpFood {
                 bottleButton.setTextColor(context.getColor(R.color.white));
 
                 popupView.findViewById(R.id.amount_layout).setVisibility(View.VISIBLE);
-
                 currentFoodType = FoodType.BOTTLE;
             }
         });

@@ -35,7 +35,7 @@ public class PopUpDiaper {
     private DateTimePicker dateTimePicker;
     private EntriesViewModel entriesViewModel;
     private TextView pooButton, peeButton, dateTV, timeTV;
-    private HashMap<Button, Integer> colorBtns = new HashMap<>();
+    private HashMap<Button, Integer> colorButtons = new HashMap<>();
 
     public PopUpDiaper(Context context, String babyID, EntriesViewModel entriesViewModel) {
         this.context = context;
@@ -124,9 +124,9 @@ public class PopUpDiaper {
         Button blackBtn = popupView.findViewById(R.id.blackColor);
         Button brownBtn = popupView.findViewById(R.id.brownColor);
 
-        colorBtns.put(redBtn, R.color.red);
-        colorBtns.put(blackBtn, R.color.black);
-        colorBtns.put(brownBtn, R.color.brown);
+        colorButtons.put(redBtn, R.color.red);
+        colorButtons.put(blackBtn, R.color.black);
+        colorButtons.put(brownBtn, R.color.brown);
 
         onColorClickListener(redBtn);
         onColorClickListener(blackBtn);
@@ -140,7 +140,7 @@ public class PopUpDiaper {
             @Override
             public void onClick(View view) {
                 changeFrameColor((LayerDrawable) view.getBackground(), R.color.colorAccent);
-                for (Map.Entry entry : colorBtns.entrySet()) {
+                for (Map.Entry entry : colorButtons.entrySet()) {
                     Button curBtn = (Button) entry.getKey();
                     if (curBtn.getId() != view.getId()) {
                         changeFrameColor((LayerDrawable) curBtn.getBackground(), R.color.white);

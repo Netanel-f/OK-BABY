@@ -38,19 +38,15 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
-
-/**
- * Contains the diaper report.
- */
 public class DiaperFragment extends Fragment {
-    private final String TAG = "DiaperFragment";
-    private EntriesViewModel entriesViewModel;
-    private AdaptiveTableLayout mTableLayout;
+    private View view;
+    private String babyID;
     private LinearLayout mGraphsLayout;
     private ReportTableAdapter mTableAdapter;
+    private AdaptiveTableLayout mTableLayout;
+    private EntriesViewModel entriesViewModel;
     private ConstraintLayout mEmptyTableError;
-    private String babyID;
-    private View view;
+    private ImageView graphsButton, tableButton;
 
     public DiaperFragment(String babyID) {
         this.babyID = babyID;
@@ -71,8 +67,9 @@ public class DiaperFragment extends Fragment {
 
         View tableView = inflater.inflate(R.layout.report_table_view, container, false);
         View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
-        final ImageView graphsBtn = view.findViewById(R.id.graphs_button);
-        final ImageView tableBtn = view.findViewById(R.id.table_button);
+
+        graphsButton = view.findViewById(R.id.graphs_button);
+        tableButton = view.findViewById(R.id.table_button);
 
         mTableLayout = tableView.findViewById(R.id.tableReportLayout);
         mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
@@ -80,35 +77,53 @@ public class DiaperFragment extends Fragment {
 
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
-        setUpButtons(viewPager, graphsBtn, tableBtn);
+        setUpButtons(viewPager);
     }
 
-    private void setUpButtons(final ViewPager viewPager, final ImageView graphsBtn, final ImageView tableBtn) {
-        graphsBtn.setOnClickListener(new View.OnClickListener() {
+    private void setUpButtons(final ViewPager viewPager) {
+        graphsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleGraphAndTable(1, viewPager, graphsBtn, tableBtn);
+                toggleGraphAndTable(1, viewPager, graphsButton, tableButton);
             }
         });
-        tableBtn.setOnClickListener(new View.OnClickListener() {
+        tableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleGraphAndTable(0, viewPager, graphsBtn, tableBtn);
+                toggleGraphAndTable(0, viewPager, graphsButton, tableButton);
             }
         });
     }
 
-    private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn){
+    private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn) {
         viewPager.setCurrentItem(destination, true);
         toggleButtonVisibility(graphsBtn);
         toggleButtonVisibility(tableBtn);
     }
 
-    private void toggleButtonVisibility(ImageView button){
-        if (button.getVisibility() == View.VISIBLE){
+    private void toggleButtonVisibility(ImageView button) {
+        if (button.getVisibility() == View.VISIBLE) {
             button.setVisibility(View.INVISIBLE);
         } else {
             button.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * If reportEntries is empty, add titles. otherwise, sort reportEntries and add titles if not exist.
+     */
+    private void updateReportEntries(List<ReportEntry> reportEntries) {
+        if (reportEntries != null && reportEntries.size() > 0) {
+            mEmptyTableError.setVisibility(View.GONE);
+            reportEntries.sort(new EntryDataComparator());
+            ReportEntry titleEntry = reportEntries.get(0);
+            if (!titleEntry.getDataByField(0).equals("date")) {
+                reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
+            }
+        } else {
+            mEmptyTableError.setVisibility(View.VISIBLE);
+            reportEntries = new ArrayList<>();
+            reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
         }
     }
 
@@ -118,24 +133,14 @@ public class DiaperFragment extends Fragment {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (entriesViewModel.isFirstTimeDiaper()) {
-                    if (reportEntries != null && reportEntries.size() > 0) {
-                        mEmptyTableError.setVisibility(View.GONE);
-                        reportEntries.sort(new EntryDataComparator());
-                        ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
-                        if (!titleEntry.getDataByField(0).equals("date")) {
-                            reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
-                        }
-                    } else {
-                        mEmptyTableError.setVisibility(View.VISIBLE);
-                        reportEntries = new ArrayList<>();
-                        reportEntries.add(0, new DiaperEntry("date", "time", "type", "texture"));
+                    updateReportEntries(reportEntries);
+                    if (!reportEntries.isEmpty()) {
+                        mTableAdapter = new ReportTableAdapter(context, reportEntries);
+                        mTableLayout.setAdapter(mTableAdapter);
+                        mTableAdapter.notifyDataSetChanged();
+                        setUpGraphs(reportEntries);
+                        entriesViewModel.setIsFirstTimeDiaper(false);
                     }
-
-                    mTableAdapter = new ReportTableAdapter(context, reportEntries);
-                    mTableLayout.setAdapter(mTableAdapter);
-                    mTableAdapter.notifyDataSetChanged();
-                    setUpGraphs(reportEntries);
-                    entriesViewModel.setIsFirstTimeDiaper(false);
                 } else {
                     entriesViewModel.setIsFirstTimeDiaper(true);
                 }
@@ -143,21 +148,20 @@ public class DiaperFragment extends Fragment {
         });
     }
 
+
     private void setUpGraphs(List<ReportEntry> reportEntries) {
         ColumnChartView chart = new ColumnChartView(view.getContext());
         mGraphsLayout.addView(chart);
-        ColumnChartData data;
 
         List<AxisValue> axisXValues = new ArrayList<>();
         List<Column> columns = generateDataForGraph(reportEntries, axisXValues);
-
-        data = new ColumnChartData(columns);
 
         Axis axisX = new Axis();
         Axis axisY = new Axis().setHasLines(true);
         axisY.setName("Number of diapers");
         axisX.setValues(axisXValues);
 
+        ColumnChartData data = new ColumnChartData(columns);
         data.setAxisXBottom(axisX);
         data.setAxisYLeft(axisY);
         data.setStacked(false);
@@ -197,7 +201,6 @@ public class DiaperFragment extends Fragment {
 
         int pooEntriesPerDay = 0, peeEntriesPerDay = 0, j = i;
         while (entry.getDate().equals(currentDate) && j < reportEntries.size()) {
-
             if (entry.getType().equals(POO))
                 pooEntriesPerDay++;
             else if (entry.getType().equals(PEE))
