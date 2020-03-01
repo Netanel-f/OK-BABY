@@ -14,6 +14,14 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
         this.type = type;
     }
 
+    public FoodEntry(String date, String startTime, String endTime, String type, String amount) {
+        this.date = date;
+        this.endTime = endTime;
+        this.startTime = startTime;
+        this.amount = amount;
+        this.type = type;
+    }
+
     public FoodEntry() {
         this.date = "";
         this.endTime = "";
@@ -83,7 +91,7 @@ public class FoodEntry extends com.ux.ok_baby.model.ReportEntry {
     private String getAmountString() {
         if (type.equals(BOTTLE))
             return amount + " ml";
-        return "";
+        return amount;
     }
 
     public String getDataByField(int fieldNum) {

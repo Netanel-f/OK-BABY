@@ -78,6 +78,7 @@ public class PopUpSleep {
                 updateSleepEntryObject();
                 if (sleepEntry.isValidEntry()) {
                     entriesViewModel.addSleepEntry(babyID, sleepEntry);
+                    entriesViewModel.setIsFirstTimeSleep(true);
                     popupWindow.dismiss();
                 } else
                     Toast.makeText(context, "One or more fields are empty.", Toast.LENGTH_LONG).show();
