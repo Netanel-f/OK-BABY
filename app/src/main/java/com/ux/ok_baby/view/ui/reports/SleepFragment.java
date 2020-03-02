@@ -45,6 +45,10 @@ public class SleepFragment extends Fragment {
     private ConstraintLayout mEmptyTableError;
     private ImageView graphsButton, tableButton;
 
+    /**
+     * ctr for Sleep fragment
+     * @param babyID baby id to open fragment with
+     */
     public SleepFragment(String babyID) {
         this.babyID = babyID;
     }
@@ -59,6 +63,12 @@ public class SleepFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * This method will setup the View UI elemnts
+     * @param inflater Layout inflater
+     * @param container ViewGroup container
+     */
     private void setUpView(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.fragment_sleep, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
@@ -78,6 +88,11 @@ public class SleepFragment extends Fragment {
         setUpButtons(viewPager);
     }
 
+
+    /**
+     * This mehod will setup the functionality of UI buttons
+     * @param viewPager view page to update
+     */
     private void setUpButtons(final ViewPager viewPager) {
         graphsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,12 +108,25 @@ public class SleepFragment extends Fragment {
         });
     }
 
+
+    /**
+     * this method will toggle the graph / table
+     * @param destination
+     * @param viewPager
+     * @param graphsBtn
+     * @param tableBtn
+     */
     private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn) {
         viewPager.setCurrentItem(destination, true);
         toggleButtonVisibility(graphsBtn);
         toggleButtonVisibility(tableBtn);
     }
 
+
+    /**
+     * This method will toggle the button visibility
+     * @param button ImageView button to toggle/
+     */
     private void toggleButtonVisibility(ImageView button) {
         if (button.getVisibility() == View.VISIBLE) {
             button.setVisibility(View.INVISIBLE);
@@ -107,6 +135,11 @@ public class SleepFragment extends Fragment {
         }
     }
 
+
+    /**
+     * This method will setup the graph
+     * @param entries entries to display in graph
+     */
     private void setUpGraphs(List<ReportEntry> entries) {
         LineChartView chart = new LineChartView(view.getContext());
         mGraphsLayout.addView(chart);
@@ -129,6 +162,12 @@ public class SleepFragment extends Fragment {
         chart.setZoomEnabled(true);
     }
 
+
+    /**
+     * This method will generate List of line from the list of ReportEntries
+     * @param reportEntries List of ReportEntry types.
+     * @return list of Lines.
+     */
     private List<Line> generateDataForGraph(List<ReportEntry> reportEntries) {
         List<PointValue> values = new ArrayList<PointValue>();
         List<Line> lines = new ArrayList<Line>();
@@ -143,8 +182,11 @@ public class SleepFragment extends Fragment {
         return lines;
     }
 
+
+
     /**
      * If reportEntries is empty, add titles. otherwise, sort reportEntries and add titles if not exist.
+     * @param reportEntries List of ReportEntry types.
      */
     private void updateReportEntries(List<ReportEntry> reportEntries) {
         if (reportEntries != null && reportEntries.size() > 0) {
@@ -161,6 +203,10 @@ public class SleepFragment extends Fragment {
         }
     }
 
+
+    /**
+     * setup the report table.
+     */
     private void setUpReportTable() {
         final Context context = getContext();
         entriesViewModel.getSleepEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
@@ -182,6 +228,11 @@ public class SleepFragment extends Fragment {
         });
     }
 
+
+    /**
+     * set on click lister to the view
+     * @param view View to set on
+     */
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override

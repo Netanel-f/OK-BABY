@@ -36,6 +36,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 import static java.lang.Math.round;
 import static com.ux.ok_baby.utils.Constants.*;
 
+
 public class FoodFragment extends Fragment {
     private final String TAG = "FoodFragment";
     private View view;
@@ -60,6 +61,12 @@ public class FoodFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * This method will setup the View UI elemnts
+     * @param inflater Layout inflater
+     * @param container ViewGroup container
+     */
     private void setUpView(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.fragment_food, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
@@ -79,6 +86,11 @@ public class FoodFragment extends Fragment {
         setUpButtons(viewPager);
     }
 
+
+    /**
+     * This mehod will setup the functionality of UI buttons
+     * @param viewPager view page to update
+     */
     private void setUpButtons(final ViewPager viewPager) {
         graphsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,12 +106,25 @@ public class FoodFragment extends Fragment {
         });
     }
 
+
+    /**
+     * this method will toggle the graph / table
+     * @param destination
+     * @param viewPager
+     * @param graphsBtn
+     * @param tableBtn
+     */
     private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn) {
         viewPager.setCurrentItem(destination, true);
         toggleButtonVisibility(graphsBtn);
         toggleButtonVisibility(tableBtn);
     }
 
+
+    /**
+     * This method will toggle the button visibility
+     * @param button ImageView button to toggle/
+     */
     private void toggleButtonVisibility(ImageView button) {
         if (button.getVisibility() == View.VISIBLE) {
             button.setVisibility(View.INVISIBLE);
@@ -110,6 +135,7 @@ public class FoodFragment extends Fragment {
 
     /**
      * If reportEntries is empty, add titles. otherwise, sort reportEntries and add titles if not exist.
+     * @param reportEntries List of ReportEntry types.
      */
     private void updateReportEntries(List<ReportEntry> reportEntries) {
         if (reportEntries != null && reportEntries.size() > 0) {
@@ -126,6 +152,10 @@ public class FoodFragment extends Fragment {
         }
     }
 
+
+    /**
+     * setup the report table.
+     */
     private void setUpReportTable() {
         final Context context = getContext();
         entriesViewModel.getFoodEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
@@ -148,6 +178,10 @@ public class FoodFragment extends Fragment {
     }
 
 
+    /**
+     * This method will setup the graph
+     * @param reportEntries entries to display in graph
+     */
     private void setUpGraphs(List<ReportEntry> reportEntries) {
         PieChartView chart = new PieChartView(view.getContext());
         mGraphsLayout.addView(chart);
@@ -161,11 +195,23 @@ public class FoodFragment extends Fragment {
         chart.setPieChartData(data);
     }
 
+
+    /**
+     * This method will generate List of line from the list of ReportEntries
+     * @param reportEntries List of ReportEntry types.
+     * @return list of Lines.
+     */
     private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
         int[] numOfEntries = getNumOfEntries(reportEntries);
         return getSlices(numOfEntries);
     }
 
+
+    /**
+     * This method will receive indices and will return a slice
+     * @param numOfEntries indices
+     * @return list of slice value
+     */
     private List<SliceValue> getSlices(int[] numOfEntries) {
         List<SliceValue> values = new ArrayList<SliceValue>();
         int sum = numOfEntries[0] + numOfEntries[1];
@@ -183,6 +229,12 @@ public class FoodFragment extends Fragment {
         return values;
     }
 
+
+    /**
+     * This method will get the number of entries.
+     * @param reportEntries list of ReportEntry
+     * @return num of entries
+     */
     private int[] getNumOfEntries(List<ReportEntry> reportEntries) {
         int BOTTLE = 0, BREASTFEEDING = 1;
         int[] numOfEntries = new int[NUM_OF_TYPES];
@@ -196,6 +248,11 @@ public class FoodFragment extends Fragment {
         return numOfEntries;
     }
 
+
+    /**
+     * set on click lister to the view
+     * @param view View to set on
+     */
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
