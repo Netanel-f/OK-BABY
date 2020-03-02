@@ -35,7 +35,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/date_title"
+                android:id="@+id/dateTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -127,7 +127,7 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <Button
-                        android:id="@+id/cancel_button"
+                        android:id="@+id/cancelButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toStartOf="@+id/addButton"
@@ -147,151 +147,6 @@
                         android:text="Add" />
                 </RelativeLayout>
 
-
-
-
-            <!--Date-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:paddingVertical="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:text="@string/date"-->
-<!--                    android:paddingVertical="5dp"-->
-<!--                    android:textSize="20sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/date"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:gravity="center"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:background="@drawable/rounded_rectangle_stroke"/>-->
-
-<!--            </LinearLayout>-->
-            <!--start time-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:paddingVertical="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:text="@string/start_time"-->
-<!--                    android:paddingVertical="5dp"-->
-<!--                    android:textSize="20sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/startTime"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:gravity="center"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:background="@drawable/rounded_rectangle_stroke"/>-->
-
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:padding="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:text="@string/start_time"-->
-<!--                    android:textSize="20sp" />-->
-
-
-<!--                <TextView-->
-<!--                    android:id="@+id/startTime"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:gravity="center"-->
-<!--                    android:background="@drawable/rounded_rectangle_stroke"/>-->
-
-<!--            </LinearLayout>-->
-            <!--End time-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:paddingVertical="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:text="@string/end_time"-->
-<!--                    android:paddingVertical="5dp"-->
-<!--                    android:textSize="20sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/endTime"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:gravity="center"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:background="@drawable/rounded_rectangle_stroke"/>-->
-
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:padding="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:text="@string/end_time"-->
-<!--                    android:textSize="20sp" />-->
-
-
-<!--                <TextView-->
-<!--                    android:id="@+id/endTime"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:gravity="center"-->
-<!--                    android:background="@drawable/rounded_rectangle_stroke"/>-->
-
-<!--            </LinearLayout>-->
-
-<!--            <RelativeLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content">-->
-
-<!--                <Button-->
-<!--                    android:id="@+id/cancel_button"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_toStartOf="@+id/addButton"-->
-<!--                    android:background="@drawable/button_border"-->
-<!--                    android:text="Cancel" />-->
-
-
-<!--                <Button-->
-<!--                    android:id="@+id/addButton"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:background="@drawable/button_border"-->
-<!--                    android:text="Add" />-->
-<!--            </RelativeLayout>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

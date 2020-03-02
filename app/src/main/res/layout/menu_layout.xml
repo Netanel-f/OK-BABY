@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,19 +17,7 @@
         android:layout_marginTop="-50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/sleepButton"-->
-<!--        android:layout_width="@dimen/button_circle_size"-->
-<!--        android:layout_height="@dimen/button_circle_size"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:padding="2dp"-->
-<!--        android:background="@drawable/button_circle"-->
-<!--        app:srcCompat="@drawable/ic_sleep"-->
-
-<!--        />-->
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageButton
         android:id="@+id/sleepButton"
@@ -53,8 +42,7 @@
         android:src="@drawable/ic_food_color"
         app:layout_constraintTop_toBottomOf="@id/sleepButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 
@@ -70,8 +58,6 @@
         app:layout_constraintTop_toBottomOf="@id/foodButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,7 +57,7 @@ public class PopUpDiaper {
 
     private void setUpEntry() {
         dateTV = popupView.findViewById(R.id.date);
-        timeTV = popupView.findViewById(R.id.diaper_time);
+        timeTV = popupView.findViewById(R.id.diaperTime);
         currentDiaperType = DiaperType.PEE;
         textureSpin = popupView.findViewById(R.id.texture);
 
@@ -69,7 +69,7 @@ public class PopUpDiaper {
     }
 
     private void setUpExit() {
-        popupView.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
+        popupView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
@@ -159,8 +159,8 @@ public class PopUpDiaper {
     }
 
     private void setUpType() {
-        peeButton = popupView.findViewById(R.id.pee_btn);
-        pooButton = popupView.findViewById(R.id.poo_btn);
+        peeButton = popupView.findViewById(R.id.peeButton);
+        pooButton = popupView.findViewById(R.id.pooButton);
 
         setUpPeeButton();
         setUpPooButton();
@@ -176,7 +176,7 @@ public class PopUpDiaper {
                 peeButton.setBackgroundResource(R.drawable.food_type_left_rectangle);
                 peeButton.setTextColor(context.getColor(R.color.textColor));
 
-                popupView.findViewById(R.id.poo_layout).setVisibility(View.VISIBLE);
+                popupView.findViewById(R.id.pooLayout).setVisibility(View.VISIBLE);
                 currentDiaperType = DiaperType.POO;
             }
         });
@@ -192,7 +192,7 @@ public class PopUpDiaper {
                 pooButton.setBackgroundResource(R.drawable.food_type_right_rectangle);
                 pooButton.setTextColor(context.getColor(R.color.textColor));
 
-                popupView.findViewById(R.id.poo_layout).setVisibility(View.GONE);
+                popupView.findViewById(R.id.pooLayout).setVisibility(View.GONE);
                 currentDiaperType = DiaperType.PEE;
             }
         });

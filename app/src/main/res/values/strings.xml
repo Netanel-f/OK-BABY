@@ -45,6 +45,7 @@
     <string name="dateOfBirth">Date of Birth</string>
     <string name="update_profile">Update Profile</string>
     <string name="default_age">6 months old</string>
+    <string name="onebabyimage">oneBabyImage</string>
 
 
     <string-array name="food_type">

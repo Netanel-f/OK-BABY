@@ -67,12 +67,12 @@ public class FoodFragment extends Fragment {
         View tableView = inflater.inflate(R.layout.report_table_view, container, false);
         View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
 
-        graphsButton = view.findViewById(R.id.graphs_button);
-        tableButton = view.findViewById(R.id.table_button);
+        graphsButton = view.findViewById(R.id.graphsButton);
+        tableButton = view.findViewById(R.id.tableButton);
 
         mTableLayout = tableView.findViewById(R.id.tableReportLayout);
         mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
-        mEmptyTableError = tableView.findViewById(R.id.empty_table_error);
+        mEmptyTableError = tableView.findViewById(R.id.emptyTableError);
 
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));

@@ -73,7 +73,7 @@ public class ReportsHolderFragment extends Fragment {
 
     @SuppressLint("ResourceType")
     private void startNewFragment(Fragment fragment) {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container1, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragmentContainer1, fragment).commit();
     }
 
     public void updateBabyID(String babyID) {
