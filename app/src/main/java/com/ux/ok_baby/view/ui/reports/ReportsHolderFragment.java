@@ -37,16 +37,24 @@ public class ReportsHolderFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        setUpNavView(view);
-        seClickedItem();
+        setupNavView(view);
+        setClickedItem();
     }
 
-    private void seClickedItem() {
+    /**
+     * This method will set the clicked item
+     */
+    private void setClickedItem() {
         if (reportType != -1)
             bottomNavigationView.setSelectedItemId(reportType);
     }
 
-    private void setUpNavView(@NonNull View view) {
+
+    /**
+     * this method will setup the navigation view.
+     * @param view View to setup in
+     */
+    private void setupNavView(@NonNull View view) {
         bottomNavigationView = view.findViewById(R.id.homeNavBar);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,8 +84,12 @@ public class ReportsHolderFragment extends Fragment {
         getFragmentManager().beginTransaction().replace(R.id.fragmentContainer1, fragment).commit();
     }
 
+    /**
+     * This method will update the baby ID
+     * @param babyID baby ID to update
+     */
     public void updateBabyID(String babyID) {
         this.babyID = babyID;
-        seClickedItem();
+        setClickedItem();
     }
 }
