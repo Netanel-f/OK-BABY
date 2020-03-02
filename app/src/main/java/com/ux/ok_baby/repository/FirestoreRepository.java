@@ -35,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class for Firestore operations.
+ */
 public class FirestoreRepository {
 
     private static final String TAG = "FirestoreRepository";
@@ -53,6 +56,9 @@ public class FirestoreRepository {
 
     private static final Map<Constants.ReportType, String> reportToCollection = createMap();
 
+    /**
+     * Constructor.
+     */
     public FirestoreRepository() {
         this.firestoreDB = FirebaseFirestore.getInstance();
         this.usersCollection = firestoreDB.collection("users");
@@ -164,6 +170,11 @@ public class FirestoreRepository {
         return curBaby;
     }
 
+    /**
+     * Gets a list of the user's babies.
+     * @param uid - id of the user.
+     * @return LiveDate list of babies.
+     */
     public LiveData<List<Baby>> getUserBabies(String uid) {
 
         final List<Baby> listBabies = new ArrayList<>();
@@ -280,6 +291,12 @@ public class FirestoreRepository {
         userRef.update("babies", FieldValue.arrayUnion(babyRef));
     }
 
+    /**
+     * Get specific ReportEntry type (sleep/food/diaper) object from document.
+     * @param document - document to turn to object.
+     * @param type - type of ReportEntry.
+     * @return Sleep/Food/Diaper Entry object.
+     */
     private static ReportEntry documentToEntry(QueryDocumentSnapshot document, Constants.ReportType type) {
         ReportEntry entry;
         switch (type) {
@@ -299,6 +316,11 @@ public class FirestoreRepository {
         return entry;
     }
 
+    /**
+     * Gets a list of the baby's sleep entries.
+     * @param bid - id of the baby.
+     * @return LiveDate list of ReportEntry objects.
+     */
     public LiveData<List<ReportEntry>> getSleepEntries(String bid) {
         String collectionName = reportToCollection.get(Constants.ReportType.SLEEP);
         final CollectionReference collectionRef = babiesCollection.document(bid).collection(collectionName);
@@ -324,6 +346,11 @@ public class FirestoreRepository {
         return sleepEntries;
     }
 
+    /**
+     * Gets a list of the baby's food entries.
+     * @param bid - id of the baby.
+     * @return LiveDate list of ReportEntry objects.
+     */
     public LiveData<List<ReportEntry>> getFoodEntries(String bid) {
         String collectionName = reportToCollection.get(Constants.ReportType.FOOD);
         final CollectionReference collectionRef = babiesCollection.document(bid).collection(collectionName);
@@ -349,6 +376,11 @@ public class FirestoreRepository {
         return foodEntries;
     }
 
+    /**
+     * Gets a list of the baby's diaper entries.
+     * @param bid - id of the baby.
+     * @return LiveDate list of ReportEntry objects.
+     */
     public LiveData<List<ReportEntry>> getDiaperEntries(String bid) {
         String collectionName = reportToCollection.get(Constants.ReportType.DIAPER);
 
@@ -375,7 +407,12 @@ public class FirestoreRepository {
         return diaperEntries;
     }
 
-
+    /**
+     * Add entry to baby.
+     * @param type - type of the entry.
+     * @param bid - baby id.
+     * @param entry - entry to add.
+     */
     public void addEntry(Constants.ReportType type, String bid, ReportEntry entry) {
         String collectionName = reportToCollection.get(type);
         CollectionReference reportsRef = babiesCollection.document(bid).collection(collectionName);

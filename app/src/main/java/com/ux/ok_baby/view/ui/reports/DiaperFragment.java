@@ -38,6 +38,7 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
+
 public class DiaperFragment extends Fragment {
     private View view;
     private String babyID;
@@ -75,11 +76,17 @@ public class DiaperFragment extends Fragment {
         mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
         mEmptyTableError = tableView.findViewById(R.id.emptyTableError);
 
+        // set up ViewPager for switching table/graph view
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
         setUpButtons(viewPager);
     }
 
+    /**
+     * Set up the graph/table buttons.
+     *
+     * @param viewPager - ViewPager for switching table/graph view.
+     */
     private void setUpButtons(final ViewPager viewPager) {
         graphsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +102,25 @@ public class DiaperFragment extends Fragment {
         });
     }
 
+    /**
+     * Toggle graph and table.
+     *
+     * @param destination - graph or table.
+     * @param viewPager   - ViewPager for switching table/graph view.
+     * @param graphsBtn   - button for graphs.
+     * @param tableBtn    - button for table.
+     */
     private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn) {
         viewPager.setCurrentItem(destination, true);
         toggleButtonVisibility(graphsBtn);
         toggleButtonVisibility(tableBtn);
     }
 
+    /**
+     * Toggle button visibility.
+     *
+     * @param button - button to toggle.
+     */
     private void toggleButtonVisibility(ImageView button) {
         if (button.getVisibility() == View.VISIBLE) {
             button.setVisibility(View.INVISIBLE);
@@ -127,6 +147,9 @@ public class DiaperFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets up the table.
+     */
     private void setUpReportTable() {
         final Context context = getContext();
         entriesViewModel.getDiaperEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
@@ -148,7 +171,9 @@ public class DiaperFragment extends Fragment {
         });
     }
 
-
+    /**
+     * Sets up the graphs.
+     */
     private void setUpGraphs(List<ReportEntry> reportEntries) {
         ColumnChartView chart = new ColumnChartView(view.getContext());
         mGraphsLayout.addView(chart);
@@ -168,20 +193,28 @@ public class DiaperFragment extends Fragment {
         chart.setColumnChartData(data);
     }
 
+    /**
+     * Generates data for graph.
+     */
     private List<Column> generateDataForGraph(List<ReportEntry> reportEntries, List<AxisValue> axisValues) {
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer>[] diaperEntries = getTypePerDay(reportEntries, axisValues, dates);
         return getColumns(diaperEntries, dates);
     }
 
+    /**
+     * Get columns for the graph.
+     */
     private List<Column> getColumns(ArrayList<Integer>[] diaperEntries, ArrayList<String> dates) {
         int[] colors = {ContextCompat.getColor(getContext(), R.color.colorPrimaryDark),
                 ContextCompat.getColor(getContext(), R.color.colorPrimary)};
         List<Column> columns = new ArrayList<Column>();
 
         for (int k = 0; k < dates.size(); ++k) {
+            // count diapers per day
             List<SubcolumnValue> values = new ArrayList<SubcolumnValue>();
             for (int j = 0; j < NUM_OF_TYPES; ++j) {
+                // count pee/poo
                 SubcolumnValue value = new SubcolumnValue(diaperEntries[j].get(k), colors[j]);
                 value.setLabel((Integer) Math.round(value.getValue()) + "");
                 values.add(value);
@@ -193,7 +226,9 @@ public class DiaperFragment extends Fragment {
         return columns;
     }
 
-
+    /**
+     * Get number of pee/poo diapers by date.
+     */
     private int getNumOfTypeByDate(ArrayList<Integer> numOfPooEntriesPerDay, ArrayList<Integer> numOfPeeEntriesPerDay,
                                    List<ReportEntry> reportEntries, int i) {
         DiaperEntry entry = (DiaperEntry) reportEntries.get(i);
@@ -218,7 +253,11 @@ public class DiaperFragment extends Fragment {
         return j;
     }
 
-    private ArrayList<Integer>[] getTypePerDay(List<ReportEntry> reportEntries, List<AxisValue> axisValues, ArrayList<String> dates) {
+    /**
+     * Get type of pee/poo diapers by date.
+     */
+    private ArrayList<Integer>[] getTypePerDay(List<ReportEntry> reportEntries,
+                                               List<AxisValue> axisValues, ArrayList<String> dates) {
         ArrayList<Integer> numOfPooEntriesPerDay = new ArrayList<>();
         ArrayList<Integer> numOfPeeEntriesPerDay = new ArrayList<>();
 
@@ -229,7 +268,7 @@ public class DiaperFragment extends Fragment {
 
             int j = getNumOfTypeByDate(numOfPooEntriesPerDay, numOfPeeEntriesPerDay, reportEntries, i);
 
-            // generate lavels
+            // generate levels
             AxisValue axisValue = new AxisValue(dates.size());
             axisValue.setLabel(currentDate);
             axisValues.add(axisValue);
@@ -243,6 +282,9 @@ public class DiaperFragment extends Fragment {
         return new ArrayList[]{numOfPooEntriesPerDay, numOfPeeEntriesPerDay};
     }
 
+    /**
+     * Sets pop up when FAB is clicked.
+     */
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
