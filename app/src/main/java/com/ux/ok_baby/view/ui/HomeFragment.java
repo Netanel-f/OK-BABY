@@ -3,7 +3,6 @@ package com.ux.ok_baby.view.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.ux.ok_baby.utils.Constants.*;
 
+
 /**
  * First screen when loading the app (after sign in).
  * Contains buttons to navigate to other screens.
@@ -51,9 +51,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
     private Baby mainBaby;
     private Baby tempMainBaby;
     boolean isNewUser;
-
-    public ImageView graphsBtn;
-
     private TextView mainBabyName;
     private TextView mainBabyAge;
     private ImageView babyImgView;
@@ -84,8 +81,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         setUpRecycler();
 
 
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class); //todo fix deprecated
-//        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
         if (isNewUser) {
             addNewBaby();
@@ -99,6 +95,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
             });
         }
 
+        // set up buttons and UI functionality
         setUpMenu(savedInstanceState);
         setupEditButton();
         setUpAddBabyButton();
@@ -108,7 +105,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
 
     /**
      * this method will update other babies layout
-     *
      * @param babies other babies to display on screen
      */
     private void updateBabiesDetails(List<Baby> babies) {
@@ -116,6 +112,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         userBabies = babies;
         otherBabiesAdapter.submitList(userBabies);
     }
+
 
     /**
      * This method will extract default Intent Data
@@ -125,6 +122,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         userID = getIntent().getStringExtra(USER_ID_TAG);
         babyID = getIntent().getStringExtra(Constants.BABY_ID);
     }
+
 
     /**
      * This method set up the recycler utilities
@@ -146,8 +144,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         }
     }
 
+
     /**
-     * This method set up the edit button listenr
+     * This method set up the edit button listener
      */
     private void setupEditButton() {
         babyImgView.setOnClickListener(new View.OnClickListener() {
@@ -158,8 +157,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         });
     }
 
+
     /**
-     * This method set up the add baby button listner
+     * This method set up the add baby button listener
      */
     private void setUpAddBabyButton() {
         addButtonImgView.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +170,10 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         });
     }
 
+
+    /**
+     * This method set up the logout button
+     */
     private void setUpLogOutButton() {
         logOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +182,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
             }
         });
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -202,6 +207,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
             }
         }
 
+        // returning from add a baby profile activity
         if (requestCode == START_ADD_BABY_PROF_ACT && resultCode == RESULT_OK) {
             if (data == null) {
                 Log.d(TAG, "onActivityResult: START_ADD_BABY_PROF_ACT and data == null");
@@ -212,10 +218,10 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         }
     }
 
+
     /**
      * This method is called when this activity return with result of edit baby profile
-     *
-     * @param data
+     * @param data data to be extracted from Intent
      */
     void activityResultEditBabyProfile(Intent data) {
         mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
@@ -223,10 +229,10 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         setUpMainBabyDetails();
     }
 
+
     /**
      * This method is called when this activity return with result of add baby profile
-     *
-     * @param data
+     * @param data data to be extracted from Intent
      */
     void activityResultAddBabyProfile(Intent data) {
         mainBaby = data.getParcelableExtra(BABY_OBJECT_TAG);
@@ -242,6 +248,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         otherBabiesAdapter.submitList(userBabies);
     }
 
+
     /**
      * This method set up the display of the current baby
      */
@@ -256,9 +263,9 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
                 .into(babyImgView);
     }
 
+
     /**
      * This method will return the textual age for a given date of birth
-     *
      * @param dob date of birth
      * @return age in textual view
      */
@@ -274,12 +281,6 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         } else {
             return monthsAge + " months old";
         }
-    }
-
-
-    // TODO is needed?
-    private int valToDp(int value) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
     }
 
 
@@ -307,6 +308,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         startActivityForResult(intent, START_EDIT_BABY_PROF_ACT);
     }
 
+
     /**
      * This method handle the creation of a new baby profile
      */
@@ -314,6 +316,7 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         babyID = babiesCollection.document().getId();
         tempMainBaby = mainBaby;
         mainBaby = new Baby(babyID);
+
         Intent intent = new Intent(this, BabyProfileActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(BABY_OBJECT_TAG, mainBaby);
@@ -336,6 +339,10 @@ public class HomeFragment extends FragmentActivity implements BabyRecyclerUtils.
         menuFragment.updateBabyID(babyID);
     }
 
+
+    /**
+     * THis method will setup the logout button functionality
+     */
     public void logOut(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, SignInActivity.class);
