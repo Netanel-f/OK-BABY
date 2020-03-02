@@ -22,11 +22,8 @@
         android:padding="5dp"
         android:background="@drawable/baby_profile_image_border"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/babiesRecycler"
+        app:layout_constraintEnd_toStartOf="@id/babiesRecycler"/>
 
-        >
-
-    </ImageView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/babiesRecycler"
@@ -35,10 +32,8 @@
         android:orientation="horizontal"
         android:layout_marginStart="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"/>
 
-
-    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/linearLayoutDetails"
@@ -53,8 +48,7 @@
             android:layout_height="85dp"
             android:src="@mipmap/ic_baby"
             android:padding="5dp"
-            android:background="@drawable/baby_profile_image_border"
-            />
+            android:background="@drawable/baby_profile_image_border" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -68,7 +62,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:fontFamily="sans-serif"
-                android:text="Baby Name"
+                android:text="@string/baby_name"
                 android:letterSpacing="0.1"
                 android:textSize="20sp" />
 
@@ -79,7 +73,7 @@
                 android:layout_marginStart="15dp"
                 android:fontFamily="sans-serif-light"
                 android:letterSpacing="0.1"
-                android:text="7 months old"
+                android:text="@string/default_age"
                 android:textAllCaps="true"
                 android:textSize="14sp" />
         </LinearLayout>

@@ -53,10 +53,10 @@ public class BabyProfileActivity extends AppCompatActivity {
         context = this;
 
         // set UI variables
-        babyName = findViewById(R.id.baby_name);
+        babyName = findViewById(R.id.babyName);
         babyDob = findViewById(R.id.dob);
-        profilePicture = findViewById(R.id.profile_image);
-        updateProfileBtn = findViewById(R.id.update_profile_btn);
+        profilePicture = findViewById(R.id.profileImage);
+        updateProfileBtn = findViewById(R.id.updateProfileBtn);
         progressBar = findViewById(R.id.progressBarImageUpload);
 
         // save parcelables extras from other activities
