@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Represents a Baby object.
+ */
 public class Baby implements Parcelable {
 
     private String bid;
@@ -12,19 +15,36 @@ public class Baby implements Parcelable {
     private String babyDOB;
     private String imageUrl;
 
+    /**
+     * Empty constructor.
+     */
     public Baby() {
     }
 
+    /**
+     * Baby constructor by baby id.
+     * @param bid - baby id.
+     */
     public Baby(String bid) {
         this.bid = bid;
     }
 
+    /**
+     * Baby full details constructor.
+     * @param bid - baby id.
+     * @param babyName - name of the baby.
+     * @param babyDOB - date of birth.
+     */
     public Baby(@NonNull String bid, String babyName, String babyDOB) {
         this.bid = bid;
         this.babyName = babyName;
         this.babyDOB = babyDOB;
     }
 
+    /**
+     * Parcelable Baby.
+     * @param in - parcel.
+     */
     protected Baby(Parcel in) {
         bid = in.readString();
         babyName = in.readString();
@@ -32,34 +52,58 @@ public class Baby implements Parcelable {
         imageUrl = in.readString();
     }
 
+    /**
+     * @return baby id.
+     */
     public String getBid() {
         return this.bid;
     }
 
+    /**
+     * @param bid - baby id.
+     */
     public void setBid(String bid) {
         this.bid = bid;
     }
 
+    /**
+     * @return baby name.
+     */
     public String getBabyName() {
         return this.babyName;
     }
 
+    /**
+     * @param babyName .
+     */
     public void setBabyName(String babyName) {
         this.babyName = babyName;
     }
 
+    /**
+     * @param dob - date of birth.
+     */
     public void setBabyDOB(String dob) {
         this.babyDOB = dob;
     }
 
+    /**
+     * @return baby date of birth.
+     */
     public String getBabyDOB() {
         return this.babyDOB;
     }
 
+    /**
+     * @return URL of the profile image.
+     */
     public String getImageUrl() {
         return this.imageUrl;
     }
 
+    /**
+     * @param imageUrl - URL of the profile image.
+     */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
