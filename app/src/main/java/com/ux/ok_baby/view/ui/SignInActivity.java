@@ -79,6 +79,7 @@ public class SignInActivity extends AppCompatActivity {
         setUpUI();
     }
 
+
     /**
      * Set up UI functionality
      */
@@ -88,6 +89,10 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * check if the current authenticated user is logged in
+     * @param authCurrentUser FirebaseUser token
+     */
     private void checkIfLoggedIn(FirebaseUser authCurrentUser){
         if (authCurrentUser != null){
             getUserFromDatabase(authCurrentUser);
@@ -96,6 +101,7 @@ public class SignInActivity extends AppCompatActivity {
             splashScreenLayout.setVisibility(View.INVISIBLE);
         }
     }
+
 
     /**
      * Sets up the sign in button.
@@ -113,6 +119,7 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Sets up the log in button.
      */
@@ -129,6 +136,7 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Starts the sign in process for the given email and password.
      * @param email - entered email (string).
@@ -142,6 +150,7 @@ public class SignInActivity extends AppCompatActivity {
         showProgressBar(true);
         signInToFirebase(email, password);
     }
+
 
     /**
      * Starts the sign in process for the given email and password.
@@ -180,6 +189,7 @@ public class SignInActivity extends AppCompatActivity {
         return valid;
     }
 
+
     /**
      * Sets the visibility of the progress bar.
      * @param show - if true, shows the progress bar. Otherwise, hides it.
@@ -192,17 +202,24 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Authenticates the email and password against Firebase Authentication.
      * If the user doesn't exist, creates it.
-     * @param email
-     * @param password
+     * @param email user email address
+     * @param password user password
      */
     private void signInToFirebase(String email, String password) {
             Log.w(TAG, "signInToFirebase: Attempting to authenticate user");
             authenticateUser(email, password);
     }
 
+
+    /**
+     * Authenticates the email and password against Firebase Authentication.
+     * @param email user email address
+     * @param password user password
+     */
     private void authenticateUser(String email, String password){
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -211,7 +228,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
-                            Log.w(TAG, "onComplete: succussfully logged in "+user.getUid());
+                            Log.w(TAG, "onComplete: successfully logged in "+user.getUid());
                             getUserFromDatabase(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -223,6 +240,12 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
+
+    /**
+     * Method for creating authentication user
+     * @param email user email address
+     * @param password user password
+     */
     private void createAuthenticationUser(String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -269,6 +292,14 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * This method will get the babies information for a specific user
+     * @param uid user id
+     * @param user User object to save data into
+     * @param userBabies List of Document References of user babies
+     * @param lifecycleOwner owner of current life cycle
+     */
     private void getUserBabiesFromDatabase(final String uid, User user, final List<DocumentReference> userBabies, final LifecycleOwner lifecycleOwner) {
         if (userBabies == null || userBabies.isEmpty()) {
             // baby list is empty -> treat like new user
@@ -297,10 +328,16 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * add new user
+     * @param uid user id
+     * @param email user email
+     */
     private void addNewUser(final String uid, String email) {
         addUserToDatabase(uid, email);
         navigateToNextActivity(uid, true);
     }
+
 
     /**
      * Determines if the user is a new user or an existing user and navigates accordingly.
@@ -315,6 +352,7 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(homeIntent);
     }
 
+
     private void navigateToNextActivity(String uid, DocumentReference babyRef, boolean isNewUser) {
         Intent homeIntent = new Intent(this, HomeFragment.class);
 
@@ -326,13 +364,12 @@ public class SignInActivity extends AppCompatActivity {
 
 
     /**
-     * DATABASE FUNCTIONS
+     * add user to data base
+     * @param uid user id
+     * @param email user email
      */
-
     public void addUserToDatabase(String uid, String email) {
         User user = new User(uid, email, new ArrayList<DocumentReference>());
         viewModel.addNewUser(user);
     }
-
-
 }
