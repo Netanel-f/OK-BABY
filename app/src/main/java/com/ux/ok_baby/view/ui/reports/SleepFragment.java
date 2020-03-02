@@ -124,7 +124,7 @@ public class SleepFragment extends Fragment {
 
 
     /**
-     * This metho will toggle the button visibility
+     * This method will toggle the button visibility
      * @param button ImageView button to toggle/
      */
     private void toggleButtonVisibility(ImageView button) {
