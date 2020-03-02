@@ -37,13 +37,13 @@ public class BabyProfileActivity extends AppCompatActivity {
     private final int PROFILE_IMG_REQUEST_CODE = 9239;
     private final String ACTIVITY_TAG = "BabyProfileActivity";
 
+    private Baby babyProfile, tempMainBaby;
     private ImageView profilePicture;
     private TextView babyName, babyDob;
     private Button updateProfileBtn;
     private ProgressBar progressBar;
     private Context context;
 
-    private Baby babyProfile, tempMainBaby;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +51,23 @@ public class BabyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_baby_profile);
 
         context = this;
-        profilePicture = findViewById(R.id.profile_image);
+
+        // set UI variables
         babyName = findViewById(R.id.baby_name);
         babyDob = findViewById(R.id.dob);
+        profilePicture = findViewById(R.id.profile_image);
         updateProfileBtn = findViewById(R.id.update_profile_btn);
         progressBar = findViewById(R.id.progressBarImageUpload);
 
+        // save parcelables extras from other activities
         babyProfile = getIntent().getParcelableExtra(BABY_OBJECT_TAG);
         tempMainBaby = getIntent().getParcelableExtra(OLD_MAIN_BABY_OBJECT_TAG);
 
+        // in case we are a new user
         if (babyProfile == null)
             babyProfile = getIntent().getExtras().getParcelable(BABY_OBJECT_TAG);
 
+        // call helpers setups
         setupUpdateButton();
         setupProfileImage();
         loadFromBabyObject();
@@ -75,12 +80,12 @@ public class BabyProfileActivity extends AppCompatActivity {
 
         boolean uploadFailed = false;
 
+        // check if profile image chosen successfully
         if (requestCode == PROFILE_IMG_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             final Uri uri = data.getData();
             String filePath = uri.getPath();
 
-            Log.d(ACTIVITY_TAG, "onActivityResult: filepath is " + filePath);
-            Log.d(ACTIVITY_TAG, "Uri: " + uri.toString());
+            Log.d(ACTIVITY_TAG, "onActivityResult: filepath is " + filePath + "Uri: " + uri.toString());
 
             progressBar.setVisibility(View.VISIBLE);
             uploadProfileImageToStorage(uri);
@@ -135,10 +140,9 @@ public class BabyProfileActivity extends AppCompatActivity {
     /**
      * This method will load image from storage to the place hodler
      *
-     * @param image_uri
+     * @param image_uri image URI to load
      */
     private void loadImage(String image_uri) {
-        //todo add some loading img
         Glide.with(this)
                 .load(image_uri)
                 .apply(RequestOptions.circleCropTransform())
@@ -171,14 +175,13 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * check that the user has typed a name for the baby
-     *
      * @return True iff babyName is not null && not empty, false otherwise.
      */
     private boolean checkBabyName() {
         String babyNameString = babyName.getText().toString();
 
         if (babyNameString != null && !babyNameString.isEmpty()) {
-            //display the text that you entered in edit text  todo does this comment adds something?
+            //display the text that you entered in edit text
             return true;
         } else {
             Toast.makeText(getApplicationContext(), "Enter a baby name", Toast.LENGTH_LONG).show();
@@ -215,7 +218,7 @@ public class BabyProfileActivity extends AppCompatActivity {
     /**
      * This method will upload a select profile image to Storage
      *
-     * @param localUri
+     * @param localUri the local URI of the file to be uploaded to storage.
      */
     private void uploadProfileImageToStorage(final Uri localUri) {
         StorageReference storageReference = FirebaseStorage.getInstance()
@@ -248,7 +251,6 @@ public class BabyProfileActivity extends AppCompatActivity {
 
     /**
      * This method will initiate a date Picker Dialog fragment
-     *
      * @param view current view.
      */
     public void showDatePickerDialog(View view) {
