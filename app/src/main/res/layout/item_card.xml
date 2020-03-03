@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="8dp"
-    >
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/tvText"
@@ -17,8 +16,7 @@
         android:gravity="center"
         android:textSize="12sp"
         android:textColor="@color/gray"
-        tools:text="Text"
-        />
+        tools:text="Text"/>
 
     <ImageView
         android:id="@+id/ivImage"
@@ -26,7 +24,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:focusableInTouchMode="true"
-        android:visibility="gone"
-        />
+        android:visibility="gone"/>
 
 </RelativeLayout>

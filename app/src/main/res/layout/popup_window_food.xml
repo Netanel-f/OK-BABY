@@ -70,7 +70,7 @@
 
 
             <TextView
-                android:id="@+id/date_title"
+                android:id="@+id/dateTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -236,7 +236,7 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <Button
-                    android:id="@+id/cancel_button"
+                    android:id="@+id/cancelButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/addButton"

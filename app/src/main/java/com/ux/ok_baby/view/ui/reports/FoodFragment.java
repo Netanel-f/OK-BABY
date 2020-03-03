@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,18 +37,16 @@ import static java.lang.Math.round;
 import static com.ux.ok_baby.utils.Constants.*;
 
 
-/**
- * Contains the food report.
- */
 public class FoodFragment extends Fragment {
     private final String TAG = "FoodFragment";
-    private EntriesViewModel entriesViewModel;
-    private AdaptiveTableLayout mTableLayout;
+    private View view;
+    private String babyID;
     private LinearLayout mGraphsLayout;
     private ReportTableAdapter mTableAdapter;
+    private AdaptiveTableLayout mTableLayout;
+    private EntriesViewModel entriesViewModel;
     private ConstraintLayout mEmptyTableError;
-    private String babyID;
-    private View view;
+    private ImageView graphsButton, tableButton;
 
     public FoodFragment(String babyID) {
         this.babyID = babyID;
@@ -64,81 +61,113 @@ public class FoodFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * This method will setup the View UI elemnts
+     * @param inflater Layout inflater
+     * @param container ViewGroup container
+     */
     private void setUpView(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.fragment_food, container, false);
         entriesViewModel = new ViewModelProvider(getActivity()).get(EntriesViewModel.class);
 
         View tableView = inflater.inflate(R.layout.report_table_view, container, false);
         View graphView = inflater.inflate(R.layout.report_graph_view, container, false);
-        final ImageView graphsBtn = view.findViewById(R.id.graphs_button);
-        final ImageView tableBtn = view.findViewById(R.id.table_button);
+
+        graphsButton = view.findViewById(R.id.graphsButton);
+        tableButton = view.findViewById(R.id.tableButton);
 
         mTableLayout = tableView.findViewById(R.id.tableReportLayout);
         mGraphsLayout = graphView.findViewById(R.id.graphsLayout);
-        mEmptyTableError = tableView.findViewById(R.id.empty_table_error);
+        mEmptyTableError = tableView.findViewById(R.id.emptyTableError);
 
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ReportPagerAdapter(tableView, graphView));
-        setUpButtons(viewPager, graphsBtn, tableBtn);
+        setUpButtons(viewPager);
     }
 
-    private void setUpButtons(final ViewPager viewPager, final ImageView graphsBtn, final ImageView tableBtn) {
-        graphsBtn.setOnClickListener(new View.OnClickListener() {
+
+    /**
+     * This mehod will setup the functionality of UI buttons
+     * @param viewPager view page to update
+     */
+    private void setUpButtons(final ViewPager viewPager) {
+        graphsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleGraphAndTable(1, viewPager, graphsBtn, tableBtn);
+                toggleGraphAndTable(1, viewPager, graphsButton, tableButton);
             }
         });
-        tableBtn.setOnClickListener(new View.OnClickListener() {
+        tableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleGraphAndTable(0, viewPager, graphsBtn, tableBtn);
+                toggleGraphAndTable(0, viewPager, graphsButton, tableButton);
             }
         });
     }
 
-    private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn){
+
+    /**
+     * this method will toggle the graph / table
+     * @param destination
+     * @param viewPager
+     * @param graphsBtn
+     * @param tableBtn
+     */
+    private void toggleGraphAndTable(int destination, ViewPager viewPager, ImageView graphsBtn, ImageView tableBtn) {
         viewPager.setCurrentItem(destination, true);
         toggleButtonVisibility(graphsBtn);
         toggleButtonVisibility(tableBtn);
     }
 
-    private void toggleButtonVisibility(ImageView button){
-        if (button.getVisibility() == View.VISIBLE){
+
+    /**
+     * This method will toggle the button visibility
+     * @param button ImageView button to toggle/
+     */
+    private void toggleButtonVisibility(ImageView button) {
+        if (button.getVisibility() == View.VISIBLE) {
             button.setVisibility(View.INVISIBLE);
         } else {
             button.setVisibility(View.VISIBLE);
         }
     }
 
+    /**
+     * If reportEntries is empty, add titles. otherwise, sort reportEntries and add titles if not exist.
+     * @param reportEntries List of ReportEntry types.
+     */
+    private void updateReportEntries(List<ReportEntry> reportEntries) {
+        if (reportEntries != null && reportEntries.size() > 0) {
+            mEmptyTableError.setVisibility(View.GONE);
+            reportEntries.sort(new EntryDataComparator());
+            ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
+            if (!titleEntry.getDataByField(0).equals("date")) {
+                reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "amount"));
+            }
+        } else {
+            mEmptyTableError.setVisibility(View.VISIBLE);
+            reportEntries = new ArrayList<>();
+            reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "amount"));
+        }
+    }
 
+
+    /**
+     * setup the report table.
+     */
     private void setUpReportTable() {
         final Context context = getContext();
         entriesViewModel.getFoodEntries(babyID).observe(this, new Observer<List<ReportEntry>>() {
             @Override
             public void onChanged(List<ReportEntry> reportEntries) {
                 if (entriesViewModel.isFirstTimeFood()) {
-                    if (reportEntries != null && reportEntries.size() > 0) {
-                        mEmptyTableError.setVisibility(View.GONE);
-                        reportEntries.sort(new EntryDataComparator());
-                        ReportEntry titleEntry = (ReportEntry) reportEntries.get(0);
-                        if (!titleEntry.getDataByField(0).equals("date")) {
-                            reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "amount"));
-                        }
-                    } else {
-                        // empty table
-                        mEmptyTableError.setVisibility(View.VISIBLE);
-                        reportEntries = new ArrayList<>();
-                        reportEntries.add(0, new FoodEntry("date", "start", "end", "type", "amount"));
-                    }
-
+                    updateReportEntries(reportEntries);
                     if (!reportEntries.isEmpty()) {
                         mTableAdapter = new ReportTableAdapter(context, reportEntries);
                         mTableLayout.setAdapter(mTableAdapter);
                         mTableAdapter.notifyDataSetChanged();
                         setUpGraphs(reportEntries);
-                    } else {
-                        Log.d(TAG, "onChanged: empty entries, no title.");
                     }
                     entriesViewModel.setIsFirstTimeFood(false);
                 } else {
@@ -149,6 +178,10 @@ public class FoodFragment extends Fragment {
     }
 
 
+    /**
+     * This method will setup the graph
+     * @param reportEntries entries to display in graph
+     */
     private void setUpGraphs(List<ReportEntry> reportEntries) {
         PieChartView chart = new PieChartView(view.getContext());
         mGraphsLayout.addView(chart);
@@ -162,11 +195,23 @@ public class FoodFragment extends Fragment {
         chart.setPieChartData(data);
     }
 
+
+    /**
+     * This method will generate List of line from the list of ReportEntries
+     * @param reportEntries List of ReportEntry types.
+     * @return list of Lines.
+     */
     private List<SliceValue> generateDataForGraph(List<ReportEntry> reportEntries) {
         int[] numOfEntries = getNumOfEntries(reportEntries);
         return getSlices(numOfEntries);
     }
 
+
+    /**
+     * This method will receive indices and will return a slice
+     * @param numOfEntries indices
+     * @return list of slice value
+     */
     private List<SliceValue> getSlices(int[] numOfEntries) {
         List<SliceValue> values = new ArrayList<SliceValue>();
         int sum = numOfEntries[0] + numOfEntries[1];
@@ -184,6 +229,12 @@ public class FoodFragment extends Fragment {
         return values;
     }
 
+
+    /**
+     * This method will get the number of entries.
+     * @param reportEntries list of ReportEntry
+     * @return num of entries
+     */
     private int[] getNumOfEntries(List<ReportEntry> reportEntries) {
         int BOTTLE = 0, BREASTFEEDING = 1;
         int[] numOfEntries = new int[NUM_OF_TYPES];
@@ -197,6 +248,11 @@ public class FoodFragment extends Fragment {
         return numOfEntries;
     }
 
+
+    /**
+     * set on click lister to the view
+     * @param view View to set on
+     */
     private void onAddClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override

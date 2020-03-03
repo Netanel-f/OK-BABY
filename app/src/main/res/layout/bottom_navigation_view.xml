@@ -15,8 +15,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_navigation_main"
             app:itemTextColor="@drawable/selector_bottom_bar"
-            app:itemIconTint="@drawable/selector_bottom_bar"
-            />
+            app:itemIconTint="@drawable/selector_bottom_bar"/>
     </RelativeLayout>
 
 </merge>

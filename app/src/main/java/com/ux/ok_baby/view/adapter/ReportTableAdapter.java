@@ -3,7 +3,6 @@ package com.ux.ok_baby.view.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -19,20 +18,21 @@ import com.cleveroad.adaptivetablelayout.LinkedAdaptiveTableAdapter;
 import com.cleveroad.adaptivetablelayout.ViewHolderImpl;
 import com.ux.ok_baby.R;
 import com.ux.ok_baby.model.ReportEntry;
+
 import java.util.List;
 
 import static com.ux.ok_baby.utils.Constants.POO_COLORS1;
 
 public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImpl> {
 
-    private static final int NUM_OF_COLS_IN_REPORT = 6;
     private static final String TAG = "ReportTableAdapter";
-    private final LayoutInflater mLayoutInflater;
+    private static final int NUM_OF_COLS_IN_REPORT = 6;
     private final List<ReportEntry> mTableDataSource;
-    private final int mColumnWidth;
-    private final int mRowHeight;
+    private final LayoutInflater mLayoutInflater;
     private final int mHeaderHeight;
+    private final int mColumnWidth;
     private final int mHeaderWidth;
+    private final int mRowHeight;
 
 
     public ReportTableAdapter(Context context, List<ReportEntry> dataSource) {
@@ -53,11 +53,9 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
 
     @Override
     public int getColumnCount() {
-//        if (mTableDataSource.isEmpty() || mTableDataSource.size() <= 1) {
         if (mTableDataSource.isEmpty()) {
             return NUM_OF_COLS_IN_REPORT;
         } else {
-            // determine col width dynamically
             return Math.min(NUM_OF_COLS_IN_REPORT, mTableDataSource.get(0).getNumOfDisplayedFields());
         }
     }
@@ -90,35 +88,35 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
     public void onBindViewHolder(@NonNull ViewHolderImpl viewHolder, int row, int column) {
         final TestViewHolder vh = (TestViewHolder) viewHolder;
 
-        String itemData = "";
         try {
             ReportEntry entry = mTableDataSource.get(row);
-            itemData = entry.getDataByField(column);
+            String itemData = entry.getDataByField(column);
             itemData = itemData.trim();
 
-
             if (column == 3 && mTableDataSource.get(0).getDataByField(3).equals("texture") && !itemData.isEmpty()) {
-                SpannableString spannable2 = new SpannableString(itemData);
-                try {
-                    spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
-                            0, itemData.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                } catch (NullPointerException e){
-                    Log.d(TAG, "onBindViewHolder: Poo color not set.");
-                    spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get("Brown")),
-                            0, itemData.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
+                SpannableString spannable2 = getSpannableString(itemData, entry);
                 vh.tvText.setVisibility(View.VISIBLE);
                 vh.tvText.setText(spannable2);
             } else {
-                // update views
                 vh.tvText.setVisibility(View.VISIBLE);
                 vh.tvText.setText(itemData);
             }
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             Log.d(TAG, "onBindViewHolder: table data not updated.");
         }
+    }
 
-
+    private SpannableString getSpannableString(String itemData, ReportEntry entry) {
+        SpannableString spannable2 = new SpannableString(itemData);
+        try {
+            spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get(entry.getDataByField(4))),
+                    0, itemData.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } catch (NullPointerException e) {
+            Log.d(TAG, "onBindViewHolder: Poo color not set.");
+            spannable2.setSpan(new ForegroundColorSpan(POO_COLORS1.get("Brown")),
+                    0, itemData.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannable2;
     }
 
 
@@ -154,7 +152,6 @@ public class ReportTableAdapter extends LinkedAdaptiveTableAdapter<ViewHolderImp
         if (mTableDataSource.isEmpty()) {
             return mColumnWidth;
         } else {
-            // determine col width dynamically
             return Math.max(calculateColWidth(getColumnCount()), mColumnWidth);
         }
     }

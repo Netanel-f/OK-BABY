@@ -7,5 +7,5 @@
     <dimen name="column_header_height">60dp</dimen>
     <dimen name="row_header_width">90dp</dimen>
     <dimen name="button_circle_size">80dp</dimen>
-    <dimen name="profile_img_details_size">130dp</dimen>
+    <dimen name="profileImgDetailsSize">130dp</dimen>
 </resources>

@@ -41,6 +41,11 @@
     <string name="ml">ml</string>
     <string name="default_bottle_amount">30</string>
     <string name="add">Add</string>
+    <string name="baby_name">Baby Name</string>
+    <string name="dateOfBirth">Date of Birth</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="default_age">6 months old</string>
+    <string name="onebabyimage">oneBabyImage</string>
 
 
     <string-array name="food_type">

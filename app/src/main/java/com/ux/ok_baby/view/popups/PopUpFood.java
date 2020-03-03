@@ -62,7 +62,7 @@ public class PopUpFood {
     }
 
     private void setUpExit() {
-        popupView.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
+        popupView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
@@ -127,7 +127,6 @@ public class PopUpFood {
                 bottleButton.setTextColor(context.getColor(R.color.white));
 
                 popupView.findViewById(R.id.amount_layout).setVisibility(View.VISIBLE);
-
                 currentFoodType = FoodType.BOTTLE;
             }
         });

@@ -55,7 +55,7 @@ public class PopUpSleep {
     }
 
     private void setUpExit() {
-        popupView.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
+        popupView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
